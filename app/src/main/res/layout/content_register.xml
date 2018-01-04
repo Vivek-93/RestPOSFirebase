@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.bitplaylabs.restaurent.views.activities.RegisterActivity"
+    tools:showIn="@layout/activity_register">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="10dp"
+            android:layout_marginTop="70dp"
+            android:paddingRight="10dp">
+
+            <LinearLayout
+                android:id="@+id/register_act_linearlayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    app:cardCornerRadius="2dp"
+                    app:cardElevation="6dp"
+                    app:cardUseCompatPadding="true">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="15dp"
+                        android:orientation="vertical">
+
+
+                        <EditText
+                            android:id="@+id/reg_act_name_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:drawablePadding="8dp"
+                            android:hint="Enter Name"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:imeOptions="actionNext"
+                            android:singleLine="true"
+                            android:textSize="16sp" />
+
+
+                        <EditText
+                            android:id="@+id/reg_act_mobileno_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:drawablePadding="8dp"
+                            android:hint="Contact Number"
+                            android:inputType="number"
+                            android:imeOptions="actionNext"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:singleLine="true"
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/reg_act_email_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:drawablePadding="8dp"
+                            android:hint="Email"
+                            android:imeOptions="actionNext"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:singleLine="true"
+                            android:textSize="16sp" />
+
+
+                        <EditText
+                            android:id="@+id/reg_act_passwo_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:hint="Enter Password"
+                            android:maxLines="1"
+                            android:paddingLeft="10dp"
+                            android:imeOptions="actionNext"
+                            android:paddingRight="10dp"
+                            android:singleLine="true"
+                            android:textSize="16sp" />
+
+
+
+
+
+                        <Spinner
+                            android:id="@+id/reg_act_select_type"
+                            android:layout_width="200dp"
+                            android:layout_height="30dp"
+                            android:entries="@array/selectrole"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="20dp"
+                            android:paddingLeft="15dp" />
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp" />
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+                <TextView
+                    android:id="@+id/termsN_contition_tv1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:gravity="bottom"
+                    android:text="By Creating a new account you accept our" />
+
+                <TextView
+                    android:id="@+id/reg_act_signup_term_condition_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/termsN_contition_tv1"
+                    android:layout_gravity="center"
+                    android:gravity="bottom"
+                    android:text="Terms and Conditions"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="italic" />
+
+                <View
+                    android:layout_width="145dp"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/reg_act_signup_term_condition_tv"
+                    android:layout_gravity="center"
+                    android:background="@color/colorPrimary" />
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/register_act_sign_up_button"
+                android:layout_width="160dp"
+                android:layout_height="40dp"
+                android:layout_below="@+id/register_act_linearlayout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="-88dp"
+                android:text="Sign Up" />
+
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+
+</RelativeLayout>

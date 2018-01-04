@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.bitplaylabs.restaurent.views.activities.UserProfileUpdateActivity"
+    tools:showIn="@layout/activity_user_profile_update">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/act_update_profile_iv"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_edit" />
+
+            <Button
+                android:id="@+id/act_user_profile_edit_done_btn"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:textSize="10dp"
+                android:background="@drawable/edittext_background"
+                android:text="DONE"
+                android:textColor="@color/colorBlack" />
+
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="User Name"
+            android:textColor="@color/colorBlack" />
+
+        <EditText
+            android:id="@+id/act_user_profile_update_name_et"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/edittext_background"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Mobile Number"
+            android:textColor="@color/colorBlack" />
+
+        <EditText
+            android:id="@+id/act_user_profile_update_mobileno_et"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/edittext_background"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:maxLength="10"
+            android:inputType="number"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Email"
+            android:textColor="@color/colorBlack" />
+
+        <EditText
+            android:id="@+id/act_user_profile_update_email_et"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/edittext_background"
+            android:drawablePadding="8dp"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Role"
+            android:textColor="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/act_user_profile_update_role_et"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/edittext_background"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Role"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Address"
+            android:visibility="gone"
+            android:textColor="@color/colorBlack" />
+
+        <EditText
+            android:id="@+id/act_user_profile_update_address_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext_background"
+            android:gravity="center_vertical"
+            android:minHeight="40dp"
+            android:paddingLeft="10dp"
+            android:visibility="gone"
+            android:paddingRight="10dp"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Father's name"
+            android:visibility="gone"
+            android:textColor="@color/colorBlack" />
+
+        <EditText
+            android:id="@+id/act_user_profile_update_father_et"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/edittext_background"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text=""
+            android:visibility="gone"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Aadhar Number"
+            android:visibility="gone"
+            android:textColor="@color/colorBlack" />
+
+        <EditText
+            android:id="@+id/act_user_profile_update_aadhar_et"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/edittext_background"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:inputType="number"
+            android:visibility="gone"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Pan Number"
+            android:visibility="gone"
+            android:textColor="@color/colorBlack" />
+
+        <EditText
+            android:id="@+id/act_user_profile_update_pan_et"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/edittext_background"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:visibility="gone"
+            android:singleLine="true"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+
+    </LinearLayout>
+
+
+</ScrollView>
