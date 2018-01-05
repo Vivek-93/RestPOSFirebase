@@ -12,9 +12,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.adapters.CaptionRecyclerViewAdaptor;
+import com.bitplaylabs.restaurent.extra.GuestDetails;
 import com.bitplaylabs.restaurent.extra.TableDetails;
 import com.bitplaylabs.restaurent.extra.UserGetInformation;
 import com.bitplaylabs.restaurent.utils.Sharedpreferences;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<TableDetails> data;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,12 +77,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initializeViews() {
         data = new ArrayList<>();
-
-       // data = new ArrayList<>();
         mLogout.setOnClickListener(this);
         mProfile.setOnClickListener(this);
 
-        //  mUserName.setText(userName);
         mRef = firebaseDatabase.getReference("users");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -95,14 +95,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         mRef = firebaseDatabase.getReference("tables");
+
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                Log.d("MainActivity","data1"+dataSnapshot.getValue());
-                TableDetails list= new  TableDetails();
-                list= dataSnapshot.getValue(TableDetails.class);
-                data.add(list);
+                TableDetails value = dataSnapshot.getValue(TableDetails.class);
+                TableDetails fire = new TableDetails();
+                String id = value.getTableid();
+                String tablename = value.getTablename();
+                String key= dataSnapshot.getKey().toString();
+                fire.setTableid(id);
+                fire.setTablename(tablename);
+                fire.setTablekey(key);
+                data.add(fire);
+                mPrefs.setTableKey(key);
+                Log.d("MainActivity","list size"+key);
+
             }
 
             @Override
@@ -125,56 +134,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
         });
-     /*   mRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-
-                for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren()){
-                    Log.d("MainActivity","data"+dataSnapshot1.getValue().toString());
-
-                    TableDetails list= new TableDetails();
-                    list= dataSnapshot1.getValue(TableDetails.class);
-                    data.add(list);
-                  //  data.add(tableDetails);
-//                    Log.d("MainActivity","data1"+dataSnapshot1.getValue(TableDetails.class));
-                   *//* TableDetails value = dataSnapshot1.getValue(TableDetails.class);
-                    TableDetails fire = new TableDetails();
-                    String id = value.getTableId();
-
-                    String tablename = value.getTableName();
-                    fire.setTableId(id);
-                    fire.setTableName(tablename);
-                    data.add(fire);
-                //  data.add(value);*//*
-
-                    Log.d("MainActivity","list size"+data.size());
-                }
-            //    Log.d("MainActivity","data"+dataSnapshot1.getValue().toString());
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w("Hello", "Failed to read value.", error.toException());
-            }
-        });*/
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(this,data/*, data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
+        captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(this,data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
             @Override
-            public void onClicked(String tableid, String tableno, String headcount, String guestname, String phoneno) {
+            public void onClicked(String tablekey, String tableid, String tableno, String headcount, String guestname, String phoneno) {
 
-                mITableDetailPresenter.guestDetailsApiCall(Integer.valueOf(tableno), Integer.valueOf(headcount), guestname,
-                        Integer.valueOf(phoneno));
+              //  mRef = firebaseDatabase.getReference("tables");
+                Log.d("MainActivity",""+guestname+", "+phoneno+","+headcount);
+                GuestDetails guestDetails=new GuestDetails(guestname,phoneno,headcount);
+                firebaseDatabase.getReference("users").child(mPrefs.getUserId()).child(tablekey).setValue(guestDetails);
 
-                mPref.setTableId(tableid);
+                Intent intent=new Intent(MainActivity.this,TableDetailsActivity.class);
+                intent.putExtra("TableKey",tablekey);
+                intent.putExtra("TableNumber",tableno);
+                startActivity(intent);
+              //  Toast.makeText(MainActivity.this, ""+tableno, Toast.LENGTH_SHORT).show();
 
             }
-        }*/);
+        });
         mRecyclerView.setAdapter(captionRecyclerViewAdaptor);
 
     }

@@ -7,32 +7,36 @@ package com.bitplaylabs.restaurent.extra;
 public class TableDetails {
 
 
-    public String tableId;
-    public String tableName;
+    public String tableid;
+    public String tablename;
+    public String tablekey;
 
-
-    public TableDetails (String tableId ,String tableName){
-        this.tableId=tableId;
-        this.tableName=tableName;
-
-    }
 
     public TableDetails(){
 
     }
-    public String getTableId() {
-        return tableId;
+
+    public String getTableid() {
+        return tableid;
     }
 
-    public void setTableId(String tableId) {
-        this.tableId = tableId;
+    public void setTableid(String tableid) {
+        this.tableid = tableid;
     }
 
-    public String getTableName() {
-        return tableName;
+    public String getTablename() {
+        return tablename;
     }
 
-    public void setTableName(String tableName) {
-        this.tableName = tableName;
+    public void setTablename(String tablename) {
+        this.tablename = tablename;
+    }
+
+    public String getTablekey() {
+        return tablekey;
+    }
+
+    public void setTablekey(String tablekey) {
+        this.tablekey = tablekey;
     }
 }

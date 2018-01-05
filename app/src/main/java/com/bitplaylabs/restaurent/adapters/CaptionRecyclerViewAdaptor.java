@@ -41,18 +41,18 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
     private Button proceedBtn;
     int counter = 0;
     private EditText guestName,guestPhone,guestTable;
-   // private final ProceedButtonClick mClick;
+    private final ProceedButtonClick mClick;
 
-   /* public interface ProceedButtonClick {
+    public interface ProceedButtonClick {
 
-        void onClicked(String tableid, String tableno, String headcount, String guestname, String phoneno);
-    }*/
+        void onClicked(String tablekey, String tableid, String tableno, String headcount, String guestname, String phoneno);
+    }
 
 
-    public CaptionRecyclerViewAdaptor(Context context,/*, List<TableDetailModel> data, ProceedButtonClick mClick*/List<TableDetails> data) {
+    public CaptionRecyclerViewAdaptor(Context context, List<TableDetails> data,ProceedButtonClick mClick) {
         this.mContext = context;
         this.data = data;
-      //  this.mClick = mClick;
+        this.mClick = mClick;
 
     }
 
@@ -67,7 +67,7 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
     @Override
     public void onBindViewHolder(final CaptionRecyclerViewAdaptor.ViewHolder holder, final int position) {
 
-        holder.myTextView.setText("Table "+data.get(position).getTableName().toString());
+        holder.myTextView.setText(""+data.get(position).getTablename().toString());
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -127,14 +127,12 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                     proceedBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-/*
 
-                                mClick.onClicked(data.get(position).getId().toString(), data.get(position).getTablenumber().toString(), counts.getText().toString(), guestName.getText().toString(),
+                                mClick.onClicked(data.get(position).getTablekey(),data.get(position).getTableid().toString(), data.get(position).getTablename().toString(), counts.getText().toString(), guestName.getText().toString(),
                                         guestPhone.getText().toString());
                                 notifyDataSetChanged();
-*/
 
-                           // tableInfoDialogBox.dismiss();
+                            tableInfoDialogBox.dismiss();
                         }
                     });
 

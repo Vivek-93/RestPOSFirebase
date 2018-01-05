@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bitplaylabs.restaurent.views.activities.TableDetailsActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <ImageView
+                    android:id="@+id/act_table_details_back_iv"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".1"
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_arrow_back"
+                    android:tint="@color/colorWhite"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:text=""
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".7"
+                    android:padding="5dp" />
+
+
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".15">
+
+
+
+                    <ImageView
+                        android:id="@+id/act_table_details_toolbar_iv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerInside"
+                        android:tint="@color/colorWhite"
+                        android:src="@drawable/ic_add_shopping"/>
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/content_table_details" />
+
+
+
+</android.support.design.widget.CoordinatorLayout>

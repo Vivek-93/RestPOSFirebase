@@ -1,0 +1,26 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bitplaylabs.restaurent.views.fragments.CaptionCatogeryFragment">
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_caption_catogery_rv"
+        android:layout_width="match_parent"
+        android:layout_height="55dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_caption_sub_catogery_rv"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_below="@id/fragment_caption_catogery_rv" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_caption_sub_sub_catogery_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fragment_caption_sub_catogery_rv"/>
+
+</FrameLayout>

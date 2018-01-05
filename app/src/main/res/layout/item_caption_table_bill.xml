@@ -6,7 +6,7 @@
     android:layout_gravity="center"
     android:background="@drawable/dialog_background_white"
     android:orientation="vertical"
-    app:cardCornerRadius="16dp">
+    app:cardCornerRadius="3dp">
 
     <LinearLayout
         android:layout_width="match_parent"
