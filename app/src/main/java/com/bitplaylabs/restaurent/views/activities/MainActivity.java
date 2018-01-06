@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fire.setTablekey(key);
                 data.add(fire);
                 mPrefs.setTableKey(key);
-                Log.d("MainActivity","list size"+key);
+                Log.d("MainActivity",""+dataSnapshot.getValue());
 
             }
 

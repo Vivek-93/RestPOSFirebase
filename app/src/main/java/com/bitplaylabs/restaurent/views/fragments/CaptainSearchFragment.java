@@ -12,10 +12,10 @@ import com.bitplaylabs.restaurent.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CaptionSearchFragment extends Fragment {
+public class CaptainSearchFragment extends Fragment {
 
 
-    public CaptionSearchFragment() {
+    public CaptainSearchFragment() {
         // Required empty public constructor
     }
 

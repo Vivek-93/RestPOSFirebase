@@ -3,11 +3,8 @@ package com.bitplaylabs.restaurent.views.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,12 +14,10 @@ import android.widget.TextView;
 
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.extra.GuestDetails;
-import com.bitplaylabs.restaurent.extra.UserGetInformation;
 import com.bitplaylabs.restaurent.utils.Sharedpreferences;
 import com.bitplaylabs.restaurent.utils.Utils;
-import com.bitplaylabs.restaurent.views.fragments.CaptionCatogeryFragment;
-import com.bitplaylabs.restaurent.views.fragments.CaptionSearchFragment;
-import com.google.firebase.auth.FirebaseAuth;
+import com.bitplaylabs.restaurent.views.fragments.CaptainCategoryFragment;
+import com.bitplaylabs.restaurent.views.fragments.CaptainSearchFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -143,7 +138,7 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
 
         //  Bundle bundle = new Bundle();
         //  bundle.putSerializable("itemList", mealdetails);
-        CaptionSearchFragment csf = new CaptionSearchFragment();
+        CaptainSearchFragment csf = new CaptainSearchFragment();
         //   csf.setArguments(bundle);
         mFragmentManager.beginTransaction().replace(R.id.act_table_details_framelayout, csf).addToBackStack(null).commit();
     }
@@ -152,7 +147,7 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
 
       /*  Bundle bundle = new Bundle();
         bundle.putString("tableno", mGuestTable.getText().toString());*/
-        CaptionCatogeryFragment ccf = new CaptionCatogeryFragment();
+        CaptainCategoryFragment ccf = new CaptainCategoryFragment();
         //   ccf.setArguments(bundle);
         mFragmentManager.beginTransaction().replace(R.id.act_table_details_framelayout, ccf).addToBackStack(null).commit();
     }
