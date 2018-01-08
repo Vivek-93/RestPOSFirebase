@@ -44,7 +44,6 @@ public class CaptainCategoryFragment extends Fragment {
     private FragmentManager mFragmentManager;
     private Sharedpreferences mPref;
 
-    private FirebaseAuth mAuth;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
     private List<MenuList> cogetaryList;
@@ -81,9 +80,6 @@ public class CaptainCategoryFragment extends Fragment {
     private void initializeView() {
         mPref = Sharedpreferences.getUserDataObj(getActivity());
         cogetaryList = new ArrayList<>();
-
-        Log.d("CCF","init"+cogetaryList.size());
-      //  settingUpCategoryRecyclerView();
         mRef = firebaseDatabase.getReference("menulist");
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -119,40 +115,15 @@ public class CaptainCategoryFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-       /* mCatogeryRecyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        mMenuCategoryAdapter=new MenuCategoryAdapter(mContext, cogetaryList);
-        mCatogeryRecyclerView.setLayoutManager(mLayoutManager);
-        mCatogeryRecyclerView.setAdapter(mMenuCategoryAdapter);*/
-        Log.d("CCF","resume"+cogetaryList.size());
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
 
-     /*   mCatogeryRecyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        mMenuCategoryAdapter=new MenuCategoryAdapter(mContext, cogetaryList);
-        mCatogeryRecyclerView.setLayoutManager(mLayoutManager);
-        mCatogeryRecyclerView.setAdapter(mMenuCategoryAdapter);*/
-        Log.d("CCF","start"+cogetaryList.size());
     }
 
-    private void settingUpCategoryRecyclerView() {
-
-      /*  mMenuCategoryAdapter = new MenuCategoryAdapter(getContext(), pos, cogetaryList, new MenuCategoryAdapter.CatogeryonClick() {
-            @Override
-            public void onClicked(MenuList catogery, int pos) {
-                // mMenuCategoryPresenter.getSubCategoryApi(catogery.getCategory());
-                // settingUpCategoryRecyclerView(catogery, pos);
-
-                Log.d("CCP",""+cogetaryList.size());
-                Toast.makeText(mContext, "position" + pos, Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
-    }
 
     private void showData(DataSnapshot dataSnapshot) {
         MenuList menuListFirebase = dataSnapshot.getValue(MenuList.class);

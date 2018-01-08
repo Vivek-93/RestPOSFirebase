@@ -30,8 +30,6 @@ public class MenuCategoryAdapter extends RecyclerView.Adapter<MenuCategoryAdapte
     private final CatogeryonClick mClick;
     private final int pos;
     private int row_index=-1;
-    private ArrayList<MenuList> arrayList2;
-
 
     public interface CatogeryonClick {
         void onClicked(MenuList data, int pos);
@@ -64,16 +62,7 @@ public class MenuCategoryAdapter extends RecyclerView.Adapter<MenuCategoryAdapte
     @Override
     public void onBindViewHolder(final MenuCategoryAdapter.ViewHolder holder, final int position) {
       //  HashSet hashSet = new HashSet(data);
-         arrayList2 = new ArrayList<>();
 
-        if(data.get(position).getCategory().equalsIgnoreCase(data.get(position+1).getCategory()))
-        {
-            arrayList2.remove(data.get(position).getCategory());
-            Log.d("CCFAdapter","arraylist"+arrayList2.size());
-
-        }
-
-        Log.d("CCFAdapter","list"+arrayList2.size());
         holder.item_card.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
