@@ -31,6 +31,7 @@ import com.bitplaylabs.restaurent.adapters.CaptainSearchAdapter;
 import com.bitplaylabs.restaurent.adapters.MenuCategoryAdapter;
 import com.bitplaylabs.restaurent.extra.MenuList;
 import com.bitplaylabs.restaurent.extra.SearchItemModel;
+import com.bitplaylabs.restaurent.utils.Sharedpreferences;
 import com.bitplaylabs.restaurent.views.activities.TableDetailsActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -54,13 +55,14 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
     public AutoCompleteTextView mSearchEt;
     public ImageView mSearchIv;
     public RecyclerView mCaptionSearchRv;
+    public Button mBookItems;
 
     public String search;
     private Dialog additemsDialog;
     private Spinner itemSpinner;
     private ArrayList<String> addQuantity;
     // private SearchData mSearchData;
-
+    private Sharedpreferences mPrefs;
 
     private List<String> searchList;
 
@@ -68,7 +70,7 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
     private DatabaseReference mRef;
     private CaptainSearchAdapter mCaptainSearchAdapter;
 
-    private List<SearchItemModel> searchDataList ;
+    private List<SearchItemModel> searchDataList;
 
     public CaptainSearchFragment() {
         // Required empty public constructor
@@ -79,10 +81,12 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ((InputMethodManager) (getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         View view = inflater.inflate(R.layout.fragment_caption_search, container, false);
+        mPrefs = Sharedpreferences.getUserDataObj(getContext());
         firebaseDatabase = FirebaseDatabase.getInstance();
         mSearchEt = (AutoCompleteTextView) view.findViewById(R.id.fragment_caption_search_et);
         mSearchIv = (ImageView) view.findViewById(R.id.fragment_caption_search_iv);
         mCaptionSearchRv = (RecyclerView) view.findViewById(R.id.fragment_caption_search_rv);
+        mBookItems = (Button) view.findViewById(R.id.fragment_caption_confirm);
 
         initilizeView();
 
@@ -102,6 +106,7 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
 
     private void initilizeView() {
 
+        mBookItems.setOnClickListener(this);
         Log.d("CaptainSearchFragment", "item name");
         searchList = new ArrayList<>();
         searchDataList = new ArrayList<>();
@@ -193,6 +198,13 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
             case R.id.fragment_caption_search_iv:
                 searchFunction();
                 break;
+
+            case R.id.fragment_caption_confirm:
+
+                mRef = firebaseDatabase.getReference("tables");
+                mRef.child(mPrefs.getTableKey()).child("booked").setValue(searchDataList);
+
+                break;
         }
     }
 
@@ -230,7 +242,7 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
                     searchItemm = searchDataList.get(i).toString();
 
                 }*/
-                SearchItemModel searchItemm=new SearchItemModel();
+                SearchItemModel searchItemm = new SearchItemModel();
                 searchItemm.setSearchItem(search);
                 searchItemm.setItemQuantity(Integer.parseInt(itemSpinner.getSelectedItem().toString()));
                 searchDataList.add(searchItemm);
@@ -238,7 +250,7 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
                 mCaptionSearchRv.setHasFixedSize(true);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                 mCaptionSearchRv.setLayoutManager(layoutManager);
-                mCaptainSearchAdapter= new CaptainSearchAdapter(getContext(), searchDataList);
+                mCaptainSearchAdapter = new CaptainSearchAdapter(getContext(), searchDataList);
                 mCaptionSearchRv.setAdapter(mCaptainSearchAdapter);
                 mSearchEt.setText("");
                 additemsDialog.dismiss();

@@ -114,8 +114,8 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
         switch (view.getId()) {
             case R.id.act_table_details_toolbar_iv:
 
-              /*  Intent intent = new Intent(TableDetailsActivity.this, BookedItemsActivity.class);
-                startActivity(intent);*/
+                Intent intent = new Intent(TableDetailsActivity.this, BookedOrderActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.act_table_details_catogery_btn:

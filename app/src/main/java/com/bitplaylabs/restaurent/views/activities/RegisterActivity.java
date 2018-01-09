@@ -117,7 +117,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     }else {
                         Log.w("RegisterActivity", "createUserWithEmail:failure", task.getException());
                         if(task.getException() instanceof FirebaseAuthUserCollisionException){
-                            Toast.makeText(RegisterActivity.this, "You are already registerde", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(RegisterActivity.this, "You are already registered", Toast.LENGTH_SHORT).show();
                         }else {
                             Toast.makeText(RegisterActivity.this, ""+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }

@@ -22,5 +22,8 @@ public class UserInformation {
         this.selectrole = selectrole;
     }
 
+    public UserInformation(){
+
+    }
 
 }

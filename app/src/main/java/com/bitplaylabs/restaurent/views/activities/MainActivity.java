@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<TableDetails> data;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mProfile = (ImageView) findViewById(R.id.act_main_profile_iv);
         mUserName = (TextView) findViewById(R.id.act_main_toolbar_name_tv);
         mUserRole = (TextView) findViewById(R.id.act_main_toolbar_role_tv);
-        mRecyclerView=(RecyclerView)findViewById(R.id.act_home_caption_rv);
+        mRecyclerView = (RecyclerView) findViewById(R.id.act_home_caption_rv);
         mPrefs = Sharedpreferences.getUserDataObj(this);
         mPrefs.setUserId(userId);
         Utils.showProgress(this);
@@ -95,22 +94,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         mRef = firebaseDatabase.getReference("tables");
-
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
+                Utils.stopProgress(MainActivity.this);
                 TableDetails value = dataSnapshot.getValue(TableDetails.class);
                 TableDetails fire = new TableDetails();
                 String id = value.getTableid();
                 String tablename = value.getTablename();
-                String key= dataSnapshot.getKey().toString();
+                String key = dataSnapshot.getKey().toString();
                 fire.setTableid(id);
                 fire.setTablename(tablename);
                 fire.setTablekey(key);
                 data.add(fire);
-                mPrefs.setTableKey(key);
-                Log.d("MainActivity",""+dataSnapshot.getValue());
+                //  mPrefs.setTableKey(key);
+                Log.d("MainActivity", "" + dataSnapshot.getValue());
 
             }
 
@@ -137,33 +135,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(this,data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
+        captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(this, data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
             @Override
             public void onClicked(String tablekey, String tableid, String tableno, String headcount, String guestname, String phoneno) {
+                mPrefs.setTableKey(tablekey);
 
-              //  mRef = firebaseDatabase.getReference("tables");
-                Log.d("MainActivity",""+guestname+", "+phoneno+","+headcount);
-                GuestDetails guestDetails=new GuestDetails(guestname,phoneno,headcount);
-                firebaseDatabase.getReference("users").child(mPrefs.getUserId()).child(tablekey).setValue(guestDetails);
+                Log.d("ManAct", "" + headcount + "" + guestname + "" + phoneno);
+                GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount);
+                // firebaseDatabase.getReference("users").child(userId).child(tablekey).setValue(guestDetails);
 
-                Intent intent=new Intent(MainActivity.this,TableDetailsActivity.class);
-                intent.putExtra("TableKey",tablekey);
-                intent.putExtra("TableNumber",tableno);
+                Intent intent = new Intent(MainActivity.this, TableDetailsActivity.class);
+                intent.putExtra("TableKey", tablekey);
+                intent.putExtra("TableNumber", tableno);
                 startActivity(intent);
-              //  Toast.makeText(MainActivity.this, ""+tableno, Toast.LENGTH_SHORT).show();
-
             }
         });
         mRecyclerView.setAdapter(captionRecyclerViewAdaptor);
 
     }
 
-    private void  showData(DataSnapshot dataSnapshot) {
+    private void showData(DataSnapshot dataSnapshot) {
 
-        Utils.stopProgress(this);
-
-
-        Log.d("MainActivity",""+dataSnapshot.child(userId).getValue().toString());
+        Log.d("MainActivity", "" + dataSnapshot.child(userId).getValue().toString());
         String userName = dataSnapshot.child(userId).getValue(UserGetInformation.class).getName().toString();
         String userRole = dataSnapshot.child(userId).getValue(UserGetInformation.class).getSelectrole().toString();
         mUserName.setText(userName);
