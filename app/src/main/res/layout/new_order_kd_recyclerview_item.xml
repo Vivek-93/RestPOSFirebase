@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="3dp"
+    android:layout_marginRight="3dp"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.05dp"
+        android:background="@color/colorBlack" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="10">
+
+        <TextView
+            android:id="@+id/fag_new_order_rv_kot_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight=".9"
+            android:gravity="center"
+            android:text="KOT"
+            android:visibility="gone"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/fag_new_order_rv_item_name_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1.5"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/fag_new_order_rv_qty_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight=".8"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/fag_new_order_rv_table_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1.4"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/fag_new_order_rv_order_time_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1.7"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/fag_new_order_rv_time_elapsed_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1.8"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorBlack" />
+
+        <TextView
+            android:id="@+id/item_order_taken_by_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="2.1"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height=".05dp"
+        android:background="@color/colorBlack" />
+
+</LinearLayout>

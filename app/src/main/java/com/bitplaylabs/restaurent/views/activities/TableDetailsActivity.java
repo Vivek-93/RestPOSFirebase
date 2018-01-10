@@ -46,7 +46,7 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_table_details);
         firebaseDatabase = FirebaseDatabase.getInstance();
-        mRef = firebaseDatabase.getReference("users");
+        mRef = firebaseDatabase.getReference("guestdetails");
         mCetogery = (Button) findViewById(R.id.act_table_details_catogery_btn);
         mSearch = (Button) findViewById(R.id.act_table_details_search_btn);
         mFramelayout = (FrameLayout) findViewById(R.id.act_table_details_framelayout);

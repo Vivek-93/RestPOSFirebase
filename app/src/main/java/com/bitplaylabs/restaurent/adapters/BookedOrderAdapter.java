@@ -2,6 +2,7 @@ package com.bitplaylabs.restaurent.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +28,9 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
   //  public List<UpdateItems> updateItemsList;
 
 
-    public BookedOrderAdapter(Context context, List<BookedDetailModel> itemslist) {
+    public BookedOrderAdapter(Context context/*, List<BookedDetailModel> itemslist*/) {
         this.mContext = context;
-        this.itemslist = itemslist;
+       /* this.itemslist = itemslist;*/
         // this.name=name;
       //  updateItemsList = new ArrayList<UpdateItems>();
 
@@ -48,10 +49,10 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
     @Override
     public void onBindViewHolder(final BookedOrderAdapter.ViewHolder holder, final int position) {
 
-
-        holder.item_Name.setText(""+itemslist.get(position).bookedItemName);
+      //  holder.item_Name.setText(""+itemslist.size());
+    /*    holder.item_Name.setText(""+itemslist.get(position).bookedItemName);
         holder.quality.setText(""+itemslist.get(position).getBookedItemQuantity());
-        holder.count.setText(String.valueOf(position + 1) + ".");
+        holder.count.setText(String.valueOf(position + 1) + ".");*/
 
       /*  holder.editMoreIV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +72,9 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
 
     @Override
     public int getItemCount() {
-        return itemslist.size();
+      //  Log.d("BOA",""+itemslist.size());
+
+        return /*itemslist.size()*/10;
 
     }
 

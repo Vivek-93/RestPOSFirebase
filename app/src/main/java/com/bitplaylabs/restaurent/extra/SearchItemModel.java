@@ -9,9 +9,34 @@ public class SearchItemModel {
 
     public String searchItem;
     public int itemQuantity;
+    public String tableNo;
+    public String captainName;
 
-    public SearchItemModel(){
+    public SearchItemModel() {
 
+    }
+
+    public SearchItemModel(String searchItem, int itemQuantity, String tableNo, String captainName) {
+        this.searchItem = searchItem;
+        this.itemQuantity = itemQuantity;
+        this.tableNo = tableNo;
+        this.captainName = captainName;
+    }
+
+    public String getTableNo() {
+        return tableNo;
+    }
+
+    public void setTableNo(String tableNo) {
+        this.tableNo = tableNo;
+    }
+
+    public String getCaptainName() {
+        return captainName;
+    }
+
+    public void setCaptainName(String captainName) {
+        this.captainName = captainName;
     }
 
     public String getSearchItem() {

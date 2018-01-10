@@ -201,8 +201,8 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
 
             case R.id.fragment_caption_confirm:
 
-                mRef = firebaseDatabase.getReference("tables");
-                mRef.child(mPrefs.getTableKey()).child("booked").setValue(searchDataList);
+                mRef = firebaseDatabase.getReference("");
+                mRef.child("booked")/*.child(mPrefs.getTableKey())*/.setValue(searchDataList);
 
                 break;
         }
@@ -245,6 +245,8 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
                 SearchItemModel searchItemm = new SearchItemModel();
                 searchItemm.setSearchItem(search);
                 searchItemm.setItemQuantity(Integer.parseInt(itemSpinner.getSelectedItem().toString()));
+                searchItemm.setCaptainName(mPrefs.getLoggedInUsername());
+                searchItemm.setTableNo(mPrefs.getTableKey());
                 searchDataList.add(searchItemm);
 
                 mCaptionSearchRv.setHasFixedSize(true);

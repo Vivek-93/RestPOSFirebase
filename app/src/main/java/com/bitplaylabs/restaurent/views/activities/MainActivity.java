@@ -140,14 +140,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onClicked(String tablekey, String tableid, String tableno, String headcount, String guestname, String phoneno) {
                 mPrefs.setTableKey(tablekey);
 
-                Log.d("ManAct", "" + headcount + "" + guestname + "" + phoneno);
-                GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount);
-                // firebaseDatabase.getReference("users").child(userId).child(tablekey).setValue(guestDetails);
+                try {
+                    Log.d("ManAct", "" + headcount + "" + guestname + "" + phoneno);
+                    GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount);
+                    firebaseDatabase.getReference().child("guestdetails").child(userId).child(tablekey).setValue(guestDetails);
+                    Intent intent = new Intent(MainActivity.this, TableDetailsActivity.class);
+                    intent.putExtra("TableKey", tablekey);
+                    intent.putExtra("TableNumber", tableno);
+                    startActivity(intent);
 
-                Intent intent = new Intent(MainActivity.this, TableDetailsActivity.class);
-                intent.putExtra("TableKey", tablekey);
-                intent.putExtra("TableNumber", tableno);
-                startActivity(intent);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
         });
         mRecyclerView.setAdapter(captionRecyclerViewAdaptor);
@@ -160,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String userName = dataSnapshot.child(userId).getValue(UserGetInformation.class).getName().toString();
         String userRole = dataSnapshot.child(userId).getValue(UserGetInformation.class).getSelectrole().toString();
         mUserName.setText(userName);
+        mPrefs.setLoggedInUsername(userName);
         mUserRole.setText(userRole);
         // Log.d("MainActivity", "username" + userName);
     }

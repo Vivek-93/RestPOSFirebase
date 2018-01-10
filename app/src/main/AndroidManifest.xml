@@ -44,6 +44,10 @@
         <activity
             android:name=".views.activities.BookedOrderActivity"
             android:label="@string/title_activity_booked_order"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.activities.KDMainActivity"
+            android:label="@string/title_activity_kdmain"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

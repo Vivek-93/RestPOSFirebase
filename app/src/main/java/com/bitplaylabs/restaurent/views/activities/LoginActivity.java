@@ -117,13 +117,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 userRole = dataSnapshot.child(user1.getUid()).getValue(UserGetInformation.class).getSelectrole().toString();
 
                                 if (userRole.equalsIgnoreCase("Captain")) {
-                                    Log.d("LoginActivity", "signInWithEmail:success");
+
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                     startActivity(intent);
 
-                                }else if(userRole.equalsIgnoreCase("Kitchen Display")) {
-                                    Toast.makeText(LoginActivity.this, "Hello", Toast.LENGTH_SHORT).show();
+                                } else if (userRole.equalsIgnoreCase("Kitchen Display")) {
+
+                                    Intent intent = new Intent(LoginActivity.this, KDMainActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    startActivity(intent);
                                 }
 
                             }
@@ -154,7 +157,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         } else {
                             Toast.makeText(LoginActivity.this, "Hello", Toast.LENGTH_SHORT).show();
                         }*/
-
 
 
                     } else if (!task.isSuccessful()) {

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.bitplaylabs.restaurent.views.activities.KDMainActivity"
+    tools:showIn="@layout/activity_kdmain">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_above="@+id/act_kd_main_alltable_cv">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/act_kd_main_card_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                android:weightSum="10">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:text="Kitchen Name :"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/act_kd_main_user_name_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="2.2"
+                    android:text="Vivek"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="30dp"
+                    android:background="@color/colorBlack" />
+
+                <DigitalClock
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.5"
+                    android:gravity="center"
+                    android:textColor="@color/color_blue_btn" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="30dp"
+                    android:visibility="gone"
+                    android:background="@color/colorBlack" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1.6"
+                    android:visibility="gone"
+                    android:text="Chef Name :"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="2.5"
+                    android:text="Vivek"
+                    android:visibility="gone"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/act_kd_main_table_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="3dp"
+            app:tabGravity="fill"
+            android:layout_marginTop="1dp"
+            app:tabIndicatorColor="@color/colorPrimary"
+            app:tabMode="fixed"
+            app:tabBackground="@drawable/tab_color_selector"
+            app:tabSelectedTextColor="@color/colorWhite"
+            app:tabTextAppearance="@android:style/TextAppearance.Widget.TabWidget"
+            app:tabTextColor="@color/colorBlack"/>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/act_kd_main_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/act_kd_main_alltable_cv"
+        app:cardUseCompatPadding="true">
+        <LinearLayout
+            android:id="@+id/act_kd_main_ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:background="@drawable/edittext_background"
+                android:textColor="@color/colorBlack"
+                android:text="All Tables"/>
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:background="@color/colorBlack"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/act_kd_main_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>

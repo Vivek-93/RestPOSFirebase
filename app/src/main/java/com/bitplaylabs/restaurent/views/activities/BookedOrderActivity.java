@@ -26,6 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +44,15 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
     private Sharedpreferences mPrefs;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booked_order);
+        mAuth = FirebaseAuth.getInstance();
+        String token= FirebaseInstanceId.getInstance().getToken();
+      //  mRef = firebaseDatabase.getReference("booked");
         mBookedRv = (RecyclerView) findViewById(R.id.act_booked_table_items_rv);
         mEmptyLl = (LinearLayout) findViewById(R.id.act_booked_item_empty_ll);
         mLl = (LinearLayout) findViewById(R.id.act_booked_item_ll);
@@ -63,11 +68,11 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
         mRefresh.setOnClickListener(this);
         mBack.setOnClickListener(this);
 
-     /*   mRef = firebaseDatabase.getReference("tables").child(mPrefs.getTableKey())*//*.child("Booked")*//*;
-        mRef.addChildEventListener(new ChildEventListener() {
+      //  mRef = mRef.child(mPrefs.getTableKey());
+       /* mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-              *//*  Utils.stopProgress(MainActivity.this);
+               // Utils.stopProgress(BookedOrderActivity.this);
                 TableDetails value = dataSnapshot.getValue(TableDetails.class);
                 TableDetails fire = new TableDetails();
                 String id = value.getTableid();
@@ -76,9 +81,10 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                 fire.setTableid(id);
                 fire.setTablename(tablename);
                 fire.setTablekey(key);
-                data.add(fire);*//*
+                data.add(fire);
                 //  mPrefs.setTableKey(key);
 
+                mTotalBillPrice.setText(""+dataSnapshot.getValue());
                 Log.d("BookedOrderActivity", "" + dataSnapshot.getValue());
 
             }
@@ -102,11 +108,11 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
-*/
-
+        });*/
         mBookedRv.setHasFixedSize(true);
-        mBookedItemsAdapter = new BookedOrderAdapter(this, mBookedItemList);
+        mBookedItemsAdapter = new BookedOrderAdapter(this/*, mBookedItemList*/);
+      //  Log.d("BOA","fromactivity"+mBookedItemList.size());
+      //  mTotalBillPrice.setText(mBookedItemList.size());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mBookedRv.setLayoutManager(mLayoutManager);
         mBookedRv.setAdapter(mBookedItemsAdapter);
@@ -119,15 +125,10 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
             case R.id.act_booked_items_refresh_ib:
                 break;
 
-
             case R.id.act_booked_back_iv:
-
                 onBackPressed();
                 break;
 
-
         }
-
-
     }
 }
