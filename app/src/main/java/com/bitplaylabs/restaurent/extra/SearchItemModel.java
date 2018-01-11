@@ -11,16 +11,26 @@ public class SearchItemModel {
     public int itemQuantity;
     public String tableNo;
     public String captainName;
+    public Long itemPrice;
 
     public SearchItemModel() {
 
     }
 
-    public SearchItemModel(String searchItem, int itemQuantity, String tableNo, String captainName) {
+    public SearchItemModel(String searchItem, int itemQuantity, String tableNo, String captainName, Long itemPrice) {
         this.searchItem = searchItem;
         this.itemQuantity = itemQuantity;
         this.tableNo = tableNo;
         this.captainName = captainName;
+        this.itemPrice=itemPrice;
+    }
+
+    public Long getItemPrice() {
+        return itemPrice;
+    }
+
+    public void setItemPrice(Long itemPrice) {
+        this.itemPrice = itemPrice;
     }
 
     public String getTableNo() {

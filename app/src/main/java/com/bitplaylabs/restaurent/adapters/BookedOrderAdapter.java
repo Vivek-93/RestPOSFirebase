@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.extra.BookedDetailModel;
@@ -28,9 +29,9 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
   //  public List<UpdateItems> updateItemsList;
 
 
-    public BookedOrderAdapter(Context context/*, List<BookedDetailModel> itemslist*/) {
+    public BookedOrderAdapter(Context context, List<BookedDetailModel> itemslist) {
         this.mContext = context;
-       /* this.itemslist = itemslist;*/
+        this.itemslist = itemslist;
         // this.name=name;
       //  updateItemsList = new ArrayList<UpdateItems>();
 
@@ -49,7 +50,9 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
     @Override
     public void onBindViewHolder(final BookedOrderAdapter.ViewHolder holder, final int position) {
 
-      //  holder.item_Name.setText(""+itemslist.size());
+        holder.item_Name.setText(""+itemslist.get(position).getBookedItemName());
+        holder.quality.setText(""+itemslist.get(position).getBookedItemQuantity());
+        holder.count.setText(String.valueOf(position + 1) + ".");
     /*    holder.item_Name.setText(""+itemslist.get(position).bookedItemName);
         holder.quality.setText(""+itemslist.get(position).getBookedItemQuantity());
         holder.count.setText(String.valueOf(position + 1) + ".");*/
@@ -74,7 +77,7 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
     public int getItemCount() {
       //  Log.d("BOA",""+itemslist.size());
 
-        return /*itemslist.size()*/10;
+        return itemslist.size();
 
     }
 
@@ -94,11 +97,11 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
             count = (TextView) itemView.findViewById(R.id.item_count_tv);
             editMoreIV = (ImageView) itemView.findViewById(R.id.item_setting_iv);
             editDoneIv=(ImageView)itemView.findViewById(R.id.item_setting_done_iv);
-           /* itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
 
-                    //    int position = getLayoutPosition();
+                        int position = getLayoutPosition();
 
                     delete(getAdapterPosition());
                     Toast.makeText(mContext, "" + item_Name.getText().toString() + " Delected", Toast.LENGTH_SHORT).show();
@@ -110,7 +113,7 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
                     itemslist.remove(position);
                     notifyItemRemoved(position);
                 }
-            });*/
+            });
 
         }
     }

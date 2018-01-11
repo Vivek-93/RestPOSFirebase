@@ -58,7 +58,7 @@ public class NewOrderKDAdapter extends RecyclerView.Adapter<NewOrderKDAdapter.Vi
 
     @Override
     public int getItemCount() {
-        Log.d("NewOrderAdapter", "" + mOrderList.size());
+
         return mOrderList.size();
 
     }

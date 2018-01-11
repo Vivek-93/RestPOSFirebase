@@ -73,7 +73,7 @@ public class MenuCategoryAdapter extends RecyclerView.Adapter<MenuCategoryAdapte
 
             }
         });
-      /*  if(row_index==position){
+        if(row_index==position){
             holder.item_card.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
             holder.item_Name.setTextColor(mContext.getResources().getColor(R.color.colorWhite));
         }
@@ -81,7 +81,7 @@ public class MenuCategoryAdapter extends RecyclerView.Adapter<MenuCategoryAdapte
         {
             holder.item_card.setBackgroundColor(Color.parseColor("#ffffff"));
             holder.item_Name.setTextColor(mContext.getResources().getColor(R.color.colorBlack));
-        }*/
+        }
         holder.item_Name.setText(data.get(position).getCategory());
 
     }

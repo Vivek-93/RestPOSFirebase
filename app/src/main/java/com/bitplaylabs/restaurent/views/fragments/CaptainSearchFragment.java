@@ -29,7 +29,9 @@ import android.widget.Toast;
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.adapters.CaptainSearchAdapter;
 import com.bitplaylabs.restaurent.adapters.MenuCategoryAdapter;
+import com.bitplaylabs.restaurent.adapters.SearchBookedAdapter;
 import com.bitplaylabs.restaurent.extra.MenuList;
+import com.bitplaylabs.restaurent.extra.SearchBookedList;
 import com.bitplaylabs.restaurent.extra.SearchItemModel;
 import com.bitplaylabs.restaurent.utils.Sharedpreferences;
 import com.bitplaylabs.restaurent.views.activities.TableDetailsActivity;
@@ -64,7 +66,7 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
     // private SearchData mSearchData;
     private Sharedpreferences mPrefs;
 
-    private List<String> searchList;
+    private List<SearchBookedList> searchList;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
@@ -76,10 +78,11 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
         // Required empty public constructor
     }
 
+   private SearchBookedAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ((InputMethodManager) (getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+       // ((InputMethodManager) (getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         View view = inflater.inflate(R.layout.fragment_caption_search, container, false);
         mPrefs = Sharedpreferences.getUserDataObj(getContext());
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -92,7 +95,6 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
 
         return view;
     }
-
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -140,26 +142,6 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
         });
 
 
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Log.d("Main", "" + dataSnapshot.getValue());
-
-/*
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
-                    entries.add(ds.getValue(LogEntry.class));
-                }
-*/
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("LogFragment", "loadLog:onCancelled", databaseError.toException());
-            }
-        };
-
         mSearchIv.setOnClickListener(this);
 
     }
@@ -167,28 +149,16 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
     private void showData(DataSnapshot dataSnapshot) {
 
         MenuList menuListFirebase = dataSnapshot.getValue(MenuList.class);
-     /*   MenuList menuList = new MenuList();
+        SearchBookedList menuList = new SearchBookedList();
         String itemName = menuListFirebase.getItemname();
-        menuList.setCategory(itemName);
-        Log.d("CaptainSearchFragment", "item name" + itemName);
+        Long itemPrice= menuListFirebase.getPrice();
+        menuList.setItemName(itemName);
+        menuList.setItemPrice(itemPrice);
         searchList.add(menuList);
-        mSearchEt.setText("" + dataSnapshot);*/
 
-        MenuList menuList = new MenuList();
-        String itemName = menuListFirebase.getItemname();
-        searchList.add(itemName);
-      /*  mCaptionSearchRv.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-        mCaptionSearchRv.setLayoutManager(layoutManager);
-        mCaptainSearchAdapter = new CaptainSearchAdapter(getContext(), searchList);
-        mCaptionSearchRv.setAdapter(mCaptainSearchAdapter);
-*/
-
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, searchList);
-
+        mAdapter = new SearchBookedAdapter(getActivity(), searchList);
         mSearchEt.setThreshold(0);
-        mSearchEt.setAdapter(arrayAdapter);
-
+        mSearchEt.setAdapter(mAdapter);
 
     }
 

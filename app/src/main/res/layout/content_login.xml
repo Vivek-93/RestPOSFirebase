@@ -155,6 +155,8 @@
                 android:layout_height="43dp"
                 android:layout_below="@id/login_act_linearlayout"
                 android:layout_centerHorizontal="true"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/colorWhite"
                 android:layout_marginTop="-88dp"
                 android:text="Login" />
 

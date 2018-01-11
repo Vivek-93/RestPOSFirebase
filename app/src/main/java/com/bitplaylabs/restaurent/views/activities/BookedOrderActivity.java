@@ -13,10 +13,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.adapters.BookedOrderAdapter;
 import com.bitplaylabs.restaurent.extra.BookedDetailModel;
+import com.bitplaylabs.restaurent.extra.SearchBookedList;
+import com.bitplaylabs.restaurent.extra.SearchItemModel;
 import com.bitplaylabs.restaurent.extra.TableDetails;
 import com.bitplaylabs.restaurent.utils.Sharedpreferences;
 import com.bitplaylabs.restaurent.utils.Utils;
@@ -31,7 +34,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookedOrderActivity extends AppCompatActivity implements View.OnClickListener{
+public class BookedOrderActivity extends AppCompatActivity implements View.OnClickListener {
 
     public RecyclerView mBookedRv;
     public LinearLayout mEmptyLl, mLl;
@@ -39,20 +42,20 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
     public TextView mTotalBillPrice;
     public ImageButton mRefresh;
     public ImageView mBack;
-    private List<BookedDetailModel> mBookedItemList = new ArrayList<>();
+    private List<BookedDetailModel> mBookedItemList;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
     private Sharedpreferences mPrefs;
-    private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booked_order);
-        mAuth = FirebaseAuth.getInstance();
-        String token= FirebaseInstanceId.getInstance().getToken();
-      //  mRef = firebaseDatabase.getReference("booked");
+
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        Utils.showProgress(BookedOrderActivity.this);
         mBookedRv = (RecyclerView) findViewById(R.id.act_booked_table_items_rv);
         mEmptyLl = (LinearLayout) findViewById(R.id.act_booked_item_empty_ll);
         mLl = (LinearLayout) findViewById(R.id.act_booked_item_ll);
@@ -65,27 +68,60 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void initilizeView() {
+        mBookedItemList = new ArrayList<>();
         mRefresh.setOnClickListener(this);
         mBack.setOnClickListener(this);
 
-      //  mRef = mRef.child(mPrefs.getTableKey());
-       /* mRef.addChildEventListener(new ChildEventListener() {
+      /*  mRef = mRef.child(mPrefs.getTableKey());*/
+
+        mRef = firebaseDatabase.getReference("booked");
+        mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-               // Utils.stopProgress(BookedOrderActivity.this);
-                TableDetails value = dataSnapshot.getValue(TableDetails.class);
-                TableDetails fire = new TableDetails();
-                String id = value.getTableid();
-                String tablename = value.getTablename();
-                String key = dataSnapshot.getKey().toString();
-                fire.setTableid(id);
-                fire.setTablename(tablename);
-                fire.setTablekey(key);
-                data.add(fire);
-                //  mPrefs.setTableKey(key);
+                 Utils.stopProgress(BookedOrderActivity.this);
 
-                mTotalBillPrice.setText(""+dataSnapshot.getValue());
+                SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
+                BookedDetailModel searchBookedList = new BookedDetailModel();
+
+                String tableNo=searchItemModel.getTableNo().toString();
+                String itemName = searchItemModel.getSearchItem().toString();
+                int itemQuantity = searchItemModel.getItemQuantity();
+                searchBookedList.setBookedItemName(itemName);
+                searchBookedList.setBookedItemQuantity(itemQuantity);
+                mBookedItemList.add(searchBookedList);
+              /*  if(tableNo.equalsIgnoreCase(mPrefs.getTableKey())){
+                    String itemName = searchItemModel.getSearchItem().toString();
+                    int itemQuantity = searchItemModel.getItemQuantity();
+                    searchBookedList.setBookedItemName(itemName);
+                    searchBookedList.setBookedItemQuantity(itemQuantity);
+                    mBookedItemList.add(searchBookedList);
+                    Toast.makeText(BookedOrderActivity.this, "" +mPrefs.getTableKey(), Toast.LENGTH_SHORT).show();
+                }*/
+
+              /*  String[] strArray = itemName.split(" ");
+                for (int i = 0; i < strArray.length; i++) {
+
+                    if(i%2==0){
+
+                      sum=  sum+Integer.parseInt(strArray[i]);
+                      //  int number = Integer.parseInt(strArray[i]);
+                     //   sum = sum + number;
+                        Toast.makeText(BookedOrderActivity.this, "" +strArray[i]+""+sum , Toast.LENGTH_SHORT).show();
+                    }
+                  *//*  int number = Integer.parseInt(strArray[i]);
+                    sum = sum + number;*//*
+                  //  Toast.makeText(BookedOrderActivity.this, "" +strArray[i], Toast.LENGTH_SHORT).show();
+                    // System.out.println(strArray[i]);
+                }*/
+
+           //     mTotalBillPrice.setText("" + dataSnapshot.getValue());
                 Log.d("BookedOrderActivity", "" + dataSnapshot.getValue());
+
+                mBookedRv.setHasFixedSize(true);
+                mBookedItemsAdapter = new BookedOrderAdapter(getApplication(), mBookedItemList);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplication());
+                mBookedRv.setLayoutManager(mLayoutManager);
+                mBookedRv.setAdapter(mBookedItemsAdapter);
 
             }
 
@@ -108,14 +144,8 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });*/
-        mBookedRv.setHasFixedSize(true);
-        mBookedItemsAdapter = new BookedOrderAdapter(this/*, mBookedItemList*/);
-      //  Log.d("BOA","fromactivity"+mBookedItemList.size());
-      //  mTotalBillPrice.setText(mBookedItemList.size());
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mBookedRv.setLayoutManager(mLayoutManager);
-        mBookedRv.setAdapter(mBookedItemsAdapter);
+        });
+
     }
 
     @Override

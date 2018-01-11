@@ -65,8 +65,8 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void initializeViews() {
-
         mFragmentManager = getSupportFragmentManager();
+
 
         openCatogeryFragment();
 

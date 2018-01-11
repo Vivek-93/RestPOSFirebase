@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bitplaylabs.restaurent.R;
+import com.bitplaylabs.restaurent.extra.TableDetails;
+
+import java.util.List;
 
 /**
  * Created by vivek yadav on 26-10-2017.
@@ -16,10 +19,12 @@ import com.bitplaylabs.restaurent.R;
 public class KDMainAdapter extends RecyclerView.Adapter<KDMainAdapter.ViewHolder> {
 
     private Context mContext;
+    private List<TableDetails> data;
 
 
-    public KDMainAdapter(Context context) {
+    public KDMainAdapter(Context context,List<TableDetails> data) {
         this.mContext = context;
+        this.data=data;
 
 
     }
@@ -36,7 +41,7 @@ public class KDMainAdapter extends RecyclerView.Adapter<KDMainAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final KDMainAdapter.ViewHolder holder, final int position) {
 
-        holder.table_no.setText(""+position);
+        holder.table_no.setText(""+data.get(position).getTableid());
 
     }
 
@@ -44,7 +49,7 @@ public class KDMainAdapter extends RecyclerView.Adapter<KDMainAdapter.ViewHolder
     @Override
     public int getItemCount() {
 
-        return 10;
+        return data.size();
 
     }
 

@@ -17,14 +17,20 @@ import android.widget.TextView;
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.adapters.KDMainAdapter;
 import com.bitplaylabs.restaurent.adapters.KdHomeViewPagerAdapter;
+import com.bitplaylabs.restaurent.extra.TableDetails;
 import com.bitplaylabs.restaurent.extra.UserGetInformation;
+import com.bitplaylabs.restaurent.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class KDMainActivity extends AppCompatActivity {
 
@@ -47,6 +53,7 @@ public class KDMainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     String userId;
     FirebaseUser user;
+    private List<TableDetails> data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +74,12 @@ public class KDMainActivity extends AppCompatActivity {
 
     private void initializeViews() {
 
+        mFragmentManager = getSupportFragmentManager();
+
+        settingUpTabLayout();
+        settingUpViewPager();
+
+        data = new ArrayList<>();
         mRef = firebaseDatabase.getReference("users");
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -81,11 +94,51 @@ public class KDMainActivity extends AppCompatActivity {
             }
         });
 
-        mFragmentManager = getSupportFragmentManager();
 
-        settingUpTabLayout();
-        settingUpViewPager();
-        settingUpMainRecyclerView();
+
+        mRef = firebaseDatabase.getReference("tables");
+        mRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                TableDetails value = dataSnapshot.getValue(TableDetails.class);
+                TableDetails fire = new TableDetails();
+                String id = value.getTableid();
+                String tablename = value.getTablename();
+                String key = dataSnapshot.getKey().toString();
+                fire.setTableid(id);
+                fire.setTablename(tablename);
+                fire.setTablekey(key);
+                data.add(fire);
+                //  mPrefs.setTableKey(key);
+                mKdMainRv.setHasFixedSize(true);
+                mKDMainAdapter = new KDMainAdapter(KDMainActivity.this,data);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(KDMainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+                mKdMainRv.setLayoutManager(mLayoutManager);
+                mKdMainRv.setAdapter(mKDMainAdapter);
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
     }
 
@@ -99,15 +152,7 @@ public class KDMainActivity extends AppCompatActivity {
         // Log.d("MainActivity", "username" + userName);
     }
 
-    private void settingUpMainRecyclerView() {
 
-        mKdMainRv.setHasFixedSize(true);
-        mKDMainAdapter = new KDMainAdapter(this);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mKdMainRv.setLayoutManager(mLayoutManager);
-        mKdMainRv.setAdapter(mKDMainAdapter);
-
-    }
 
     private void settingUpViewPager() {
 
