@@ -47,7 +47,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
     private Sharedpreferences mPrefs;
-
+    long sum=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,14 +72,12 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
         mRefresh.setOnClickListener(this);
         mBack.setOnClickListener(this);
 
-      /*  mRef = mRef.child(mPrefs.getTableKey());*/
-
-        mRef = firebaseDatabase.getReference("booked");
+        mRef = firebaseDatabase.getReference("booked").child(mPrefs.getTableKey());
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                  Utils.stopProgress(BookedOrderActivity.this);
-
+                Toast.makeText(BookedOrderActivity.this, ""+s, Toast.LENGTH_SHORT).show();
                 SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
                 BookedDetailModel searchBookedList = new BookedDetailModel();
 
@@ -88,35 +86,11 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                 int itemQuantity = searchItemModel.getItemQuantity();
                 searchBookedList.setBookedItemName(itemName);
                 searchBookedList.setBookedItemQuantity(itemQuantity);
+                long itemPrice=searchItemModel.getItemPrice();
                 mBookedItemList.add(searchBookedList);
-              /*  if(tableNo.equalsIgnoreCase(mPrefs.getTableKey())){
-                    String itemName = searchItemModel.getSearchItem().toString();
-                    int itemQuantity = searchItemModel.getItemQuantity();
-                    searchBookedList.setBookedItemName(itemName);
-                    searchBookedList.setBookedItemQuantity(itemQuantity);
-                    mBookedItemList.add(searchBookedList);
-                    Toast.makeText(BookedOrderActivity.this, "" +mPrefs.getTableKey(), Toast.LENGTH_SHORT).show();
-                }*/
 
-              /*  String[] strArray = itemName.split(" ");
-                for (int i = 0; i < strArray.length; i++) {
-
-                    if(i%2==0){
-
-                      sum=  sum+Integer.parseInt(strArray[i]);
-                      //  int number = Integer.parseInt(strArray[i]);
-                     //   sum = sum + number;
-                        Toast.makeText(BookedOrderActivity.this, "" +strArray[i]+""+sum , Toast.LENGTH_SHORT).show();
-                    }
-                  *//*  int number = Integer.parseInt(strArray[i]);
-                    sum = sum + number;*//*
-                  //  Toast.makeText(BookedOrderActivity.this, "" +strArray[i], Toast.LENGTH_SHORT).show();
-                    // System.out.println(strArray[i]);
-                }*/
-
-           //     mTotalBillPrice.setText("" + dataSnapshot.getValue());
-                Log.d("BookedOrderActivity", "" + dataSnapshot.getValue());
-
+                sum = sum + (itemPrice * itemQuantity);
+                mTotalBillPrice.setText(""+sum);
                 mBookedRv.setHasFixedSize(true);
                 mBookedItemsAdapter = new BookedOrderAdapter(getApplication(), mBookedItemList);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplication());

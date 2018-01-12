@@ -63,6 +63,8 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
             }
         });
         if (row_index == position) {
+          /*  holder.mCardView.setEnabled(false);
+            holder.mCardView.setClickable(false);*/
             holder.mCardView.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
             holder.mItemName.setTextColor(mContext.getResources().getColor(R.color.colorWhite));
         } else {

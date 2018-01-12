@@ -51,6 +51,7 @@ public class CaptainCategoryFragment extends Fragment {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
     private List<MenuList> cogetaryList;
+   // private List<MenuList> cogetaryList;
     private List<MenuList> subCogetaryList;
     private List<MenuList> subSubCogetaryList;
     private MenuCategoryAdapter mMenuCategoryAdapter;
@@ -60,6 +61,15 @@ public class CaptainCategoryFragment extends Fragment {
     private SubItemArrayAdapter mSubItemArrayAdapter;
     private List<SearchItemModel> searchDataList;
     private int position;
+    String selected=null;
+
+    List<String> myList=new ArrayList<>();{
+        myList.add("Morning");
+        myList.add("Afternoon");
+        myList.add("Evening");
+    }
+    private String subCategorySelected =null;
+
     public CaptainCategoryFragment() {
         // Required empty public constructor
     }
@@ -142,41 +152,76 @@ public class CaptainCategoryFragment extends Fragment {
         String itemCategory = menuListFirebase.getCategory();
         menuList.setCategory(itemCategory);
         cogetaryList.add(menuList);
+      /*  HashSet<MenuList> hashSet = new HashSet<MenuList>();
+        hashSet.addAll(cogetaryList);
+        cogetaryList.clear();
+        cogetaryList.addAll(hashSet);*/
+
+        settingCategoryRecyclerView();
+
+    }
+
+    private void settingCategoryRecyclerView() {
 
         mCatogeryRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        mMenuCategoryAdapter=new MenuCategoryAdapter(mContext, pos, cogetaryList, new MenuCategoryAdapter.CatogeryonClick() {
+        mMenuCategoryAdapter=new MenuCategoryAdapter(mContext, pos, myList, new MenuCategoryAdapter.CatogeryonClick() {
             @Override
-            public void onClicked(MenuList data, int pos) {
+            public void onClicked(String data, int pos) {
 
+                selected=data;
+                Toast.makeText(mContext, ""+data+pos, Toast.LENGTH_SHORT).show();
                 mRef = firebaseDatabase.getReference("menulist");
                 mRef.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         MenuList menuListFirebase = dataSnapshot.getValue(MenuList.class);
                         MenuList menuList = new MenuList();
-                        String itemSubCategory = menuListFirebase.getSubcategory();
-                        menuList.setSubcategory(itemSubCategory );
-                        subCogetaryList.add(menuList);
+                        String itemCategory = menuListFirebase.getCategory();
+                        if(itemCategory.equalsIgnoreCase(selected)) {
+                            String itemSubCategory = menuListFirebase.getSubcategory();
+                            menuList.setSubcategory(itemSubCategory);
+
+                           /* HashSet<MenuList> hashSet = new HashSet<MenuList>();
+                            hashSet.addAll(subCogetaryList);
+                            subCogetaryList.clear();
+                            subCogetaryList.addAll(hashSet);*/
+                            subCogetaryList.add(menuList);
+
+                        }
+
                         mCatogeryRecyclerView.setHasFixedSize(true);
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
                         mSubCategoryAdapter = new SubCategoryAdapter(getContext(), position, subCogetaryList, new SubCategoryAdapter.SubCatogeryonClick() {
                             @Override
                             public void onClicked(MenuList data, int pos) {
 
+                                subCategorySelected= data.getSubcategory();
                                 mRef = firebaseDatabase.getReference("menulist");
                                 mRef.addChildEventListener(new ChildEventListener() {
                                     @Override
                                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                         MenuList menuListFirebase = dataSnapshot.getValue(MenuList.class);
                                         MenuList menuList = new MenuList();
-                                        String itemName= menuListFirebase.getItemname();
+                                        String itemSubCategory = menuListFirebase.getSubcategory();
+                                        if(itemSubCategory.equalsIgnoreCase(subCategorySelected)) {
+                                            String itemName = menuListFirebase.getItemname();
+                                            Long itemPrice= menuListFirebase.getPrice();
+                                            String mealType= menuListFirebase.getMealtype();
+                                            menuList.setItemname(itemName );
+                                            menuList.setPrice(itemPrice);
+                                            menuList.setMealtype(mealType);
+                                          //  subSubCogetaryList.clear();
+                                            subSubCogetaryList.add(menuList);
+                                        }
+
+                                      /*  String itemName= menuListFirebase.getItemname();
                                         Long itemPrice= menuListFirebase.getPrice();
                                         String mealType= menuListFirebase.getMealtype();
                                         menuList.setItemname(itemName );
                                         menuList.setPrice(itemPrice);
                                         menuList.setMealtype(mealType);
-                                        subSubCogetaryList.add(menuList);
+                                        subSubCogetaryList.add(menuList);*/
 
                                     }
 
@@ -205,15 +250,17 @@ public class CaptainCategoryFragment extends Fragment {
 
                                     @Override
                                     public void onClicked(String itemname, int quantity, float price) {
+                                     //   subSubCogetaryList.clear();
                                         SearchItemModel searchItemm = new SearchItemModel();
                                         searchItemm.setSearchItem(itemname);
                                         searchItemm.setItemQuantity(quantity);
                                         searchItemm.setCaptainName(mPref.getLoggedInUsername());
                                         searchItemm.setTableNo(mPref.getTableKey());
+                                        searchItemm.setItemPrice((long) price);
                                         searchDataList.add(searchItemm);
 
                                         mRef = firebaseDatabase.getReference("");
-                                        mRef.child("booked")/*.child(mPrefs.getTableKey())*/.setValue(searchDataList);
+                                        mRef.child("booked").child(mPref.getTableKey()).setValue(searchDataList);
                                     }
                                 });
                                 mSubSubCatogeryRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
@@ -225,6 +272,7 @@ public class CaptainCategoryFragment extends Fragment {
 
                         mSubCatogeryRv.setLayoutManager(mLayoutManager);
                         mSubCatogeryRv.setAdapter(mSubCategoryAdapter);
+
                     }
 
                     @Override

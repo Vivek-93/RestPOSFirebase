@@ -87,9 +87,7 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
 
             }
         });
-       /* mGuestName.setText("" +);
-        mGuestPhone.setText("" +);
-        mGuestTable.setText("" + );*/
+
 
     }
 

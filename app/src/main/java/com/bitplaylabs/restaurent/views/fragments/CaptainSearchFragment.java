@@ -217,6 +217,7 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
                 searchItemm.setItemQuantity(Integer.parseInt(itemSpinner.getSelectedItem().toString()));
                 searchItemm.setCaptainName(mPrefs.getLoggedInUsername());
                 searchItemm.setTableNo(mPrefs.getTableKey());
+              //  searchItemm.setItemPrice(search);
                 searchDataList.add(searchItemm);
 
                 mCaptionSearchRv.setHasFixedSize(true);

@@ -25,29 +25,28 @@ import java.util.Set;
 
 public class MenuCategoryAdapter extends RecyclerView.Adapter<MenuCategoryAdapter.ViewHolder> {
 
-    private List<MenuList> data;
+    private List<String> data;
     private Context mContext;
     private final CatogeryonClick mClick;
     private final int pos;
     private int row_index=-1;
 
     public interface CatogeryonClick {
-        void onClicked(MenuList data, int pos);
+        void onClicked(String data, int pos);
 
     }
 
-    public MenuCategoryAdapter(Context mContext, int pos, List<MenuList> cogetaryList, CatogeryonClick mClick) {
+    public MenuCategoryAdapter(Context mContext, int pos, List<String> cogetaryList, CatogeryonClick mClick) {
         this.mContext=mContext;
         this.pos = pos;
         this.data=cogetaryList;
         this.mClick = mClick;
 
-
-
-
-
+       /* HashSet<MenuList> hashSet = new HashSet<MenuList>();
+        hashSet.addAll(cogetaryList);
+        cogetaryList.clear();
+        cogetaryList.addAll(hashSet);*/
     }
-
 
 
     @Override
@@ -62,6 +61,7 @@ public class MenuCategoryAdapter extends RecyclerView.Adapter<MenuCategoryAdapte
     @Override
     public void onBindViewHolder(final MenuCategoryAdapter.ViewHolder holder, final int position) {
       //  HashSet hashSet = new HashSet(data);
+
 
         holder.item_card.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +82,7 @@ public class MenuCategoryAdapter extends RecyclerView.Adapter<MenuCategoryAdapte
             holder.item_card.setBackgroundColor(Color.parseColor("#ffffff"));
             holder.item_Name.setTextColor(mContext.getResources().getColor(R.color.colorBlack));
         }
-        holder.item_Name.setText(data.get(position).getCategory());
+        holder.item_Name.setText(data.get(position).toString());
 
     }
 

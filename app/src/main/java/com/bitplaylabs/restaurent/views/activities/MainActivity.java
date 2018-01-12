@@ -107,8 +107,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fire.setTablename(tablename);
                 fire.setTablekey(key);
                 data.add(fire);
-                //  mPrefs.setTableKey(key);
-                Log.d("MainActivity", "" + dataSnapshot.getValue());
+
+                mRecyclerView.setHasFixedSize(true);
+                mRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+                captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(MainActivity.this, data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
+                    @Override
+                    public void onClicked(String tablekey, String tableid, String tableno, String headcount, String guestname, String phoneno) {
+                        mPrefs.setTableKey(tablekey);
+
+                        try {
+                            Log.d("ManAct", "" + headcount + "" + guestname + "" + phoneno);
+                            GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount);
+                            firebaseDatabase.getReference().child("guestdetails").child(userId).child(tablekey).setValue(guestDetails);
+                            Intent intent = new Intent(MainActivity.this, TableDetailsActivity.class);
+                            intent.putExtra("TableKey", tablekey);
+                            intent.putExtra("TableNumber", tableno);
+                            startActivity(intent);
+
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
+                mRecyclerView.setAdapter(captionRecyclerViewAdaptor);
 
             }
 
@@ -133,30 +156,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(this, data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
-            @Override
-            public void onClicked(String tablekey, String tableid, String tableno, String headcount, String guestname, String phoneno) {
-                mPrefs.setTableKey(tablekey);
 
-                try {
-                    Log.d("ManAct", "" + headcount + "" + guestname + "" + phoneno);
-                    GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount);
-                    firebaseDatabase.getReference().child("guestdetails").child(userId).child(tablekey).setValue(guestDetails);
-                    Intent intent = new Intent(MainActivity.this, TableDetailsActivity.class);
-                    intent.putExtra("TableKey", tablekey);
-                    intent.putExtra("TableNumber", tableno);
-                    startActivity(intent);
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        });
-        mRecyclerView.setAdapter(captionRecyclerViewAdaptor);
 
     }
 
@@ -168,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mUserName.setText(userName);
         mPrefs.setLoggedInUsername(userName);
         mUserRole.setText(userRole);
-        // Log.d("MainActivity", "username" + userName);
+
     }
 
     @Override

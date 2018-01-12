@@ -25,11 +25,11 @@ public class SearchBookedAdapter extends ArrayAdapter<SearchBookedList> {
     int resource, textViewResourceId;
     List<SearchBookedList> items, tempItems, suggestions;
 
-    public SearchBookedAdapter(@NonNull Context context ,List<SearchBookedList> objects) {
+    public SearchBookedAdapter(@NonNull Context context, List<SearchBookedList> objects) {
         super(context, android.R.layout.simple_list_item_1, objects);
-        this.items = objects ;
-        this.tempItems =new ArrayList<SearchBookedList>(objects);
-        this.suggestions =new ArrayList<SearchBookedList>(objects);
+        this.items = objects;
+        this.tempItems = new ArrayList<SearchBookedList>(objects);
+        this.suggestions = new ArrayList<SearchBookedList>(objects);
     }
 
     @Override
@@ -40,11 +40,12 @@ public class SearchBookedAdapter extends ArrayAdapter<SearchBookedList> {
         }
 
         TextView txtCustomer = (TextView) convertView.findViewById(R.id.tvCustomer);
+        TextView itemPrice = (TextView) convertView.findViewById(R.id.item_price);
 
 
         if (txtCustomer != null)
-            txtCustomer.setText(items.getItemName() + " " + items.getItemPrice());
-
+            txtCustomer.setText(items.getItemName());
+            itemPrice.setText("" + items.getItemPrice());
 
         return convertView;
     }
@@ -89,8 +90,7 @@ public class SearchBookedAdapter extends ArrayAdapter<SearchBookedList> {
                     add(cust);
                     notifyDataSetChanged();
                 }
-            }
-            else{
+            } else {
                 clear();
                 notifyDataSetChanged();
             }
