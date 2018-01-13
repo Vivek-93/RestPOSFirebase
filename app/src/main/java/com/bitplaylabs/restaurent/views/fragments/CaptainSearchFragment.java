@@ -208,10 +208,6 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
             @Override
             public void onClick(View view) {
 
-              /*  for (int i = 0; i < searchDataList.size(); i++) {
-                    searchItemm = searchDataList.get(i).toString();
-
-                }*/
                 SearchItemModel searchItemm = new SearchItemModel();
                 searchItemm.setSearchItem(search);
                 searchItemm.setItemQuantity(Integer.parseInt(itemSpinner.getSelectedItem().toString()));

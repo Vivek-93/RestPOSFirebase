@@ -51,24 +51,27 @@ public class CaptainCategoryFragment extends Fragment {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
     private List<MenuList> cogetaryList;
-   // private List<MenuList> cogetaryList;
+    // private List<MenuList> cogetaryList;
     private List<MenuList> subCogetaryList;
     private List<MenuList> subSubCogetaryList;
     private MenuCategoryAdapter mMenuCategoryAdapter;
     private int pos;
     List<MenuList> items;
-    private SubCategoryAdapter mSubCategoryAdapter ;
+    private SubCategoryAdapter mSubCategoryAdapter;
     private SubItemArrayAdapter mSubItemArrayAdapter;
     private List<SearchItemModel> searchDataList;
     private int position;
-    String selected=null;
+    String selected = null;
 
-    List<String> myList=new ArrayList<>();{
+    List<String> myList = new ArrayList<>();
+
+    {
         myList.add("Morning");
         myList.add("Afternoon");
         myList.add("Evening");
     }
-    private String subCategorySelected =null;
+
+    private String subCategorySelected = null;
 
     public CaptainCategoryFragment() {
         // Required empty public constructor
@@ -100,8 +103,8 @@ public class CaptainCategoryFragment extends Fragment {
         mPref = Sharedpreferences.getUserDataObj(getActivity());
         searchDataList = new ArrayList<>();
         cogetaryList = new ArrayList<>();
-        subCogetaryList=new ArrayList<>();
-        subSubCogetaryList=new ArrayList<>();
+        subCogetaryList = new ArrayList<>();
+        subSubCogetaryList = new ArrayList<>();
         mRef = firebaseDatabase.getReference("menulist");
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -165,12 +168,13 @@ public class CaptainCategoryFragment extends Fragment {
 
         mCatogeryRecyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        mMenuCategoryAdapter=new MenuCategoryAdapter(mContext, pos, myList, new MenuCategoryAdapter.CatogeryonClick() {
+        mMenuCategoryAdapter = new MenuCategoryAdapter(mContext, pos, myList, new MenuCategoryAdapter.CatogeryonClick() {
             @Override
             public void onClicked(String data, int pos) {
 
-                selected=data;
-                Toast.makeText(mContext, ""+data+pos, Toast.LENGTH_SHORT).show();
+                subCogetaryList.clear();
+                selected = data;
+                Toast.makeText(mContext, "" + data + pos, Toast.LENGTH_SHORT).show();
                 mRef = firebaseDatabase.getReference("menulist");
                 mRef.addChildEventListener(new ChildEventListener() {
                     @Override
@@ -178,7 +182,7 @@ public class CaptainCategoryFragment extends Fragment {
                         MenuList menuListFirebase = dataSnapshot.getValue(MenuList.class);
                         MenuList menuList = new MenuList();
                         String itemCategory = menuListFirebase.getCategory();
-                        if(itemCategory.equalsIgnoreCase(selected)) {
+                        if (itemCategory.equalsIgnoreCase(selected)) {
                             String itemSubCategory = menuListFirebase.getSubcategory();
                             menuList.setSubcategory(itemSubCategory);
 
@@ -188,6 +192,8 @@ public class CaptainCategoryFragment extends Fragment {
                             subCogetaryList.addAll(hashSet);*/
                             subCogetaryList.add(menuList);
 
+                        } else{
+
                         }
 
                         mCatogeryRecyclerView.setHasFixedSize(true);
@@ -195,8 +201,8 @@ public class CaptainCategoryFragment extends Fragment {
                         mSubCategoryAdapter = new SubCategoryAdapter(getContext(), position, subCogetaryList, new SubCategoryAdapter.SubCatogeryonClick() {
                             @Override
                             public void onClicked(MenuList data, int pos) {
-
-                                subCategorySelected= data.getSubcategory();
+                               // subSubCogetaryList.clear();
+                                subCategorySelected = data.getSubcategory();
                                 mRef = firebaseDatabase.getReference("menulist");
                                 mRef.addChildEventListener(new ChildEventListener() {
                                     @Override
@@ -204,24 +210,36 @@ public class CaptainCategoryFragment extends Fragment {
                                         MenuList menuListFirebase = dataSnapshot.getValue(MenuList.class);
                                         MenuList menuList = new MenuList();
                                         String itemSubCategory = menuListFirebase.getSubcategory();
-                                        if(itemSubCategory.equalsIgnoreCase(subCategorySelected)) {
+                                        if (itemSubCategory.equalsIgnoreCase(subCategorySelected)) {
                                             String itemName = menuListFirebase.getItemname();
-                                            Long itemPrice= menuListFirebase.getPrice();
-                                            String mealType= menuListFirebase.getMealtype();
-                                            menuList.setItemname(itemName );
+                                            Long itemPrice = menuListFirebase.getPrice();
+                                            String mealType = menuListFirebase.getMealtype();
+                                            menuList.setItemname(itemName);
                                             menuList.setPrice(itemPrice);
                                             menuList.setMealtype(mealType);
-                                          //  subSubCogetaryList.clear();
+                                            //  subSubCogetaryList.clear();
                                             subSubCogetaryList.add(menuList);
-                                        }
 
-                                      /*  String itemName= menuListFirebase.getItemname();
-                                        Long itemPrice= menuListFirebase.getPrice();
-                                        String mealType= menuListFirebase.getMealtype();
-                                        menuList.setItemname(itemName );
-                                        menuList.setPrice(itemPrice);
-                                        menuList.setMealtype(mealType);
-                                        subSubCogetaryList.add(menuList);*/
+                                            mSubSubCatogeryRv.setHasFixedSize(true);
+                                            mSubItemArrayAdapter = new SubItemArrayAdapter(getContext(), subSubCogetaryList, new SubItemArrayAdapter.AddCartButtonClick() {
+
+                                                @Override
+                                                public void onClicked(String itemname, int quantity, float price) {
+                                                    //   subSubCogetaryList.clear();
+                                                    SearchItemModel searchItemm = new SearchItemModel();
+                                                    searchItemm.setSearchItem(itemname);
+                                                    searchItemm.setItemQuantity(quantity);
+                                                    searchItemm.setCaptainName(mPref.getLoggedInUsername());
+                                                    searchItemm.setTableNo(mPref.getTableKey());
+                                                    searchItemm.setItemPrice((long) price);
+                                                    searchDataList.add(searchItemm);
+
+                                                    mRef = firebaseDatabase.getReference("");
+                                                    mRef.child("booked").child(mPref.getTableKey()).setValue(searchDataList);
+                                                }
+                                            });
+
+                                        }
 
                                     }
 
@@ -245,27 +263,10 @@ public class CaptainCategoryFragment extends Fragment {
 
                                     }
                                 });
-                                mSubSubCatogeryRv.setHasFixedSize(true);
-                                mSubItemArrayAdapter = new SubItemArrayAdapter(getContext(), subSubCogetaryList, new SubItemArrayAdapter.AddCartButtonClick() {
 
-                                    @Override
-                                    public void onClicked(String itemname, int quantity, float price) {
-                                     //   subSubCogetaryList.clear();
-                                        SearchItemModel searchItemm = new SearchItemModel();
-                                        searchItemm.setSearchItem(itemname);
-                                        searchItemm.setItemQuantity(quantity);
-                                        searchItemm.setCaptainName(mPref.getLoggedInUsername());
-                                        searchItemm.setTableNo(mPref.getTableKey());
-                                        searchItemm.setItemPrice((long) price);
-                                        searchDataList.add(searchItemm);
-
-                                        mRef = firebaseDatabase.getReference("");
-                                        mRef.child("booked").child(mPref.getTableKey()).setValue(searchDataList);
-                                    }
-                                });
                                 mSubSubCatogeryRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
                                 mSubSubCatogeryRv.setAdapter(mSubItemArrayAdapter);
-                                Toast.makeText(getContext(), ""+pos, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "" + pos, Toast.LENGTH_SHORT).show();
 
                             }
                         });

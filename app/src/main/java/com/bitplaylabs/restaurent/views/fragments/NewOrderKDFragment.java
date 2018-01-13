@@ -49,8 +49,6 @@ public class NewOrderKDFragment extends Fragment {
     private DatabaseReference mRef;
     private List<TableDetails> data;
 
-    TextView kd;
-
     public NewOrderKDFragment() {
         // Required empty public constructor
     }
