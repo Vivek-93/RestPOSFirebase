@@ -39,10 +39,10 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
     public RecyclerView mBookedRv;
     public LinearLayout mEmptyLl, mLl;
     private BookedOrderAdapter mBookedItemsAdapter;
-    public TextView mTotalBillPrice;
-    public ImageButton mRefresh;
+    public TextView mTotalBillPrice , mDoneTv;
     public ImageView mBack;
-    private List<BookedDetailModel> mBookedItemList;
+    private List<SearchItemModel> mBookedItemList;
+    private List<SearchItemModel> mUpdateList;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
@@ -53,15 +53,14 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booked_order);
-
         firebaseDatabase = FirebaseDatabase.getInstance();
         Utils.showProgress(BookedOrderActivity.this);
         mBookedRv = (RecyclerView) findViewById(R.id.act_booked_table_items_rv);
         mEmptyLl = (LinearLayout) findViewById(R.id.act_booked_item_empty_ll);
         mLl = (LinearLayout) findViewById(R.id.act_booked_item_ll);
         mTotalBillPrice = (TextView) findViewById(R.id.act_booked_items_totalprice_tv);
-        mRefresh = (ImageButton) findViewById(R.id.act_booked_items_refresh_ib);
         mBack = (ImageView) findViewById(R.id.act_booked_back_iv);
+        mDoneTv=(TextView)findViewById(R.id.act_booked_done_tv);
         mPrefs = Sharedpreferences.getUserDataObj(this);
         initilizeView();
 
@@ -69,33 +68,50 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
 
     private void initilizeView() {
         mBookedItemList = new ArrayList<>();
-        mRefresh.setOnClickListener(this);
+        mUpdateList = new ArrayList<>();
         mBack.setOnClickListener(this);
+        mDoneTv.setOnClickListener(this);
 
         mRef = firebaseDatabase.getReference("booked").child(mPrefs.getTableKey());
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                  Utils.stopProgress(BookedOrderActivity.this);
-                Toast.makeText(BookedOrderActivity.this, ""+s, Toast.LENGTH_SHORT).show();
                 SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
-                BookedDetailModel searchBookedList = new BookedDetailModel();
+                SearchItemModel searchBookedList = new SearchItemModel();
 
                 String tableNo=searchItemModel.getTableNo().toString();
                 String itemName = searchItemModel.getSearchItem().toString();
                 int itemQuantity = searchItemModel.getItemQuantity();
-                searchBookedList.setBookedItemName(itemName);
-                searchBookedList.setBookedItemQuantity(itemQuantity);
                 long itemPrice=searchItemModel.getItemPrice();
+                searchBookedList.setSearchItem(itemName);
+                searchBookedList.setItemQuantity(itemQuantity);
+                searchBookedList.setItemPrice(itemPrice);
+                searchBookedList.setCaptainName(searchItemModel.getCaptainName().toString());
+                searchBookedList.setTableNo(searchItemModel.getTableNo().toString());
+
                 mBookedItemList.add(searchBookedList);
 
                 sum = sum + (itemPrice * itemQuantity);
                 mTotalBillPrice.setText(""+sum);
                 mBookedRv.setHasFixedSize(true);
-                mBookedItemsAdapter = new BookedOrderAdapter(getApplication(), mBookedItemList);
+                mBookedItemsAdapter = new BookedOrderAdapter(getApplication(), mBookedItemList, new BookedOrderAdapter.BookedActivityonClick() {
+                    @Override
+                    public void onClicked(List<SearchItemModel> data , int postion) {
+                        SearchItemModel searchItemModel = new SearchItemModel();
+                        searchItemModel.setSearchItem(data.get(postion).getSearchItem());
+                        searchItemModel.setItemQuantity(data.get(postion).getItemQuantity());
+                        searchItemModel.setCaptainName(data.get(postion).getCaptainName());
+                        searchItemModel.setTableNo(data.get(postion).getTableNo());
+                        searchItemModel.setItemPrice(data.get(postion).getItemPrice());
+                        mUpdateList.add(searchItemModel);
+
+                    }
+                });
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplication());
                 mBookedRv.setLayoutManager(mLayoutManager);
                 mBookedRv.setAdapter(mBookedItemsAdapter);
+
 
             }
 
@@ -126,7 +142,11 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
 
         switch (view.getId()) {
-            case R.id.act_booked_items_refresh_ib:
+
+            case R.id.act_booked_done_tv:
+
+                mRef = firebaseDatabase.getReference("");
+                mRef.child("booked").child(mPrefs.getTableKey()).setValue(mUpdateList);
                 break;
 
             case R.id.act_booked_back_iv:

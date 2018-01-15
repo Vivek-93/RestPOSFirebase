@@ -35,7 +35,6 @@ public class SubItemArrayAdapter extends RecyclerView.Adapter<SubItemArrayAdapte
     private Spinner itemQuantitySpinner;
     private Dialog additemsDialogBox;
     private List<String> addQuantity;
- //   public static List<BookedItems> bookeditemsList = new ArrayList<BookedItems>();
 
     private final AddCartButtonClick mClick;
 
@@ -108,22 +107,8 @@ public class SubItemArrayAdapter extends RecyclerView.Adapter<SubItemArrayAdapte
                             int quantity = Integer.parseInt(itemQuantitySpinner.getSelectedItem().toString());
                             String itemName = data.get(position).getItemname().toString();
                             String price = data.get(position).getPrice().toString();
-
                             mClick.onClicked(itemName,quantity, Float.parseFloat(price));
-
-
-                          /*  BookedItems bookedItems = new BookedItems();
-                            bookedItems.setItemName(itemName);
-                            bookedItems.setQuantity(quantity);
-                            bookedItems.setPrice(price);
-                            bookeditemsList.add(bookedItems);
-                            Log.d("list", "" + bookeditemsList.size());*/
-                           /* Intent intent = new Intent(mContext, TableDetailsActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-                            mContext.startActivity(intent);
-*/
                             additemsDialogBox.dismiss();
-
                         }
                     });
 
@@ -136,9 +121,6 @@ public class SubItemArrayAdapter extends RecyclerView.Adapter<SubItemArrayAdapte
 
     }
 
-  /*  public ArrayList<BookedItems> getArrayList() {
-        return (ArrayList<BookedItems>) bookeditemsList;
-    }*/
 
     @Override
     public int getItemCount() {

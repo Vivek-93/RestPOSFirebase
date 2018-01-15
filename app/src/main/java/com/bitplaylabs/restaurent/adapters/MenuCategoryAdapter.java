@@ -42,10 +42,6 @@ public class MenuCategoryAdapter extends RecyclerView.Adapter<MenuCategoryAdapte
         this.data=cogetaryList;
         this.mClick = mClick;
 
-       /* HashSet<MenuList> hashSet = new HashSet<MenuList>();
-        hashSet.addAll(cogetaryList);
-        cogetaryList.clear();
-        cogetaryList.addAll(hashSet);*/
     }
 
 

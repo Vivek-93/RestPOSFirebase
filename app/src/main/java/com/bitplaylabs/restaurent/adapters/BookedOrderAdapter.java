@@ -2,6 +2,8 @@ package com.bitplaylabs.restaurent.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +15,9 @@ import android.widget.Toast;
 
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.extra.BookedDetailModel;
+import com.bitplaylabs.restaurent.extra.SearchItemModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,19 +28,21 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
 
     private Context mContext;
 
-    public List<BookedDetailModel> itemslist;
+    public List<SearchItemModel> itemslist;
+    public List<SearchItemModel> upDatelist;
+    private int pos;
+    private final BookedActivityonClick mClick;
 
-  //  public List<UpdateItems> updateItemsList;
+    public interface BookedActivityonClick {
+        void onClicked(List<SearchItemModel> data, int position);
 
+    }
 
-    public BookedOrderAdapter(Context context, List<BookedDetailModel> itemslist) {
+    public BookedOrderAdapter(Context context, List<SearchItemModel> itemslist, BookedActivityonClick mClick) {
         this.mContext = context;
         this.itemslist = itemslist;
-        // this.name=name;
-      //  updateItemsList = new ArrayList<UpdateItems>();
-
-
-
+        this.mClick = mClick;
+        upDatelist=new ArrayList<>();
     }
 
     @Override
@@ -50,26 +56,52 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
     @Override
     public void onBindViewHolder(final BookedOrderAdapter.ViewHolder holder, final int position) {
 
-        holder.item_Name.setText(""+itemslist.get(position).getBookedItemName());
-        holder.quality.setText(""+itemslist.get(position).getBookedItemQuantity());
+        holder.item_Name.setText(""+itemslist.get(position).getSearchItem());
+        holder.quality.setText(""+itemslist.get(position).getItemQuantity());
         holder.count.setText(String.valueOf(position + 1) + ".");
-    /*    holder.item_Name.setText(""+itemslist.get(position).bookedItemName);
-        holder.quality.setText(""+itemslist.get(position).getBookedItemQuantity());
-        holder.count.setText(String.valueOf(position + 1) + ".");*/
 
-      /*  holder.editMoreIV.setOnClickListener(new View.OnClickListener() {
+
+        holder.quality.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                holder.quality.setFocusable(true);
-                holder.quality.setEnabled(true);
-                holder.quality.setCursorVisible(true);
-                holder.editDoneIv.setVisibility(View.VISIBLE);
-                holder.editMoreIV.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+
+                Toast.makeText(mContext, ""+i+"i1"+i1+"i2"+i2, Toast.LENGTH_SHORT).show();
+                try {
+                    String updateName=  holder.item_Name.getText().toString();
+                    String updateQuantity= holder.quality.getText().toString();
+                    SearchItemModel bookedDetailModel=new SearchItemModel();
+                    bookedDetailModel.setSearchItem(updateName);
+                    bookedDetailModel.setItemQuantity(Integer.parseInt(updateQuantity));
+                    bookedDetailModel.setItemPrice(itemslist.get(position).getItemPrice());
+                    bookedDetailModel.setCaptainName(itemslist.get(position).getCaptainName());
+                    bookedDetailModel.setTableNo(itemslist.get(position).getTableNo());
+                    upDatelist.add(bookedDetailModel);
+                    mClick.onClicked(upDatelist,position);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+
 
             }
         });
-*/
+
+
+      //  holder.quality.setText(""+itemslist.get(position).getBookedItemQuantity());
+
 
     }
 
@@ -95,13 +127,11 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
             item_Name = (TextView) itemView.findViewById(R.id.namee);
             quality = (EditText) itemView.findViewById(R.id.quality);
             count = (TextView) itemView.findViewById(R.id.item_count_tv);
-            editMoreIV = (ImageView) itemView.findViewById(R.id.item_setting_iv);
-            editDoneIv=(ImageView)itemView.findViewById(R.id.item_setting_done_iv);
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
 
-                        int position = getLayoutPosition();
+                    int position = getLayoutPosition();
 
                     delete(getAdapterPosition());
                     Toast.makeText(mContext, "" + item_Name.getText().toString() + " Delected", Toast.LENGTH_SHORT).show();

@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mPrefs.setTableKey(tablekey);
 
                         try {
-                            Log.d("ManAct", "" + headcount + "" + guestname + "" + phoneno);
+
                             GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount);
                             firebaseDatabase.getReference().child("guestdetails").child(userId).child(tablekey).setValue(guestDetails);
                             Intent intent = new Intent(MainActivity.this, TableDetailsActivity.class);

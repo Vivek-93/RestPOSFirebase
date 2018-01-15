@@ -22,6 +22,7 @@ import com.bitplaylabs.restaurent.adapters.SubItemArrayAdapter;
 import com.bitplaylabs.restaurent.extra.MenuList;
 import com.bitplaylabs.restaurent.extra.SearchItemModel;
 import com.bitplaylabs.restaurent.utils.Sharedpreferences;
+import com.bitplaylabs.restaurent.utils.Utils;
 import com.bitplaylabs.restaurent.views.activities.TableDetailsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -155,11 +156,6 @@ public class CaptainCategoryFragment extends Fragment {
         String itemCategory = menuListFirebase.getCategory();
         menuList.setCategory(itemCategory);
         cogetaryList.add(menuList);
-      /*  HashSet<MenuList> hashSet = new HashSet<MenuList>();
-        hashSet.addAll(cogetaryList);
-        cogetaryList.clear();
-        cogetaryList.addAll(hashSet);*/
-
         settingCategoryRecyclerView();
 
     }
@@ -186,13 +182,9 @@ public class CaptainCategoryFragment extends Fragment {
                             String itemSubCategory = menuListFirebase.getSubcategory();
                             menuList.setSubcategory(itemSubCategory);
 
-                           /* HashSet<MenuList> hashSet = new HashSet<MenuList>();
-                            hashSet.addAll(subCogetaryList);
-                            subCogetaryList.clear();
-                            subCogetaryList.addAll(hashSet);*/
                             subCogetaryList.add(menuList);
 
-                        } else{
+                        } else {
 
                         }
 
@@ -201,12 +193,15 @@ public class CaptainCategoryFragment extends Fragment {
                         mSubCategoryAdapter = new SubCategoryAdapter(getContext(), position, subCogetaryList, new SubCategoryAdapter.SubCatogeryonClick() {
                             @Override
                             public void onClicked(MenuList data, int pos) {
-                               // subSubCogetaryList.clear();
+                                subSubCogetaryList.clear();
+                                Utils.showProgress(mContext);
+                                Toast.makeText(getContext(), "" + data.getSubcategory(), Toast.LENGTH_SHORT).show();
                                 subCategorySelected = data.getSubcategory();
                                 mRef = firebaseDatabase.getReference("menulist");
                                 mRef.addChildEventListener(new ChildEventListener() {
                                     @Override
                                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                        Utils.stopProgress(mContext);
                                         MenuList menuListFirebase = dataSnapshot.getValue(MenuList.class);
                                         MenuList menuList = new MenuList();
                                         String itemSubCategory = menuListFirebase.getSubcategory();
@@ -219,27 +214,29 @@ public class CaptainCategoryFragment extends Fragment {
                                             menuList.setMealtype(mealType);
                                             //  subSubCogetaryList.clear();
                                             subSubCogetaryList.add(menuList);
-
-                                            mSubSubCatogeryRv.setHasFixedSize(true);
-                                            mSubItemArrayAdapter = new SubItemArrayAdapter(getContext(), subSubCogetaryList, new SubItemArrayAdapter.AddCartButtonClick() {
-
-                                                @Override
-                                                public void onClicked(String itemname, int quantity, float price) {
-                                                    //   subSubCogetaryList.clear();
-                                                    SearchItemModel searchItemm = new SearchItemModel();
-                                                    searchItemm.setSearchItem(itemname);
-                                                    searchItemm.setItemQuantity(quantity);
-                                                    searchItemm.setCaptainName(mPref.getLoggedInUsername());
-                                                    searchItemm.setTableNo(mPref.getTableKey());
-                                                    searchItemm.setItemPrice((long) price);
-                                                    searchDataList.add(searchItemm);
-
-                                                    mRef = firebaseDatabase.getReference("");
-                                                    mRef.child("booked").child(mPref.getTableKey()).setValue(searchDataList);
-                                                }
-                                            });
+                                        } else {
 
                                         }
+                                        mSubSubCatogeryRv.setHasFixedSize(true);
+                                        mSubItemArrayAdapter = new SubItemArrayAdapter(getContext(), subSubCogetaryList, new SubItemArrayAdapter.AddCartButtonClick() {
+
+                                            @Override
+                                            public void onClicked(String itemname, int quantity, float price) {
+                                                //   subSubCogetaryList.clear();
+                                                SearchItemModel searchItemm = new SearchItemModel();
+                                                searchItemm.setSearchItem(itemname);
+                                                searchItemm.setItemQuantity(quantity);
+                                                searchItemm.setCaptainName(mPref.getLoggedInUsername());
+                                                searchItemm.setTableNo(mPref.getTableKey());
+                                                searchItemm.setItemPrice((long) price);
+                                                searchDataList.add(searchItemm);
+
+                                                mRef = firebaseDatabase.getReference("");
+                                                mRef.child("booked").child(mPref.getTableKey()).setValue(searchDataList);
+                                            }
+                                        });
+                                        mSubSubCatogeryRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
+                                        mSubSubCatogeryRv.setAdapter(mSubItemArrayAdapter);
 
                                     }
 
@@ -263,10 +260,6 @@ public class CaptainCategoryFragment extends Fragment {
 
                                     }
                                 });
-
-                                mSubSubCatogeryRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
-                                mSubSubCatogeryRv.setAdapter(mSubItemArrayAdapter);
-                                Toast.makeText(getContext(), "" + pos, Toast.LENGTH_SHORT).show();
 
                             }
                         });

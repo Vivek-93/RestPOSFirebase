@@ -22,7 +22,7 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
 
     private List<MenuList> subData;
     private Context mContext;
-    private final int position;
+    private int pos;
     private String mCatogery;
     private final SubCatogeryonClick mClick;
     private int row_index = -1;
@@ -35,7 +35,7 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
 
     public SubCategoryAdapter(Context context, int pos, List<MenuList> subData, SubCatogeryonClick mClick) {
         this.mContext = context;
-        this.position = pos;
+        this.pos = pos;
         this.subData = subData;
         this.mClick = mClick;
     }
@@ -63,8 +63,6 @@ public class SubCategoryAdapter extends RecyclerView.Adapter<SubCategoryAdapter.
             }
         });
         if (row_index == position) {
-          /*  holder.mCardView.setEnabled(false);
-            holder.mCardView.setClickable(false);*/
             holder.mCardView.setBackgroundColor(mContext.getResources().getColor(R.color.colorAccent));
             holder.mItemName.setTextColor(mContext.getResources().getColor(R.color.colorWhite));
         } else {
