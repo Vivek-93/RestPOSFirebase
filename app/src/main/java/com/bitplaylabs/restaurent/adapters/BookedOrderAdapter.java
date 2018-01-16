@@ -60,7 +60,6 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
         holder.quality.setText(""+itemslist.get(position).getItemQuantity());
         holder.count.setText(String.valueOf(position + 1) + ".");
 
-
         holder.quality.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -71,8 +70,6 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-
-                Toast.makeText(mContext, ""+i+"i1"+i1+"i2"+i2, Toast.LENGTH_SHORT).show();
                 try {
                     String updateName=  holder.item_Name.getText().toString();
                     String updateQuantity= holder.quality.getText().toString();
@@ -87,15 +84,10 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
-
-
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
-
-
             }
         });
 

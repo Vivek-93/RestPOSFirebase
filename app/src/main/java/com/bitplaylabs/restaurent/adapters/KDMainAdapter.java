@@ -1,6 +1,7 @@
 package com.bitplaylabs.restaurent.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +44,15 @@ public class KDMainAdapter extends RecyclerView.Adapter<KDMainAdapter.ViewHolder
 
         holder.table_no.setText(""+data.get(position).getTableid());
 
-    }
+        if (data.get(position).getStatus().equalsIgnoreCase("1")) {
+            holder.itemView.setBackgroundColor(Color.GREEN);
+
+
+        } else if (data.get(position).getStatus().equalsIgnoreCase("0")) {
+
+        }
+
+        }
 
 
     @Override

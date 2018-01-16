@@ -104,10 +104,12 @@ public class KDMainActivity extends AppCompatActivity {
                 TableDetails fire = new TableDetails();
                 String id = value.getTableid();
                 String tablename = value.getTablename();
+                String tablestatus = value.getStatus();
                 String key = dataSnapshot.getKey().toString();
                 fire.setTableid(id);
                 fire.setTablename(tablename);
                 fire.setTablekey(key);
+                fire.setStatus(tablestatus);
                 data.add(fire);
                 //  mPrefs.setTableKey(key);
                 mKdMainRv.setHasFixedSize(true);

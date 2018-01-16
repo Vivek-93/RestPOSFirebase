@@ -59,7 +59,7 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
         context = TableDetailsActivity.this;
         mPrefs = Sharedpreferences.getUserDataObj(this);
         keyId=getIntent().getExtras().getString("TableKey");
-        tableNo=getIntent().getExtras().getString("TableNumber");
+      //  tableNo=getIntent().getExtras().getString("TableNumber");
 
         initializeViews();
     }
@@ -103,7 +103,7 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
         String headCount = dataSnapshot.child(mPrefs.getUserId()).child(keyId).getValue(GuestDetails.class).getHeadcount().toString();
         mGuestName.setText(guestName);
         mGuestPhone.setText(guestPhone);
-        mGuestTable.setText(tableNo);
+        mGuestTable.setText(keyId);
     }
 
     @Override

@@ -20,9 +20,19 @@ import android.widget.Toast;
 
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.extra.TableDetails;
+import com.bitplaylabs.restaurent.utils.Sharedpreferences;
 import com.bitplaylabs.restaurent.views.activities.MainActivity;
+import com.bitplaylabs.restaurent.views.activities.TableDetailsActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,19 +50,26 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
     private ImageView decreseIv, increseIv;
     private Button proceedBtn;
     int counter = 0;
-    private EditText guestName,guestPhone,guestTable;
+    private EditText guestName, guestPhone, guestTable;
     private final ProceedButtonClick mClick;
+    private FirebaseDatabase firebaseDatabase;
+    private FirebaseAuth.AuthStateListener mStateListener;
+    private DatabaseReference mRef;
+    private Sharedpreferences mPrefs;
 
     public interface ProceedButtonClick {
 
-        void onClicked(String tablekey, String tableid, String tableno, String headcount, String guestname, String phoneno);
+        void onClicked(String tablekey, String tableid, String headcount, String guestname, String phoneno);
     }
 
 
-    public CaptionRecyclerViewAdaptor(Context context, List<TableDetails> data,ProceedButtonClick mClick) {
+    public CaptionRecyclerViewAdaptor(Context context, List<TableDetails> data, ProceedButtonClick mClick) {
         this.mContext = context;
         this.data = data;
         this.mClick = mClick;
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        mRef = firebaseDatabase.getReference();
+        mPrefs = Sharedpreferences.getUserDataObj(mContext);
 
     }
 
@@ -67,7 +84,35 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
     @Override
     public void onBindViewHolder(final CaptionRecyclerViewAdaptor.ViewHolder holder, final int position) {
 
-        holder.myTextView.setText(""+data.get(position).getTablename().toString());
+        holder.myTextView.setText("" + data.get(position).getTablename().toString());
+
+       /* String dateStr = "04052018";
+
+        SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy");
+        Date dateObj = null;
+        try {
+            dateObj = curFormater.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        SimpleDateFormat postFormater = new SimpleDateFormat("dd MM yyyy");
+        String newDateStr = postFormater.format(dateObj);*/
+
+        /*String kot= position+""+ Calendar.getInstance().getTime()+""+"01";
+        Toast.makeText(mContext, ""+kot, Toast.LENGTH_SHORT).show();*/
+        if (data.get(position).getStatus().equalsIgnoreCase("1")) {
+            holder.itemView.setBackgroundColor(Color.GREEN);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mContext, TableDetailsActivity.class);
+                    intent.putExtra("TableKey", data.get(position).getTablekey());
+                    //  intent.putExtra("TableNumber", data.get(position).get);
+                    mContext.startActivity(intent);
+                }
+            });
+
+        } else if (data.get(position).getStatus().equalsIgnoreCase("0")) {
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -81,9 +126,9 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                     decreseIv = (ImageView) tableInfoDialogBox.findViewById(R.id.caption_table_decrese_count);
                     increseIv = (ImageView) tableInfoDialogBox.findViewById(R.id.caption_table_increse_count);
                     counts = (TextView) tableInfoDialogBox.findViewById(R.id.caption_table_count);
-                    guestName=(EditText)tableInfoDialogBox.findViewById(R.id.caption_table_guest_name_et);
-                    guestPhone=(EditText)tableInfoDialogBox.findViewById(R.id.caption_table_guest_phone_et);
-                    guestTable=(EditText)tableInfoDialogBox.findViewById(R.id.caption_table_guest_table_et);
+                    guestName = (EditText) tableInfoDialogBox.findViewById(R.id.caption_table_guest_name_et);
+                    guestPhone = (EditText) tableInfoDialogBox.findViewById(R.id.caption_table_guest_phone_et);
+                    guestTable = (EditText) tableInfoDialogBox.findViewById(R.id.caption_table_guest_table_et);
                     proceedBtn = (Button) tableInfoDialogBox.findViewById(R.id.caption_table_proceed_btn);
 
                     try {
@@ -128,9 +173,9 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                         @Override
                         public void onClick(View view) {
 
-                                mClick.onClicked(data.get(position).getTablekey(),data.get(position).getTableid().toString(), data.get(position).getTablename().toString(), counts.getText().toString(), guestName.getText().toString(),
-                                        guestPhone.getText().toString());
-                                notifyDataSetChanged();
+                            mClick.onClicked(data.get(position).getTablekey(), data.get(position).getTableid().toString(), data.get(position).getTablename().toString(),
+                                    guestName.getText().toString(),guestPhone.getText().toString());
+                            notifyDataSetChanged();
 
                             tableInfoDialogBox.dismiss();
                         }
@@ -138,6 +183,9 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
 
                 }
             });
+
+        }
+
 
         holder.printBillBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,7 +204,11 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                     @Override
                     public void onClick(View view) {
 
-                        printBillInPDF();
+                        if (data.get(position).getStatus().equalsIgnoreCase("1")) {
+                            Toast.makeText(mContext, "Hello"+data.get(position).getTablekey(), Toast.LENGTH_SHORT).show();
+                            mRef=firebaseDatabase.getReference("tables");
+                            mRef.child(data.get(position).getTablekey()).child("status").setValue("0");
+                        }
                         printDialogBox.dismiss();
                     }
                 });
@@ -167,21 +219,13 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                         printDialogBox.dismiss();
                     }
                 });
+
             }
 
 
         });
 
     }
-
-    private void printBillInPDF() {
-
-
-      /*  Intent intent=new Intent(mContext, BillPdfViewActivity.class);
-        mContext.startActivity(intent);*/
-
-    }
-
 
     @Override
     public int getItemCount() {

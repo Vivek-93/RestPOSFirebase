@@ -147,6 +147,8 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
 
                 mRef = firebaseDatabase.getReference("");
                 mRef.child("booked").child(mPrefs.getTableKey()).setValue(mUpdateList);
+                mRef.child("tables").child(mPrefs.getTableKey()).child("status").setValue("1");
+                mRef.child("tables").child(mPrefs.getTableKey()).child("totalprice").setValue(""+sum);
                 break;
 
             case R.id.act_booked_back_iv:

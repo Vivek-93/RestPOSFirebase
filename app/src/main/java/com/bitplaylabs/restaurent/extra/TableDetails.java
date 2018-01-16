@@ -10,6 +10,8 @@ public class TableDetails {
     public String tableid;
     public String tablename;
     public String tablekey;
+    public String status;
+    public String totalprice;
 
 
     public TableDetails(){
@@ -38,5 +40,21 @@ public class TableDetails {
 
     public void setTablekey(String tablekey) {
         this.tablekey = tablekey;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getTotalprice() {
+        return totalprice;
+    }
+
+    public void setTotalprice(String totalprice) {
+        this.totalprice = totalprice;
     }
 }

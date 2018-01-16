@@ -74,6 +74,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+        captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(MainActivity.this, data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
+            @Override
+            public void onClicked(String tablekey, String tableid, String headcount, String guestname, String phoneno) {
+                mPrefs.setTableKey(tablekey);
+                try {
+
+                    GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount);
+                    firebaseDatabase.getReference().child("guestdetails").child(userId).child(tablekey).setValue(guestDetails);
+                    Intent intent = new Intent(MainActivity.this, TableDetailsActivity.class);
+                    intent.putExtra("TableKey", tablekey);
+                    // intent.putExtra("TableNumber", tableno);
+                    startActivity(intent);
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        mRecyclerView.setAdapter(captionRecyclerViewAdaptor);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
     private void initializeViews() {
         data = new ArrayList<>();
         mLogout.setOnClickListener(this);
@@ -102,26 +138,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 TableDetails fire = new TableDetails();
                 String id = value.getTableid();
                 String tablename = value.getTablename();
+                String tablestatus = value.getStatus();
+                String totalprice = value.getTotalprice();
                 String key = dataSnapshot.getKey().toString();
                 fire.setTableid(id);
                 fire.setTablename(tablename);
                 fire.setTablekey(key);
+                fire.setStatus(tablestatus);
+                fire.setTotalprice(totalprice);
                 data.add(fire);
 
                 mRecyclerView.setHasFixedSize(true);
                 mRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
                 captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(MainActivity.this, data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
                     @Override
-                    public void onClicked(String tablekey, String tableid, String tableno, String headcount, String guestname, String phoneno) {
+                    public void onClicked(String tablekey, String tableid, String headcount, String guestname, String phoneno) {
                         mPrefs.setTableKey(tablekey);
-
                         try {
 
                             GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount);
                             firebaseDatabase.getReference().child("guestdetails").child(userId).child(tablekey).setValue(guestDetails);
                             Intent intent = new Intent(MainActivity.this, TableDetailsActivity.class);
                             intent.putExtra("TableKey", tablekey);
-                            intent.putExtra("TableNumber", tableno);
+                            // intent.putExtra("TableNumber", tableno);
                             startActivity(intent);
 
 
