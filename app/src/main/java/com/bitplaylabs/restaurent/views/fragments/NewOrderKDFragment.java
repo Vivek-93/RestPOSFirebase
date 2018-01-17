@@ -59,7 +59,7 @@ public class NewOrderKDFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_order_kd, container, false);
         firebaseDatabase = FirebaseDatabase.getInstance();
         mRecyclerView = (RecyclerView) view.findViewById(R.id.frag_kd_new_order_rv);
-       // kd = (TextView) view.findViewById(R.id.kd);
+        // kd = (TextView) view.findViewById(R.id.kd);
         initializeView();
         return view;
     }
@@ -82,6 +82,7 @@ public class NewOrderKDFragment extends Fragment {
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
                 TableDetails value = dataSnapshot.getValue(TableDetails.class);
                 TableDetails fire = new TableDetails();
                 String id = value.getTableid();
@@ -92,7 +93,54 @@ public class NewOrderKDFragment extends Fragment {
                 fire.setTablekey(key);
                 data.add(fire);
 
-                setValue(s);
+                mRef = firebaseDatabase.getReference("booked").child("" + key);
+                mRef.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                        //  kd.setText(s + "" + dataSnapshot.getValue() + "size" + data.size());
+                        SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
+                        SearchItemModel list = new SearchItemModel();
+                        String itemName = searchItemModel.getSearchItem();
+                        int itemQuantity = searchItemModel.getItemQuantity();
+                        String tableNo = searchItemModel.getTableNo();
+                        String captainName = searchItemModel.getCaptainName();
+                        list.setSearchItem(itemName);
+                        list.setItemQuantity(itemQuantity);
+                        list.setTableNo(tableNo);
+                        list.setCaptainName(captainName);
+                        newOrderList.add(list);
+                        //  Toast.makeText(mContext, "" + dataSnapshot.getValue(), Toast.LENGTH_LONG).show();
+                        // kd.setText(""+itemName);
+                        mRecyclerView.setHasFixedSize(true);
+                        mNewOrderKDAdapter = new NewOrderKDAdapter(getContext(), newOrderList);
+                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+                        mRecyclerView.setLayoutManager(mLayoutManager);
+                        mRecyclerView.setAdapter(mNewOrderKDAdapter);
+
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
             }
 
@@ -118,66 +166,10 @@ public class NewOrderKDFragment extends Fragment {
         });
 
 
-
-
     }
 
     private void setValue(String s) {
-        for (int i = 0; i < data.size(); i++) {
-            mRef = firebaseDatabase.getReference("booked").child(""+data.get(i).getTableid());
-            mRef.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                  //  kd.setText(s + "" + dataSnapshot.getValue() + "size" + data.size());
-
-                    SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
-                    SearchItemModel list = new SearchItemModel();
-                    String itemName = searchItemModel.getSearchItem();
-                    int itemQuantity = searchItemModel.getItemQuantity();
-                    String tableNo = searchItemModel.getTableNo();
-                    String captainName = searchItemModel.getCaptainName();
-                    list.setSearchItem(itemName);
-                    list.setItemQuantity(itemQuantity);
-                    list.setTableNo(tableNo);
-                    list.setCaptainName(captainName);
-                    newOrderList.add(list);
-                  //  Toast.makeText(mContext, "" + dataSnapshot.getValue(), Toast.LENGTH_LONG).show();
-                    // kd.setText(""+itemName);
-                    settingUpRecyclerView();
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-        }
-
-    }
-
-    private void settingUpRecyclerView() {
-        mRecyclerView.setHasFixedSize(true);
-        mNewOrderKDAdapter = new NewOrderKDAdapter(getContext(), newOrderList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mNewOrderKDAdapter);
 
     }
 
