@@ -1,6 +1,7 @@
 package com.bitplaylabs.restaurent.adapters;
 
 import android.content.Context;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -60,49 +61,23 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
         holder.quality.setText(""+itemslist.get(position).getItemQuantity());
         holder.count.setText(String.valueOf(position + 1) + ".");
 
-        holder.quality.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        String updateName = holder.item_Name.getText().toString();
+        String updateQuantity = holder.quality.getText().toString();
+        SearchItemModel bookedDetailModel = new SearchItemModel();
+        bookedDetailModel.setSearchItem(updateName);
 
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                try {
-                    String updateName=  holder.item_Name.getText().toString();
-                    String updateQuantity= holder.quality.getText().toString();
-                    SearchItemModel bookedDetailModel=new SearchItemModel();
-                    bookedDetailModel.setSearchItem(updateName);
-                    bookedDetailModel.setItemQuantity(Integer.parseInt(updateQuantity));
-                    bookedDetailModel.setItemPrice(itemslist.get(position).getItemPrice());
-                    bookedDetailModel.setCaptainName(itemslist.get(position).getCaptainName());
-                    bookedDetailModel.setTableNo(itemslist.get(position).getTableNo());
-                    upDatelist.add(bookedDetailModel);
-                    mClick.onClicked(upDatelist,position);
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
-
-
-      //  holder.quality.setText(""+itemslist.get(position).getBookedItemQuantity());
-
-
+        Toast.makeText(mContext, "See"+updateName+""+updateQuantity, Toast.LENGTH_SHORT).show();
+        bookedDetailModel.setItemQuantity(Integer.parseInt(updateQuantity));
+        bookedDetailModel.setItemPrice(itemslist.get(position).getItemPrice());
+        bookedDetailModel.setCaptainName(itemslist.get(position).getCaptainName());
+        bookedDetailModel.setTableNo(itemslist.get(position).getTableNo());
+        upDatelist.add(bookedDetailModel);
+        mClick.onClicked(upDatelist,position);
     }
 
     @Override
     public int getItemCount() {
-      //  Log.d("BOA",""+itemslist.size());
-
         return itemslist.size();
-
     }
 
 
@@ -115,10 +90,10 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
         public ViewHolder(final View itemView) {
             super(itemView);
 
-          //  itemView.setClickable(true);
             item_Name = (TextView) itemView.findViewById(R.id.namee);
             quality = (EditText) itemView.findViewById(R.id.quality);
             count = (TextView) itemView.findViewById(R.id.item_count_tv);
+
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {

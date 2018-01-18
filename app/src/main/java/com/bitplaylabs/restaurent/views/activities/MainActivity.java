@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
         user = mAuth.getCurrentUser();
@@ -82,11 +81,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
         captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(MainActivity.this, data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
             @Override
-            public void onClicked(String tablekey, String tableid, String headcount, String guestname, String phoneno) {
+            public void onClicked(String tablekey, String tableid, String headcount, String guestname, String phoneno,String kot) {
                 mPrefs.setTableKey(tablekey);
                 try {
 
-                    GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount);
+                    GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount,kot);
                     firebaseDatabase.getReference().child("guestdetails").child(userId).child(tablekey).setValue(guestDetails);
                     Intent intent = new Intent(MainActivity.this, TableDetailsActivity.class);
                     intent.putExtra("TableKey", tablekey);
@@ -152,11 +151,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
                 captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(MainActivity.this, data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
                     @Override
-                    public void onClicked(String tablekey, String tableid, String headcount, String guestname, String phoneno) {
+                    public void onClicked(String tablekey, String tableid, String headcount, String guestname, String phoneno,String kot) {
                         mPrefs.setTableKey(tablekey);
                         try {
 
-                            GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount);
+                            GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount ,kot);
                             firebaseDatabase.getReference().child("guestdetails").child(userId).child(tablekey).setValue(guestDetails);
                             Intent intent = new Intent(MainActivity.this, TableDetailsActivity.class);
                             intent.putExtra("TableKey", tablekey);

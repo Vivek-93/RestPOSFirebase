@@ -58,7 +58,8 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
         mBookedItems = (ImageView) findViewById(R.id.act_table_details_toolbar_iv);
         context = TableDetailsActivity.this;
         mPrefs = Sharedpreferences.getUserDataObj(this);
-        keyId=getIntent().getExtras().getString("TableKey");
+        keyId= mPrefs.getTableKey();
+       // keyId=getIntent().getExtras().getString("TableKey");
       //  tableNo=getIntent().getExtras().getString("TableNumber");
 
         initializeViews();
@@ -101,9 +102,13 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
         String guestName = dataSnapshot.child(mPrefs.getUserId()).child(keyId).getValue(GuestDetails.class).getGuestname().toString();
         String guestPhone= dataSnapshot.child(mPrefs.getUserId()).child(keyId).getValue(GuestDetails.class).getGuestnumber().toString();
         String headCount = dataSnapshot.child(mPrefs.getUserId()).child(keyId).getValue(GuestDetails.class).getHeadcount().toString();
+        String kot = dataSnapshot.child(mPrefs.getUserId()).child(keyId).getValue(GuestDetails.class).getKot().toString();
+     //   Toast.makeText(context, ""+kot, Toast.LENGTH_SHORT).show();
         mGuestName.setText(guestName);
         mGuestPhone.setText(guestPhone);
         mGuestTable.setText(keyId);
+        mKotNumber.setText(kot);
+        mPrefs.setKot(kot);
     }
 
     @Override

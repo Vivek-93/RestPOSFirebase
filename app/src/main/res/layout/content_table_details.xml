@@ -83,7 +83,6 @@
                 android:layout_below="@id/guest_table_number"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
-                android:visibility="invisible"
                 android:text="KOT               :"
                 android:textSize="12sp" />
 
@@ -93,9 +92,8 @@
                 android:layout_below="@id/guest_table_number_tv"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="5dp"
-                android:visibility="invisible"
                 android:layout_toEndOf="@id/guest_kot_number"
-                android:text="ABC10"
+                android:text=""
                 android:textSize="12sp" />
 
             <Button

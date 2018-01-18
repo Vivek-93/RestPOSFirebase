@@ -9,15 +9,17 @@ public class GuestDetails {
     public String guestname;
     public String guestnumber;
     public String headcount;
+    public String kot;
 
     public GuestDetails(){
 
     }
 
-    public GuestDetails(String guestname, String phoneno, String headcount) {
+    public GuestDetails(String guestname, String phoneno, String headcount , String kot) {
         this.guestname=guestname;
         this.guestnumber=phoneno;
         this.headcount=headcount;
+        this.kot=kot;
     }
 
     public String getGuestname() {
@@ -42,5 +44,13 @@ public class GuestDetails {
 
     public void setHeadcount(String headcount) {
         this.headcount = headcount;
+    }
+
+    public String getKot() {
+        return kot;
+    }
+
+    public void setKot(String kot) {
+        this.kot = kot;
     }
 }

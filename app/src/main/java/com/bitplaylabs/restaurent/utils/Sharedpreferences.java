@@ -37,7 +37,7 @@ public class Sharedpreferences {
 
     public static final String TAG_USER_LOGGED_IN = "userloggedinstatus";
 
-    public static final String TAG_USER_LOGGED_IN_TYPE = "userloggedintype";
+    public static final String TAG_KOT = "userloggedintype";
 
     public static final String TAG_AUTH_TOKEN = "userauthtoken";
 
@@ -45,6 +45,7 @@ public class Sharedpreferences {
     public static final String TAG_USER_ROLE= "userrole";
     public static final String TAG_TABLE_ID= "tableid";
     public static final String TAG_TABLE_NUMBER= "tablenumber";
+    public static final String TAG_LAST_DATE= "lastdate";
 
     public static final String TAG_USER_COMING_FROM = "comingfrom";
 
@@ -100,13 +101,13 @@ public class Sharedpreferences {
     /*
         *  Loggedin type
         **/
-    public String getLoggedInType() {
-        return pref.getString(TAG_USER_LOGGED_IN_TYPE, "");
+    public String getKot() {
+        return pref.getString(TAG_KOT, "");
     }
 
-    public void setLoggedInType(String imeiNumber) {
+    public void setKot(String kot) {
         try {
-            editor.putString(TAG_USER_LOGGED_IN_TYPE, imeiNumber);
+            editor.putString(TAG_KOT, kot);
             editor.commit();
         } catch (Exception e) {
         }
@@ -265,13 +266,13 @@ public class Sharedpreferences {
     **/
 
 
-    public String getTagUserComingFrom() {
-        return pref.getString(TAG_USER_COMING_FROM, "");
+    public int getLastDate() {
+        return pref.getInt(TAG_LAST_DATE, 0);
     }
 
-    public void setTagUserComingFrom(String userid) {
+    public void setLastDate(int lastDate) {
         try {
-            editor.putString(TAG_USER_COMING_FROM, userid);
+            editor.putInt(TAG_USER_COMING_FROM, lastDate);
             editor.commit();
         } catch (Exception e) {
         }

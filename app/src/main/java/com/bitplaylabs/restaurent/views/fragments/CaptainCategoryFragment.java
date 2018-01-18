@@ -233,6 +233,7 @@ public class CaptainCategoryFragment extends Fragment {
 
                                                 mRef = firebaseDatabase.getReference("");
                                                 mRef.child("booked").child(mPref.getTableKey()).setValue(searchDataList);
+                                                mRef.child("bookingdetails").child(mPref.getTableKey()).child(mPref.getKot()).setValue(searchDataList);
                                             }
                                         });
                                         mSubSubCatogeryRv.setLayoutManager(new GridLayoutManager(getContext(), 3));

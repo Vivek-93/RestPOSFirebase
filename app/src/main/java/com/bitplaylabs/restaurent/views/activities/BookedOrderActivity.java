@@ -112,7 +112,6 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                 mBookedRv.setLayoutManager(mLayoutManager);
                 mBookedRv.setAdapter(mBookedItemsAdapter);
 
-
             }
 
             @Override
@@ -145,10 +144,8 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
 
             case R.id.act_booked_done_tv:
 
-                mRef = firebaseDatabase.getReference("");
-                mRef.child("booked").child(mPrefs.getTableKey()).setValue(mUpdateList);
-                mRef.child("tables").child(mPrefs.getTableKey()).child("status").setValue("1");
-                mRef.child("tables").child(mPrefs.getTableKey()).child("totalprice").setValue(""+sum);
+                bookedOrderFun();
+
                 break;
 
             case R.id.act_booked_back_iv:
@@ -156,5 +153,24 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                 break;
 
         }
+    }
+
+    private void bookedOrderFun() {
+
+        mRef = firebaseDatabase.getReference("");
+        mRef.child("booked").child(mPrefs.getTableKey()).setValue(mUpdateList);
+        mRef.child("tables").child(mPrefs.getTableKey()).child("status").setValue("1");
+        mRef.child("tables").child(mPrefs.getTableKey()).child("totalprice").setValue(""+sum);
+        mBookedRv.setHasFixedSize(true);
+        mBookedItemsAdapter = new BookedOrderAdapter(getApplication(), mUpdateList, new BookedOrderAdapter.BookedActivityonClick() {
+            @Override
+            public void onClicked(List<SearchItemModel> data , int postion) {
+
+            }
+        });
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplication());
+        mBookedRv.setLayoutManager(mLayoutManager);
+        mBookedRv.setAdapter(mBookedItemsAdapter);
+
     }
 }

@@ -57,9 +57,10 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
     private DatabaseReference mRef;
     private Sharedpreferences mPrefs;
 
+
     public interface ProceedButtonClick {
 
-        void onClicked(String tablekey, String tableid, String headcount, String guestname, String phoneno);
+        void onClicked(String tablekey, String tableid, String headcount, String guestname, String phoneno, String kot);
     }
 
 
@@ -86,20 +87,17 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
 
         holder.myTextView.setText("" + data.get(position).getTablename().toString());
 
-       /* String dateStr = "04052018";
 
-        SimpleDateFormat curFormater = new SimpleDateFormat("dd/MM/yyyy");
-        Date dateObj = null;
-        try {
-            dateObj = curFormater.parse(dateStr);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        SimpleDateFormat postFormater = new SimpleDateFormat("dd MM yyyy");
-        String newDateStr = postFormater.format(dateObj);*/
+       /* mPrefs.setLastDate(day);
 
-        /*String kot= position+""+ Calendar.getInstance().getTime()+""+"01";
-        Toast.makeText(mContext, ""+kot, Toast.LENGTH_SHORT).show();*/
+        if (day != mPrefs.getLastDate()) {
+            Toast.makeText(mContext, "Not Equal", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(mContext, "Equal", Toast.LENGTH_SHORT).show();
+        }*/
+
+        //  String kot= position+""+ Calendar.getInstance().getTime()+""+"01";
+
         if (data.get(position).getStatus().equalsIgnoreCase("1")) {
             holder.itemView.setBackgroundColor(Color.GREEN);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -172,11 +170,22 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                     proceedBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            Calendar cal = Calendar.getInstance();
+                            //  cal.setTime(date);
 
-                            mClick.onClicked(data.get(position).getTablekey(), data.get(position).getTableid().toString(), data.get(position).getTablename().toString(),
-                                    guestName.getText().toString(),guestPhone.getText().toString());
+                            int hours = cal.get(Calendar.HOUR_OF_DAY);
+                            int minuts = cal.get(Calendar.MINUTE);
+
+                            //  lastDay == mPrefs.getLastDate();
+                            int day = cal.get(Calendar.DAY_OF_MONTH);
+                            int month = cal.get(Calendar.MONTH);
+                            int year = cal.get(Calendar.YEAR);
+
+                            String kot = hours + "" + minuts + "" + day + "" + month + "" + year ;
+                            mClick.onClicked(data.get(position).getTablekey(), data.get(position).getTableid().toString(),counts.getText().toString() ,
+                                    guestName.getText().toString(), guestPhone.getText().toString(), kot.toString());
+
                             notifyDataSetChanged();
-
                             tableInfoDialogBox.dismiss();
                         }
                     });
@@ -205,8 +214,8 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                     public void onClick(View view) {
 
                         if (data.get(position).getStatus().equalsIgnoreCase("1")) {
-                            Toast.makeText(mContext, "Hello"+data.get(position).getTablekey(), Toast.LENGTH_SHORT).show();
-                            mRef=firebaseDatabase.getReference("tables");
+                            Toast.makeText(mContext, "Hello" + data.get(position).getTablekey(), Toast.LENGTH_SHORT).show();
+                            mRef = firebaseDatabase.getReference("tables");
                             mRef.child(data.get(position).getTablekey()).child("status").setValue("0");
                         }
                         printDialogBox.dismiss();
