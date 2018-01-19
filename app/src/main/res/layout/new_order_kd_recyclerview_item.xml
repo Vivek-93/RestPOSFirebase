@@ -28,7 +28,6 @@
             android:layout_weight=".9"
             android:gravity="center"
             android:text="KOT"
-            android:visibility="gone"
             android:textColor="@color/colorBlack"
             android:textSize="16sp" />
 

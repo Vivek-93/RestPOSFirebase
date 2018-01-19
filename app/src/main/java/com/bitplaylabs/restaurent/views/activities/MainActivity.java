@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(MainActivity.this, data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
             @Override
             public void onClicked(String tablekey, String tableid, String headcount, String guestname, String phoneno,String kot) {
-                mPrefs.setTableKey(tablekey);
+
                 try {
 
                     GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount,kot);
@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(MainActivity.this, data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
                     @Override
                     public void onClicked(String tablekey, String tableid, String headcount, String guestname, String phoneno,String kot) {
-                        mPrefs.setTableKey(tablekey);
+                      //  mPrefs.setTableKey(tablekey);
                         try {
 
                             GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount ,kot);

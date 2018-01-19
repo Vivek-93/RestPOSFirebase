@@ -65,7 +65,6 @@ public class CaptainCategoryFragment extends Fragment {
     String selected = null;
 
     List<String> myList = new ArrayList<>();
-
     {
         myList.add("Morning");
         myList.add("Afternoon");
@@ -101,6 +100,8 @@ public class CaptainCategoryFragment extends Fragment {
     }
 
     private void initializeView() {
+
+
         mPref = Sharedpreferences.getUserDataObj(getActivity());
         searchDataList = new ArrayList<>();
         cogetaryList = new ArrayList<>();
@@ -181,8 +182,11 @@ public class CaptainCategoryFragment extends Fragment {
                         if (itemCategory.equalsIgnoreCase(selected)) {
                             String itemSubCategory = menuListFirebase.getSubcategory();
                             menuList.setSubcategory(itemSubCategory);
-
                             subCogetaryList.add(menuList);
+                           /* HashSet<MenuList> hashSet = new HashSet<MenuList>();
+                            hashSet.addAll(subCogetaryList);
+                            subCogetaryList.clear();
+                            subCogetaryList.addAll(hashSet);*/
 
                         } else {
 

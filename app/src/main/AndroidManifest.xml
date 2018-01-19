@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bitplaylabs.restaurent">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -45,10 +47,14 @@
             android:name=".views.activities.BookedOrderActivity"
             android:label="@string/title_activity_booked_order"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".views.activities.KDMainActivity"
             android:label="@string/title_activity_kdmain"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".views.activities.BillPrintActivity"
+            android:label="@string/title_activity_bill_print"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

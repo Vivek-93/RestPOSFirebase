@@ -19,5 +19,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_booked_order">BookedOrderActivity</string>
     <string name="title_activity_kdmain">KDMainActivity</string>
+    <string name="title_activity_bill_print">BillPrintActivity</string>
 
 </resources>

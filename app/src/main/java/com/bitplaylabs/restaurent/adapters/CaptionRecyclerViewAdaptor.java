@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.extra.TableDetails;
 import com.bitplaylabs.restaurent.utils.Sharedpreferences;
+import com.bitplaylabs.restaurent.views.activities.BillPrintActivity;
 import com.bitplaylabs.restaurent.views.activities.MainActivity;
 import com.bitplaylabs.restaurent.views.activities.TableDetailsActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -103,9 +104,10 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    mPrefs.setTableKey(data.get(position).getTableid());
                     Intent intent = new Intent(mContext, TableDetailsActivity.class);
                     intent.putExtra("TableKey", data.get(position).getTablekey());
-                    //  intent.putExtra("TableNumber", data.get(position).get);
+                    //intent.putExtra("TableNumber", data.get(position).get);
                     mContext.startActivity(intent);
                 }
             });
@@ -116,6 +118,7 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                 @Override
                 public void onClick(View v) {
 
+                    mPrefs.setTableKey(data.get(position).getTableid());
                     tableInfoDialogBox = new Dialog(mContext);
                     //  tableInfoDialogBox.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     tableInfoDialogBox.setContentView(R.layout.item_caption_table_info);
@@ -218,6 +221,10 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                             mRef = firebaseDatabase.getReference("tables");
                             mRef.child(data.get(position).getTablekey()).child("status").setValue("0");
                         }
+                        Intent intent=new Intent(mContext, BillPrintActivity.class);
+                        intent.putExtra("billingTableKey", data.get(position).getTablekey());
+                        mContext.startActivity(intent);
+
                         printDialogBox.dismiss();
                     }
                 });

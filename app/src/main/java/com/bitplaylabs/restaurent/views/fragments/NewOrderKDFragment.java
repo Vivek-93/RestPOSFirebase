@@ -117,6 +117,7 @@ public class NewOrderKDFragment extends Fragment {
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
                         mRecyclerView.setLayoutManager(mLayoutManager);
                         mRecyclerView.setAdapter(mNewOrderKDAdapter);
+                        mNewOrderKDAdapter.notifyDataSetChanged();
 
                     }
 
