@@ -89,16 +89,6 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
         holder.myTextView.setText("" + data.get(position).getTablename().toString());
 
 
-       /* mPrefs.setLastDate(day);
-
-        if (day != mPrefs.getLastDate()) {
-            Toast.makeText(mContext, "Not Equal", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(mContext, "Equal", Toast.LENGTH_SHORT).show();
-        }*/
-
-        //  String kot= position+""+ Calendar.getInstance().getTime()+""+"01";
-
         if (data.get(position).getStatus().equalsIgnoreCase("1")) {
             holder.itemView.setBackgroundColor(Color.GREEN);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -223,6 +213,7 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                         }
                         Intent intent=new Intent(mContext, BillPrintActivity.class);
                         intent.putExtra("billingTableKey", data.get(position).getTablekey());
+                        intent.putExtra("captainID", mPrefs.getUserId() );
                         mContext.startActivity(intent);
 
                         printDialogBox.dismiss();

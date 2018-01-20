@@ -1,14 +1,11 @@
 package com.bitplaylabs.restaurent.views.activities;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.TextView;
 
 import com.bitplaylabs.restaurent.R;
+import com.bitplaylabs.restaurent.extra.GuestDetails;
 import com.bitplaylabs.restaurent.extra.SearchItemModel;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -17,18 +14,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class BillPrintActivity extends AppCompatActivity {
 
-    public TextView mPrintBillTv;
+    public TextView mPrintBillTv, mGuestDetailsTv, mCaptainDetail;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
-    String tableKey;
+    String tableKey, captainId;
 
     private List<SearchItemModel> billingList;
 
@@ -39,8 +34,11 @@ public class BillPrintActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bill_print);
         firebaseDatabase = FirebaseDatabase.getInstance();
 
-        tableKey=getIntent().getExtras().getString("billingTableKey");
-        mPrintBillTv=(TextView)findViewById(R.id.act_billprint_tv);
+        tableKey = getIntent().getExtras().getString("billingTableKey");
+        captainId = getIntent().getExtras().getString("captainID");
+        mPrintBillTv = (TextView) findViewById(R.id.act_billprint_tv);
+        mCaptainDetail = (TextView) findViewById(R.id.act_billprint_captain_tv);
+        mGuestDetailsTv = (TextView) findViewById(R.id.act_billprint_guest_tv);
 
 
         initializeViews();
@@ -48,19 +46,40 @@ public class BillPrintActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        billingList=new ArrayList<>();
+        billingList = new ArrayList<>();
+
+        mRef = firebaseDatabase.getReference("guestdetails").child(captainId).child(tableKey);
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                GuestDetails getGuestDetails = dataSnapshot.getValue(GuestDetails.class);
+
+                String guestName = getGuestDetails.getGuestname();
+                String guestPhone = getGuestDetails.getGuestnumber();
+                String guestHead = getGuestDetails.getHeadcount();
+                mGuestDetailsTv.setText("Name    : " + guestName + "\n" + "Phone   : " + guestPhone + "\n" + "Head Count  :" + guestHead);
+                //  mGuestDetailsTv.setText(""+dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         mRef = firebaseDatabase.getReference("booked").child(tableKey);
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                SearchItemModel getItemsDetails=dataSnapshot.getValue(SearchItemModel.class);
-                SearchItemModel searchItemModel=new SearchItemModel();
-                String itemName= getItemsDetails.getSearchItem().toString();
-                String itemPrice= getItemsDetails.getItemPrice().toString();
-                String tableNumber= getItemsDetails.getTableNo().toString();
-                String captainName= getItemsDetails.getCaptainName().toString();
-                String itemQuantity= String.valueOf(getItemsDetails.getItemQuantity());
+                SearchItemModel getItemsDetails = dataSnapshot.getValue(SearchItemModel.class);
+                SearchItemModel searchItemModel = new SearchItemModel();
+                String itemName = getItemsDetails.getSearchItem().toString();
+                String itemPrice = getItemsDetails.getItemPrice().toString();
+                String tableNumber = getItemsDetails.getTableNo().toString();
+                String captainName = getItemsDetails.getCaptainName().toString();
+                String itemQuantity = String.valueOf(getItemsDetails.getItemQuantity());
                 searchItemModel.setSearchItem(itemName);
                 searchItemModel.setItemQuantity(Integer.parseInt(itemQuantity));
                 searchItemModel.setItemPrice(Long.valueOf(itemPrice));
@@ -68,7 +87,20 @@ public class BillPrintActivity extends AppCompatActivity {
                 searchItemModel.setCaptainName(captainName);
                 billingList.add(searchItemModel);
                 //   mPrintBillTv.setText(""+billingList);
-                mPrintBillTv.setText(""+dataSnapshot.getValue()+"size"+billingList.size());
+                StringBuilder builder = new StringBuilder();
+                long sum = 0;
+                for (int i = 0; i < billingList.size(); i++) {
+
+                    long totalprice = billingList.get(i).getItemQuantity() * billingList.get(i).getItemPrice();
+                    builder.append("\n" + (billingList.get(i).getSearchItem().toString() + "  " + billingList.get(i).getItemQuantity() + "*" + billingList.get(i).getItemPrice() + "=" + totalprice+"Rs"));
+                    sum = sum + totalprice;
+
+                    //builder.append(details + "\n");
+                }
+                mPrintBillTv.setText(builder.toString()+ "\n\n     Total ammount : "+sum+"Rs");
+                mCaptainDetail.setText("Captain : " + captainName + "              " + tableNumber);
+
+                // mPrintBillTv.setText(""+dataSnapshot.getValue()+"size"+billingList.size());
             }
 
             @Override
@@ -91,6 +123,7 @@ public class BillPrintActivity extends AppCompatActivity {
 
             }
         });
+
 
        /* mRef.addValueEventListener(new ValueEventListener() {
             @Override

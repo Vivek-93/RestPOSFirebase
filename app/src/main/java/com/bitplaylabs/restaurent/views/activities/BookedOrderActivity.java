@@ -39,7 +39,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
     public RecyclerView mBookedRv;
     public LinearLayout mEmptyLl, mLl;
     private BookedOrderAdapter mBookedItemsAdapter;
-    public TextView mTotalBillPrice , mDoneTv;
+    public TextView mTotalBillPrice, mDoneTv;
     public ImageView mBack;
     private List<SearchItemModel> mBookedItemList;
     private List<SearchItemModel> mUpdateList;
@@ -47,7 +47,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
     private Sharedpreferences mPrefs;
-    long sum=0;
+    long sum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
         mLl = (LinearLayout) findViewById(R.id.act_booked_item_ll);
         mTotalBillPrice = (TextView) findViewById(R.id.act_booked_items_totalprice_tv);
         mBack = (ImageView) findViewById(R.id.act_booked_back_iv);
-        mDoneTv=(TextView)findViewById(R.id.act_booked_done_tv);
+        mDoneTv = (TextView) findViewById(R.id.act_booked_done_tv);
         mPrefs = Sharedpreferences.getUserDataObj(this);
         initilizeView();
 
@@ -76,14 +76,14 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                 Utils.stopProgress(BookedOrderActivity.this);
+                Utils.stopProgress(BookedOrderActivity.this);
                 SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
                 SearchItemModel searchBookedList = new SearchItemModel();
 
-                String tableNo=searchItemModel.getTableNo().toString();
+                String tableNo = searchItemModel.getTableNo().toString();
                 String itemName = searchItemModel.getSearchItem().toString();
                 int itemQuantity = searchItemModel.getItemQuantity();
-                long itemPrice=searchItemModel.getItemPrice();
+                long itemPrice = searchItemModel.getItemPrice();
                 searchBookedList.setSearchItem(itemName);
                 searchBookedList.setItemQuantity(itemQuantity);
                 searchBookedList.setItemPrice(itemPrice);
@@ -93,11 +93,11 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                 mBookedItemList.add(searchBookedList);
 
                 sum = sum + (itemPrice * itemQuantity);
-                mTotalBillPrice.setText(""+sum);
+                mTotalBillPrice.setText("" + sum);
                 mBookedRv.setHasFixedSize(true);
                 mBookedItemsAdapter = new BookedOrderAdapter(getApplication(), mBookedItemList, new BookedOrderAdapter.BookedActivityonClick() {
                     @Override
-                    public void onClicked(List<SearchItemModel> data , int postion) {
+                    public void onClicked(List<SearchItemModel> data, int postion) {
                         SearchItemModel searchItemModel = new SearchItemModel();
                         searchItemModel.setSearchItem(data.get(postion).getSearchItem());
                         searchItemModel.setItemQuantity(data.get(postion).getItemQuantity());
@@ -158,14 +158,14 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
     private void bookedOrderFun() {
 
         mRef = firebaseDatabase.getReference("");
-        mRef.child("booked").child(mPrefs.getTableKey()).setValue(mUpdateList);
+
         mRef.child("tables").child(mPrefs.getTableKey()).child("status").setValue("1");
-        mRef.child("tables").child(mPrefs.getTableKey()).child("totalprice").setValue(""+sum);
+        mRef.child("tables").child(mPrefs.getTableKey()).child("totalprice").setValue("" + sum);
         mBookedRv.setHasFixedSize(true);
         mBookedItemsAdapter = new BookedOrderAdapter(getApplication(), mUpdateList, new BookedOrderAdapter.BookedActivityonClick() {
             @Override
-            public void onClicked(List<SearchItemModel> data , int postion) {
-
+            public void onClicked(List<SearchItemModel> data, int postion) {
+                mRef.child("booked").child(mPrefs.getTableKey()).setValue(mUpdateList);
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplication());

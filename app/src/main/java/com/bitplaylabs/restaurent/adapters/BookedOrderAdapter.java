@@ -65,14 +65,14 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
         String updateQuantity = holder.quality.getText().toString();
         SearchItemModel bookedDetailModel = new SearchItemModel();
         bookedDetailModel.setSearchItem(updateName);
-
-        Toast.makeText(mContext, "See"+updateName+""+updateQuantity, Toast.LENGTH_SHORT).show();
         bookedDetailModel.setItemQuantity(Integer.parseInt(updateQuantity));
         bookedDetailModel.setItemPrice(itemslist.get(position).getItemPrice());
         bookedDetailModel.setCaptainName(itemslist.get(position).getCaptainName());
         bookedDetailModel.setTableNo(itemslist.get(position).getTableNo());
         upDatelist.add(bookedDetailModel);
+     //   notifyDataSetChanged();
         mClick.onClicked(upDatelist,position);
+
     }
 
     @Override
@@ -93,6 +93,7 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
             item_Name = (TextView) itemView.findViewById(R.id.namee);
             quality = (EditText) itemView.findViewById(R.id.quality);
             count = (TextView) itemView.findViewById(R.id.item_count_tv);
+
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override

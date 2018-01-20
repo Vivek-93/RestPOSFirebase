@@ -1,10 +1,12 @@
 package com.bitplaylabs.restaurent.extra;
 
+import java.io.Serializable;
+
 /**
  * Created by anees on 08-01-2018.
  */
 
-public class SearchItemModel {
+public class SearchItemModel implements Serializable {
 
 
     public String searchItem;
