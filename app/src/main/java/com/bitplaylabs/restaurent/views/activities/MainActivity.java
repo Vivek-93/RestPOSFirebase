@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 mRecyclerView.setHasFixedSize(true);
                 mRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
-                captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(MainActivity.this, data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
+                captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(MainActivity.this, data,  new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
                     @Override
                     public void onClicked(String tablekey, String tableid, String headcount, String guestname, String phoneno,String kot) {
                       //  mPrefs.setTableKey(tablekey);

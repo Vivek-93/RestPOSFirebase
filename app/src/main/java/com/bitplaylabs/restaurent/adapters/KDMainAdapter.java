@@ -23,9 +23,9 @@ public class KDMainAdapter extends RecyclerView.Adapter<KDMainAdapter.ViewHolder
     private List<TableDetails> data;
 
 
-    public KDMainAdapter(Context context,List<TableDetails> data) {
+    public KDMainAdapter(Context context, List<TableDetails> data) {
         this.mContext = context;
-        this.data=data;
+        this.data = data;
 
 
     }
@@ -42,7 +42,7 @@ public class KDMainAdapter extends RecyclerView.Adapter<KDMainAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final KDMainAdapter.ViewHolder holder, final int position) {
 
-        holder.table_no.setText(""+data.get(position).getTableid());
+        holder.table_no.setText("" + data.get(position).getTableid());
 
         if (data.get(position).getStatus().equalsIgnoreCase("1")) {
             holder.itemView.setBackgroundColor(Color.GREEN);
@@ -52,7 +52,8 @@ public class KDMainAdapter extends RecyclerView.Adapter<KDMainAdapter.ViewHolder
 
         }
 
-        }
+    }
+
 
 
     @Override

@@ -163,9 +163,11 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                     proceedBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+
+                          //  mRef = firebaseDatabase.getReference("ordernumber");
+
                             Calendar cal = Calendar.getInstance();
                             //  cal.setTime(date);
-
                             int hours = cal.get(Calendar.HOUR_OF_DAY);
                             int minuts = cal.get(Calendar.MINUTE);
 

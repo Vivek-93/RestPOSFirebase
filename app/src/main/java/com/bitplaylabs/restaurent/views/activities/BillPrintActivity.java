@@ -2,6 +2,8 @@ package com.bitplaylabs.restaurent.views.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bitplaylabs.restaurent.R;
@@ -17,12 +19,13 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BillPrintActivity extends AppCompatActivity {
+public class BillPrintActivity extends AppCompatActivity implements View.OnClickListener{
 
     public TextView mPrintBillTv, mGuestDetailsTv, mCaptainDetail;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
+    private ImageView mBackIv;
     String tableKey, captainId;
 
     private List<SearchItemModel> billingList;
@@ -39,6 +42,7 @@ public class BillPrintActivity extends AppCompatActivity {
         mPrintBillTv = (TextView) findViewById(R.id.act_billprint_tv);
         mCaptainDetail = (TextView) findViewById(R.id.act_billprint_captain_tv);
         mGuestDetailsTv = (TextView) findViewById(R.id.act_billprint_guest_tv);
+        mBackIv=(ImageView)findViewById(R.id.act_printbill_back_iv);
 
 
         initializeViews();
@@ -47,7 +51,7 @@ public class BillPrintActivity extends AppCompatActivity {
 
     private void initializeViews() {
         billingList = new ArrayList<>();
-
+mBackIv.setOnClickListener(this);
         mRef = firebaseDatabase.getReference("guestdetails").child(captainId).child(tableKey);
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -155,4 +159,14 @@ public class BillPrintActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+
+            case R.id.act_printbill_back_iv:
+                onBackPressed();
+                finish();
+                break;
+        }
+    }
 }

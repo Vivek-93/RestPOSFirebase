@@ -3,6 +3,7 @@ package com.bitplaylabs.restaurent.views.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -30,6 +31,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,7 +52,7 @@ public class NewOrderKDFragment extends Fragment {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
     private List<TableDetails> data;
-
+    private static int SPLASH_TIME_OUT = 3000;
     public NewOrderKDFragment() {
         // Required empty public constructor
     }
@@ -75,55 +79,83 @@ public class NewOrderKDFragment extends Fragment {
     }
 
     private void initializeView() {
-        data = new ArrayList<>();
-        newOrderList = new ArrayList<SearchItemModel>();
 
-        mRef = firebaseDatabase.getReference("tables");
-        mRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
+// This schedule a runnable task every  seconds
+        scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                data = new ArrayList<>();
+                newOrderList = new ArrayList<SearchItemModel>();
 
-                TableDetails value = dataSnapshot.getValue(TableDetails.class);
-                TableDetails fire = new TableDetails();
-                String id = value.getTableid();
-                String tablename = value.getTablename();
-                String key = dataSnapshot.getKey().toString();
-                fire.setTableid(id);
-                fire.setTablename(tablename);
-                fire.setTablekey(key);
-                data.add(fire);
-
-                mRef = firebaseDatabase.getReference("booked").child("" + key);
+                mRef = firebaseDatabase.getReference("tables");
                 mRef.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                        //  kd.setText(s + "" + dataSnapshot.getValue() + "size" + data.size());
-                        SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
-                        SearchItemModel list = new SearchItemModel();
-                        String itemName = searchItemModel.getSearchItem();
-                        int itemQuantity = searchItemModel.getItemQuantity();
-                        String tableNo = searchItemModel.getTableNo();
-                        String captainName = searchItemModel.getCaptainName();
-                        list.setSearchItem(itemName);
-                        list.setItemQuantity(itemQuantity);
-                        list.setTableNo(tableNo);
-                        list.setCaptainName(captainName);
-                        newOrderList.add(list);
-                        //  Toast.makeText(mContext, "" + dataSnapshot.getValue(), Toast.LENGTH_LONG).show();
-                        // kd.setText(""+itemName);
-                        mRecyclerView.setHasFixedSize(true);
-                        mNewOrderKDAdapter = new NewOrderKDAdapter(getContext(), newOrderList);
-                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-                        mRecyclerView.setLayoutManager(mLayoutManager);
-                        mRecyclerView.setAdapter(mNewOrderKDAdapter);
-                        mNewOrderKDAdapter.notifyDataSetChanged();
+                        TableDetails value = dataSnapshot.getValue(TableDetails.class);
+                        TableDetails fire = new TableDetails();
+                        String id = value.getTableid();
+                        String tablename = value.getTablename();
+                        String key = dataSnapshot.getKey().toString();
+                        fire.setTableid(id);
+                        fire.setTablename(tablename);
+                        fire.setTablekey(key);
+                        data.add(fire);
+
+                        mRef = firebaseDatabase.getReference("booked").child("" + key);
+                        mRef.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                                //  kd.setText(s + "" + dataSnapshot.getValue() + "size" + data.size());
+                                SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
+                                SearchItemModel list = new SearchItemModel();
+                                String itemName = searchItemModel.getSearchItem();
+                                int itemQuantity = searchItemModel.getItemQuantity();
+                                String tableNo = searchItemModel.getTableNo();
+                                String captainName = searchItemModel.getCaptainName();
+                                list.setSearchItem(itemName);
+                                list.setItemQuantity(itemQuantity);
+                                list.setTableNo(tableNo);
+                                list.setCaptainName(captainName);
+                                newOrderList.add(list);
+                                //  Toast.makeText(mContext, "" + dataSnapshot.getValue(), Toast.LENGTH_LONG).show();
+                                // kd.setText(""+itemName);
+                                mRecyclerView.setHasFixedSize(true);
+                                mNewOrderKDAdapter = new NewOrderKDAdapter(getContext(), newOrderList);
+                                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+                                mRecyclerView.setLayoutManager(mLayoutManager);
+                                mRecyclerView.setAdapter(mNewOrderKDAdapter);
+                                mNewOrderKDAdapter.notifyDataSetChanged();
+
+                            }
+
+                            @Override
+                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
 
                     }
 
                     @Override
                     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
 
                     }
 
@@ -142,37 +174,11 @@ public class NewOrderKDFragment extends Fragment {
 
                     }
                 });
-
             }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
+        }, 0, 3, TimeUnit.SECONDS);
 
     }
 
-    private void setValue(String s) {
-
-
-    }
 
 
 }

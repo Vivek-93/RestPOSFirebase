@@ -172,5 +172,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
         mBookedRv.setLayoutManager(mLayoutManager);
         mBookedRv.setAdapter(mBookedItemsAdapter);
 
+        Toast.makeText(this, "Order placed", Toast.LENGTH_SHORT).show();
+
     }
 }

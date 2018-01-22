@@ -38,7 +38,7 @@ public class KDMainActivity extends AppCompatActivity {
     private FragmentManager mFragmentManager;
 
     //KDHomeViewPager Adapter
-    private KdHomeViewPagerAdapter mKdHomeViewPagerAdapter ;
+    private KdHomeViewPagerAdapter mKdHomeViewPagerAdapter;
 
     public TabLayout mKdTablayout;
     public ViewPager mKdViewPager;
@@ -63,10 +63,10 @@ public class KDMainActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         user = mAuth.getCurrentUser();
         userId = user.getUid();
-        mKdTablayout=(TabLayout)findViewById(R.id.act_kd_main_table_layout);
-        mKdViewPager=(ViewPager)findViewById(R.id.act_kd_main_viewpager);
-        mKdMainRv=(RecyclerView)findViewById(R.id.act_kd_main_rv);
-        mName=(TextView)findViewById(R.id.act_kd_main_user_name_tv);
+        mKdTablayout = (TabLayout) findViewById(R.id.act_kd_main_table_layout);
+        mKdViewPager = (ViewPager) findViewById(R.id.act_kd_main_viewpager);
+        mKdMainRv = (RecyclerView) findViewById(R.id.act_kd_main_rv);
+        mName = (TextView) findViewById(R.id.act_kd_main_user_name_tv);
 
         initializeViews();
 
@@ -74,6 +74,7 @@ public class KDMainActivity extends AppCompatActivity {
 
     private void initializeViews() {
 
+        pushNotifications();
         mFragmentManager = getSupportFragmentManager();
 
         settingUpTabLayout();
@@ -95,7 +96,6 @@ public class KDMainActivity extends AppCompatActivity {
         });
 
 
-
         mRef = firebaseDatabase.getReference("tables");
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -113,7 +113,7 @@ public class KDMainActivity extends AppCompatActivity {
                 data.add(fire);
                 //  mPrefs.setTableKey(key);
                 mKdMainRv.setHasFixedSize(true);
-                mKDMainAdapter = new KDMainAdapter(KDMainActivity.this,data);
+                mKDMainAdapter = new KDMainAdapter(KDMainActivity.this, data);
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(KDMainActivity.this, LinearLayoutManager.HORIZONTAL, false);
                 mKdMainRv.setLayoutManager(mLayoutManager);
                 mKdMainRv.setAdapter(mKDMainAdapter);
@@ -144,17 +144,18 @@ public class KDMainActivity extends AppCompatActivity {
 
     }
 
+    private void pushNotifications() {
+    }
+
     private void showData(DataSnapshot dataSnapshot) {
 
         Log.d("MainActivity", "" + dataSnapshot.child(userId).getValue().toString());
         String userName = dataSnapshot.child(userId).getValue(UserGetInformation.class).getName().toString();
         String userRole = dataSnapshot.child(userId).getValue(UserGetInformation.class).getSelectrole().toString();
         mName.setText(userName);
-       // mUserRole.setText(userRole);
+        // mUserRole.setText(userRole);
         // Log.d("MainActivity", "username" + userName);
     }
-
-
 
     private void settingUpViewPager() {
 
