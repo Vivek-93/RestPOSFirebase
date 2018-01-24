@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.extra.UserInformation;
+import com.bitplaylabs.restaurent.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -24,7 +25,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     public EditText regMobileNumber, regUserName, regEmail, regPass;
     public Spinner mSelectType;
@@ -38,7 +39,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
 
     UserInformation userInformation;
-    // FirebaseUser user=firebaseAuth.getCurrentUser();
+
     String userId;
 
 
@@ -88,6 +89,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void attemptregister() {
 
+        Utils.showProgress(this);
         nameValue = regUserName.getText().toString().trim();
         passwordValue = regPass.getText().toString().trim();
         phoneNumValue = regMobileNumber.getText().toString().trim();
@@ -96,40 +98,35 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         if (!TextUtils.isEmpty(nameValue)) {
 
-         //   progressBar.setVisibility(View.VISIBLE);
+            //   progressBar.setVisibility(View.VISIBLE);
             mAuth.createUserWithEmailAndPassword(emailValue, passwordValue).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    Toast.makeText(RegisterActivity.this, "User registered", Toast.LENGTH_SHORT).show();
-                  //  progressBar.setVisibility(View.GONE);
 
-                    if(task.isSuccessful()){
+                    //  progressBar.setVisibility(View.GONE);
+                    Utils.stopProgress(getBaseContext());
+                    if (task.isSuccessful()) {
                         FirebaseUser user1 = mAuth.getCurrentUser();
-                        Log.d("Register", "createUserWithEmail:success"+user1.getUid());
+                        Log.d("Register", "createUserWithEmail:success" + user1.getUid());
                         // userId = mDatabase.push().getKey();
                         UserInformation user = new UserInformation(nameValue, phoneNumValue, emailValue, passwordValue, selectRole);
                         mDatabase.child(user1.getUid()).setValue(user);
                         Log.d("Register", "" + userId);
 
-                        startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
+                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                         finish();
 
-                    }else {
+                    } else {
                         Log.w("RegisterActivity", "createUserWithEmail:failure", task.getException());
-                        if(task.getException() instanceof FirebaseAuthUserCollisionException){
+                        if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                             Toast.makeText(RegisterActivity.this, "You are already registered", Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(RegisterActivity.this, ""+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(RegisterActivity.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
             });
 
-
-           /* UserInformation user = new UserInformation(nameValue, phoneNumValue, emailValue, passwordValue, selectRole);
-            mDatabase.child(userId).setValue(user);
-
-            Toast.makeText(this, "User registered", Toast.LENGTH_SHORT).show();*/
 
         }
 

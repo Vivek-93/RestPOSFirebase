@@ -1,17 +1,30 @@
 package com.bitplaylabs.restaurent.adapters;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.StrictMode;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bitplaylabs.restaurent.R;
-import com.bitplaylabs.restaurent.extra.NewOrderList;
 import com.bitplaylabs.restaurent.extra.SearchItemModel;
+import com.bitplaylabs.restaurent.views.activities.BillPrintActivity;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +38,17 @@ public class NewOrderKDAdapter extends RecyclerView.Adapter<NewOrderKDAdapter.Vi
     private Context mContext;
     private List<SearchItemModel> mOrderList;
 
+    private final ReadyClick mClick;
 
-    public NewOrderKDAdapter(Context context, List<SearchItemModel> newOrderList) {
+    public interface ReadyClick {
+
+        void onClicked(int position);
+    }
+
+    public NewOrderKDAdapter(Context context, List<SearchItemModel> newOrderList,ReadyClick mClick) {
         this.mContext = context;
         this.mOrderList = newOrderList;
+        this.mClick=mClick;
 
     }
 
@@ -53,8 +73,17 @@ public class NewOrderKDAdapter extends RecyclerView.Adapter<NewOrderKDAdapter.Vi
         holder.item_time_elapsed.setText(mOrderList.get(position).getTime_elapsed().toString());*/
         holder.item_order_taken_by.setText(mOrderList.get(position).getCaptainName().toString());
 
-    }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                mClick.onClicked(position);
+               // Toast.makeText(mContext, "aa"+position, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
 
     @Override
     public int getItemCount() {

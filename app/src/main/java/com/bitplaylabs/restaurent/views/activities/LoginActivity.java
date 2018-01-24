@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.onesignal.OneSignal;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -44,13 +45,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private FirebaseDatabase firebaseDatabase;
     private Sharedpreferences mPrefs;
     private String userRole;
+    FirebaseUser user;
+    String Loggedin_User_Email;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        OneSignal.startInit(this);
         setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         mPrefs = Sharedpreferences.getUserDataObj(this);
      /*   if (mAuth.getCurrentUser() != null) {
@@ -69,10 +75,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initilizeView() {
-        mAuth = FirebaseAuth.getInstance();
+
 
         mRegisterTv.setOnClickListener(this);
         mLoginButton.setOnClickListener(this);
+      /*  Loggedin_User_Email = user.getEmail();
+        OneSignal.sendTag("User_ID", Loggedin_User_Email);*/
 
     }
 
@@ -114,6 +122,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 Utils.stopProgress(LoginActivity.this);
+
                                 userRole = dataSnapshot.child(user1.getUid()).getValue(UserGetInformation.class).getSelectrole().toString();
 
                                 if (userRole.equalsIgnoreCase("Captain")) {
@@ -139,26 +148,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
 
-
-                       /* Log.d("Register", "createUserWithEmail:success"+user1.getUid());
-                        // userId = mDatabase.push().getKey();
-                        UserGetInformation user = new UserGetInformation ();
-                        mDatabase.child(user1.getUid()).setValue(user);
-                        Log.d("Register", "" + userId);
-                        */
-
-
-                      /*  if (userRole.equalsIgnoreCase("Captain")) {
-                            Log.d("LoginActivity", "signInWithEmail:success");
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intent);
-
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Hello", Toast.LENGTH_SHORT).show();
-                        }*/
-
-
                     } else if (!task.isSuccessful()) {
                         Log.w("LoginActivity", "signInWithEmail:failure", task.getException());
                         Toast.makeText(LoginActivity.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -166,8 +155,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             });
 
-           /* Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);*/
         }
 
 

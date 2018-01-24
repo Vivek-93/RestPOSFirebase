@@ -34,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -183,10 +184,13 @@ public class CaptainCategoryFragment extends Fragment {
                             String itemSubCategory = menuListFirebase.getSubcategory();
                             menuList.setSubcategory(itemSubCategory);
                             subCogetaryList.add(menuList);
-                           /* HashSet<MenuList> hashSet = new HashSet<MenuList>();
-                            hashSet.addAll(subCogetaryList);
-                            subCogetaryList.clear();
-                            subCogetaryList.addAll(hashSet);*/
+                            Iterator<MenuList> ite = subCogetaryList.iterator();
+                            while(ite.hasNext()) {
+                                MenuList iteValue = ite.next();
+                                if(iteValue.getSubcategory().equals(menuListFirebase.getSubcategory())) ite.remove();
+                            }
+                            subCogetaryList.add(menuListFirebase);
+
 
                         } else {
 

@@ -54,8 +54,6 @@ public class KDMainAdapter extends RecyclerView.Adapter<KDMainAdapter.ViewHolder
 
     }
 
-
-
     @Override
     public int getItemCount() {
 

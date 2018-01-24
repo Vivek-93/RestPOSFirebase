@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"
-        android:text="Items"
+        android:text=""
         android:textColor="@color/color_blue_btn"/>
 
 
