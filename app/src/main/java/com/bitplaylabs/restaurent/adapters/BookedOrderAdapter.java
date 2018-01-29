@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,26 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
         holder.quality.setText(""+itemslist.get(position).getItemQuantity());
         holder.count.setText(String.valueOf(position + 1) + ".");
 
+
+        holder.quality.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+             //   data[position] = editable.toString();
+               // Log.d("DATA" + getAdapterPosition() + "2", s.toString());
+                Toast.makeText(mContext, ""+editable, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         String updateName = holder.item_Name.getText().toString();
         String updateQuantity = holder.quality.getText().toString();
         SearchItemModel bookedDetailModel = new SearchItemModel();
@@ -70,10 +91,14 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
         bookedDetailModel.setCaptainName(itemslist.get(position).getCaptainName());
         bookedDetailModel.setTableNo(itemslist.get(position).getTableNo());
         upDatelist.add(bookedDetailModel);
+
+      //  upDatelist.set(position, bookedDetailModel);
+
+    /*    notifyItemInserted(position);*/
      //   notifyDataSetChanged();
         mClick.onClicked(upDatelist,position);
-
     }
+
 
     @Override
     public int getItemCount() {
@@ -85,7 +110,6 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
 
         public TextView item_Name, count;
         public EditText quality;
-        public ImageView editMoreIV,editDoneIv;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -100,7 +124,6 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
                 public boolean onLongClick(View view) {
 
                     int position = getLayoutPosition();
-
                     delete(getAdapterPosition());
                     Toast.makeText(mContext, "" + item_Name.getText().toString() + " Delected", Toast.LENGTH_SHORT).show();
                     return true;

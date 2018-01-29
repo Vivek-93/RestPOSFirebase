@@ -172,7 +172,6 @@ public class CaptainCategoryFragment extends Fragment {
 
                 subCogetaryList.clear();
                 selected = data;
-                Toast.makeText(mContext, "" + data + pos, Toast.LENGTH_SHORT).show();
                 mRef = firebaseDatabase.getReference("menulist");
                 mRef.addChildEventListener(new ChildEventListener() {
                     @Override
@@ -203,7 +202,6 @@ public class CaptainCategoryFragment extends Fragment {
                             public void onClicked(MenuList data, int pos) {
                                 subSubCogetaryList.clear();
                                 Utils.showProgress(mContext);
-                                Toast.makeText(getContext(), "" + data.getSubcategory(), Toast.LENGTH_SHORT).show();
                                 subCategorySelected = data.getSubcategory();
                                 mRef = firebaseDatabase.getReference("menulist");
                                 mRef.addChildEventListener(new ChildEventListener() {

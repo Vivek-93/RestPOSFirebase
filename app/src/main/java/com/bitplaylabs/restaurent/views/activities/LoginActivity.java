@@ -149,6 +149,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
 
                     } else if (!task.isSuccessful()) {
+                        Utils.stopProgress(LoginActivity.this);
                         Log.w("LoginActivity", "signInWithEmail:failure", task.getException());
                         Toast.makeText(LoginActivity.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }

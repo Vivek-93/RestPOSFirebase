@@ -162,10 +162,13 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
         mRef.child("tables").child(mPrefs.getTableKey()).child("status").setValue("1");
         mRef.child("tables").child(mPrefs.getTableKey()).child("totalprice").setValue("" + sum);
         mBookedRv.setHasFixedSize(true);
+        mBookedItemList.clear();
         mBookedItemsAdapter = new BookedOrderAdapter(getApplication(), mUpdateList, new BookedOrderAdapter.BookedActivityonClick() {
             @Override
             public void onClicked(List<SearchItemModel> data, int postion) {
-                mRef.child("booked").child(mPrefs.getTableKey()).setValue(mUpdateList);
+
+                Toast.makeText(BookedOrderActivity.this, ""+mUpdateList.get(postion).getItemQuantity(), Toast.LENGTH_SHORT).show();
+                mRef.child("booked").child(mPrefs.getTableKey()).setValue(data);
             }
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplication());

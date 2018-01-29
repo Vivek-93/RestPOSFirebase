@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
-                android:text="Total ammount:"
+                android:text="Total amount:"
                 android:textColor="@color/colorBlack"
                 android:textSize="18sp"
                 android:textStyle="italic" />

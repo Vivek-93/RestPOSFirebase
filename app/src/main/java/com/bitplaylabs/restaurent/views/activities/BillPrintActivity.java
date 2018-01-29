@@ -19,9 +19,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BillPrintActivity extends AppCompatActivity implements View.OnClickListener{
+public class BillPrintActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public TextView mPrintBillTv, mGuestDetailsTv, mCaptainDetail;
+    public TextView mPrintBillTv, mGuestDetailsTv, mCaptainDetail, mBillPrintDoneTv;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
@@ -42,7 +42,8 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
         mPrintBillTv = (TextView) findViewById(R.id.act_billprint_tv);
         mCaptainDetail = (TextView) findViewById(R.id.act_billprint_captain_tv);
         mGuestDetailsTv = (TextView) findViewById(R.id.act_billprint_guest_tv);
-        mBackIv=(ImageView)findViewById(R.id.act_printbill_back_iv);
+        mBillPrintDoneTv = (TextView) findViewById(R.id.act_printbill_done_tv);
+        mBackIv = (ImageView) findViewById(R.id.act_printbill_back_iv);
 
 
         initializeViews();
@@ -50,8 +51,10 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void initializeViews() {
+
         billingList = new ArrayList<>();
-mBackIv.setOnClickListener(this);
+        mBackIv.setOnClickListener(this);
+        mBillPrintDoneTv.setOnClickListener(this);
         mRef = firebaseDatabase.getReference("guestdetails").child(captainId).child(tableKey);
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -96,12 +99,12 @@ mBackIv.setOnClickListener(this);
                 for (int i = 0; i < billingList.size(); i++) {
 
                     long totalprice = billingList.get(i).getItemQuantity() * billingList.get(i).getItemPrice();
-                    builder.append("\n" + (billingList.get(i).getSearchItem().toString() + "  " + billingList.get(i).getItemQuantity() + "*" + billingList.get(i).getItemPrice() + "=" + totalprice+"Rs"));
+                    builder.append("\n" + (billingList.get(i).getSearchItem().toString() + "  " + billingList.get(i).getItemQuantity() + "*" + billingList.get(i).getItemPrice() + "=" + totalprice + "Rs"));
                     sum = sum + totalprice;
 
                     //builder.append(details + "\n");
                 }
-                mPrintBillTv.setText(builder.toString()+ "\n\n     Total ammount : "+sum+"Rs");
+                mPrintBillTv.setText(builder.toString() + "\n\n     Total ammount : " + sum + "Rs");
                 mCaptainDetail.setText("Captain : " + captainName + "              " + tableNumber);
 
                 // mPrintBillTv.setText(""+dataSnapshot.getValue()+"size"+billingList.size());
@@ -157,16 +160,28 @@ mBackIv.setOnClickListener(this);
             }
         });*/
 
+
+
+
+
     }
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
+
+            case R.id.act_printbill_done_tv:
+                billPrintFunction();
+                break;
 
             case R.id.act_printbill_back_iv:
                 onBackPressed();
                 finish();
                 break;
         }
+    }
+
+    private void billPrintFunction() {
+        firebaseDatabase.getReference("booked").child(tableKey).removeValue();
     }
 }
