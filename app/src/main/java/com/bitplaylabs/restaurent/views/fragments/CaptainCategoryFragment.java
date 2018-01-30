@@ -229,6 +229,7 @@ public class CaptainCategoryFragment extends Fragment {
                                             @Override
                                             public void onClicked(String itemname, int quantity, float price) {
                                                 //   subSubCogetaryList.clear();
+
                                                 SearchItemModel searchItemm = new SearchItemModel();
                                                 searchItemm.setSearchItem(itemname);
                                                 searchItemm.setItemQuantity(quantity);
@@ -296,7 +297,6 @@ public class CaptainCategoryFragment extends Fragment {
 
                     }
                 });
-
 
             }
         });

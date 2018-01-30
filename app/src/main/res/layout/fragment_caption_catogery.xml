@@ -5,7 +5,6 @@
     android:orientation="vertical"
     tools:context="com.bitplaylabs.restaurent.views.fragments.CaptainCategoryFragment">
 
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_caption_catogery_rv"
         android:layout_width="match_parent"
