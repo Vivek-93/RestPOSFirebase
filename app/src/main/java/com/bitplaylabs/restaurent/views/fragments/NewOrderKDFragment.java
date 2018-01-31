@@ -106,6 +106,9 @@ public class NewOrderKDFragment extends Fragment {
 
     private void initializeView() {
 
+
+
+
         LoggedIN_User_Email = user.getEmail();
         ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
 // This schedule a runnable task every  seconds
@@ -123,7 +126,7 @@ public class NewOrderKDFragment extends Fragment {
                         TableDetails fire = new TableDetails();
                         String id = value.getTableid();
                         String tablename = value.getTablename();
-                        String key = dataSnapshot.getKey().toString();
+                        final String key = dataSnapshot.getKey().toString();
                         fire.setTableid(id);
                         fire.setTablename(tablename);
                         fire.setTablekey(key);
@@ -133,64 +136,100 @@ public class NewOrderKDFragment extends Fragment {
                         mRef.addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                String tablebookedKey= dataSnapshot.getKey();
 
-                                SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
-                                SearchItemModel list = new SearchItemModel();
-                                String itemName = searchItemModel.getSearchItem();
-                                int itemQuantity = searchItemModel.getItemQuantity();
-                                String tableNo = searchItemModel.getTableNo();
-                                String captainName = searchItemModel.getCaptainName();
-                                list.setSearchItem(itemName);
-                                list.setItemQuantity(itemQuantity);
-                                list.setTableNo(tableNo);
-                                list.setCaptainName(captainName);
-                                newOrderList.add(list);
-
-                                mRecyclerView.setHasFixedSize(true);
-                                mNewOrderKDAdapter = new NewOrderKDAdapter(getContext(), newOrderList, new NewOrderKDAdapter.ReadyClick() {
+                                mRef = firebaseDatabase.getReference("booked").child("" + key).child(""+tablebookedKey);
+                                mRef.addChildEventListener(new ChildEventListener() {
                                     @Override
-                                    public void onClicked(int position) {
+                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                                        kdDialougeBox = new Dialog(mContext);
-                                        kdDialougeBox.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                        kdDialougeBox.setContentView(R.layout.item_meal_ready);
-                                        kdDialougeBox.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                        kdDialougeBox.getWindow().setGravity(Gravity.CENTER);
-                                        kdDialougeBox.show();
 
-                                        TextView mCancelTV = (TextView) kdDialougeBox.findViewById(R.id.meal_ready_cancel_tv);
-                                        TextView mReadyTV = (TextView) kdDialougeBox.findViewById(R.id.meal_ready_tv);
+                                       // Toast.makeText(mContext, ""+dataSnapshot.getValue()+"s"+s, Toast.LENGTH_SHORT).show();
+                                        // Toast.makeText(mContext, ""+dataSnapshot.getKey(), Toast.LENGTH_SHORT).show();
+                                        SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
+                                        SearchItemModel list = new SearchItemModel();
+                                        String itemName = searchItemModel.getSearchItem();
+                                        int itemQuantity = searchItemModel.getItemQuantity();
+                                        String tableNo = searchItemModel.getTableNo();
+                                        String captainName = searchItemModel.getCaptainName();
+                                        list.setSearchItem(itemName);
+                                        list.setItemQuantity(itemQuantity);
+                                        list.setTableNo(tableNo);
+                                        list.setCaptainName(captainName);
+                                        newOrderList.add(list);
 
-                                        mReadyTV.setOnClickListener(new View.OnClickListener() {
+                                        mRecyclerView.setHasFixedSize(true);
+                                        mNewOrderKDAdapter = new NewOrderKDAdapter(getContext(), newOrderList, new NewOrderKDAdapter.ReadyClick() {
                                             @Override
-                                            public void onClick(View view) {
+                                            public void onClicked(int position) {
 
-                                                Intent service = new Intent(mContext, ReadyOrder.class);
-                                                mContext.startService(service);
+                                                kdDialougeBox = new Dialog(mContext);
+                                                kdDialougeBox.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                kdDialougeBox.setContentView(R.layout.item_meal_ready);
+                                                kdDialougeBox.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                                kdDialougeBox.getWindow().setGravity(Gravity.CENTER);
+                                                kdDialougeBox.show();
 
-                                                // itemReadyPushNotification();
-                                                kdDialougeBox.dismiss();
+                                                TextView mCancelTV = (TextView) kdDialougeBox.findViewById(R.id.meal_ready_cancel_tv);
+                                                TextView mReadyTV = (TextView) kdDialougeBox.findViewById(R.id.meal_ready_tv);
+
+                                                mReadyTV.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View view) {
+
+                                                        Intent service = new Intent(mContext, ReadyOrder.class);
+                                                        mContext.startService(service);
+
+                                                        // itemReadyPushNotification();
+                                                        kdDialougeBox.dismiss();
+                                                    }
+                                                });
+
+                                                mCancelTV.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        kdDialougeBox.dismiss();
+                                                    }
+                                                });
                                             }
                                         });
+                                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+                                        mRecyclerView.setLayoutManager(mLayoutManager);
+                                        mRecyclerView.setAdapter(mNewOrderKDAdapter);
+                                        mNewOrderKDAdapter.notifyDataSetChanged();
 
-                                        mCancelTV.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                kdDialougeBox.dismiss();
-                                            }
-                                        });
+                                    }
+
+                                    @Override
+                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+
+                                    }
+
+                                    @Override
+                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                    }
+
+                                    @Override
+                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
                                     }
                                 });
-                                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-                                mRecyclerView.setLayoutManager(mLayoutManager);
-                                mRecyclerView.setAdapter(mNewOrderKDAdapter);
-                                mNewOrderKDAdapter.notifyDataSetChanged();
+
+
+
+
 
                             }
 
                             @Override
                             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
 
                             }
 
@@ -209,6 +248,8 @@ public class NewOrderKDFragment extends Fragment {
 
                             }
                         });
+
+
 
                     }
 
@@ -233,7 +274,7 @@ public class NewOrderKDFragment extends Fragment {
                     }
                 });
             }
-        }, 0, 3, TimeUnit.SECONDS);
+        }, 0, 10, TimeUnit.SECONDS);
 
     }
 

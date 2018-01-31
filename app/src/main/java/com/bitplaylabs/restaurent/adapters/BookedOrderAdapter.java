@@ -45,6 +45,7 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
         this.itemslist = itemslist;
         this.mClick = mClick;
         upDatelist=new ArrayList<>();
+
     }
 
     @Override
@@ -63,6 +64,7 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
         holder.count.setText(String.valueOf(position + 1) + ".");
 
 
+
         holder.quality.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -72,32 +74,37 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+                String updateName = holder.item_Name.getText().toString();
+                String updateQuantity = charSequence.toString();
+                SearchItemModel bookedDetailModel = new SearchItemModel();
+                bookedDetailModel.setSearchItem(updateName);
+                bookedDetailModel.setItemQuantity(Integer.parseInt(updateQuantity));
+                bookedDetailModel.setItemPrice(itemslist.get(position).getItemPrice());
+                bookedDetailModel.setCaptainName(itemslist.get(position).getCaptainName());
+                bookedDetailModel.setTableNo(itemslist.get(position).getTableNo());
+                upDatelist.add(bookedDetailModel);
+
+                //  upDatelist.set(position, bookedDetailModel);
+    /*    notifyItemInserted(position);*/
+                //   notifyDataSetChanged();
+                mClick.onClicked(upDatelist,position);
+
+
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-             //   data[position] = editable.toString();
-               // Log.d("DATA" + getAdapterPosition() + "2", s.toString());
-                Toast.makeText(mContext, ""+editable, Toast.LENGTH_SHORT).show();
+
+
+
             }
         });
 
-        String updateName = holder.item_Name.getText().toString();
-        String updateQuantity = holder.quality.getText().toString();
-        SearchItemModel bookedDetailModel = new SearchItemModel();
-        bookedDetailModel.setSearchItem(updateName);
-        bookedDetailModel.setItemQuantity(Integer.parseInt(updateQuantity));
-        bookedDetailModel.setItemPrice(itemslist.get(position).getItemPrice());
-        bookedDetailModel.setCaptainName(itemslist.get(position).getCaptainName());
-        bookedDetailModel.setTableNo(itemslist.get(position).getTableNo());
-        upDatelist.add(bookedDetailModel);
 
-      //  upDatelist.set(position, bookedDetailModel);
 
-    /*    notifyItemInserted(position);*/
-     //   notifyDataSetChanged();
-        mClick.onClicked(upDatelist,position);
     }
+
+
 
 
     @Override

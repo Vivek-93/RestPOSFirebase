@@ -77,40 +77,65 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Utils.stopProgress(BookedOrderActivity.this);
-                SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
-                SearchItemModel searchBookedList = new SearchItemModel();
-
-                String tableNo = searchItemModel.getTableNo().toString();
-                String itemName = searchItemModel.getSearchItem().toString();
-                int itemQuantity = searchItemModel.getItemQuantity();
-                long itemPrice = searchItemModel.getItemPrice();
-                searchBookedList.setSearchItem(itemName);
-                searchBookedList.setItemQuantity(itemQuantity);
-                searchBookedList.setItemPrice(itemPrice);
-                searchBookedList.setCaptainName(searchItemModel.getCaptainName().toString());
-                searchBookedList.setTableNo(searchItemModel.getTableNo().toString());
-
-                mBookedItemList.add(searchBookedList);
-
-                sum = sum + (itemPrice * itemQuantity);
-                mTotalBillPrice.setText("" + sum);
-                mBookedRv.setHasFixedSize(true);
-                mBookedItemsAdapter = new BookedOrderAdapter(getApplication(), mBookedItemList, new BookedOrderAdapter.BookedActivityonClick() {
+                String key = dataSnapshot.getKey();
+                mRef = firebaseDatabase.getReference("booked").child(mPrefs.getTableKey()).child("" + key);
+                mRef.addChildEventListener(new ChildEventListener() {
                     @Override
-                    public void onClicked(List<SearchItemModel> data, int postion) {
-                        SearchItemModel searchItemModel = new SearchItemModel();
-                        searchItemModel.setSearchItem(data.get(postion).getSearchItem());
-                        searchItemModel.setItemQuantity(data.get(postion).getItemQuantity());
-                        searchItemModel.setCaptainName(data.get(postion).getCaptainName());
-                        searchItemModel.setTableNo(data.get(postion).getTableNo());
-                        searchItemModel.setItemPrice(data.get(postion).getItemPrice());
-                        mUpdateList.add(searchItemModel);
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
+                        SearchItemModel searchBookedList = new SearchItemModel();
+
+                        String tableNo = searchItemModel.getTableNo().toString();
+                        String itemName = searchItemModel.getSearchItem().toString();
+                        int itemQuantity = searchItemModel.getItemQuantity();
+                        long itemPrice = searchItemModel.getItemPrice();
+                        searchBookedList.setSearchItem(itemName);
+                        searchBookedList.setItemQuantity(itemQuantity);
+                        searchBookedList.setItemPrice(itemPrice);
+                        searchBookedList.setCaptainName(searchItemModel.getCaptainName().toString());
+                        searchBookedList.setTableNo(searchItemModel.getTableNo().toString());
+                        mBookedItemList.add(searchBookedList);
+                        sum = sum + (itemPrice * itemQuantity);
+                        mTotalBillPrice.setText("" + sum);
+                        mBookedRv.setHasFixedSize(true);
+                        mBookedItemsAdapter = new BookedOrderAdapter(getApplication(), mBookedItemList, new BookedOrderAdapter.BookedActivityonClick() {
+                            @Override
+                            public void onClicked(List<SearchItemModel> data, int postion) {
+                                SearchItemModel searchItemModel = new SearchItemModel();
+                                searchItemModel.setSearchItem(data.get(postion).getSearchItem());
+                                searchItemModel.setItemQuantity(data.get(postion).getItemQuantity());
+                                searchItemModel.setCaptainName(data.get(postion).getCaptainName());
+                                searchItemModel.setTableNo(data.get(postion).getTableNo());
+                                searchItemModel.setItemPrice(data.get(postion).getItemPrice());
+                                mUpdateList.add(searchItemModel);
+
+                            }
+                        });
+                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplication());
+                        mBookedRv.setLayoutManager(mLayoutManager);
+                        mBookedRv.setAdapter(mBookedItemsAdapter);
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
                     }
                 });
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplication());
-                mBookedRv.setLayoutManager(mLayoutManager);
-                mBookedRv.setAdapter(mBookedItemsAdapter);
 
             }
 
@@ -158,7 +183,6 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
     private void bookedOrderFun() {
 
         mRef = firebaseDatabase.getReference("");
-
         mRef.child("tables").child(mPrefs.getTableKey()).child("status").setValue("1");
         mRef.child("tables").child(mPrefs.getTableKey()).child("totalprice").setValue("" + sum);
         mBookedRv.setHasFixedSize(true);
@@ -167,7 +191,8 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onClicked(List<SearchItemModel> data, int postion) {
 
-                Toast.makeText(BookedOrderActivity.this, ""+mUpdateList.get(postion).getItemQuantity(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(BookedOrderActivity.this, "" + data.get(postion).getItemQuantity(), Toast.LENGTH_SHORT).show();
+                //   Toast.makeText(BookedOrderActivity.this, ""+postion, Toast.LENGTH_SHORT).show();
                 mRef.child("booked").child(mPrefs.getTableKey()).setValue(data);
             }
         });
