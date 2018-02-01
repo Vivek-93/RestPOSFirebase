@@ -78,6 +78,8 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Utils.stopProgress(BookedOrderActivity.this);
                 String key = dataSnapshot.getKey();
+
+                Toast.makeText(BookedOrderActivity.this, ""+key, Toast.LENGTH_SHORT).show();
                 mRef = firebaseDatabase.getReference("booked").child(mPrefs.getTableKey()).child("" + key);
                 mRef.addChildEventListener(new ChildEventListener() {
                     @Override
@@ -94,7 +96,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                         searchBookedList.setItemPrice(itemPrice);
                         searchBookedList.setCaptainName(searchItemModel.getCaptainName().toString());
                         searchBookedList.setTableNo(searchItemModel.getTableNo().toString());
-                        mBookedItemList.add(searchBookedList);
+                          mBookedItemList.add(searchBookedList);
                         sum = sum + (itemPrice * itemQuantity);
                         mTotalBillPrice.setText("" + sum);
                         mBookedRv.setHasFixedSize(true);
@@ -136,7 +138,6 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
 
                     }
                 });
-
             }
 
             @Override

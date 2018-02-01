@@ -69,7 +69,7 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
         mFragmentManager = getSupportFragmentManager();
 
 
-     //   openCatogeryFragment();
+        openCatogeryFragment();
 
         mBookedItems.setOnClickListener(this);
         mSearch.setOnClickListener(this);

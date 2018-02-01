@@ -13,12 +13,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.adapters.KDMainAdapter;
 import com.bitplaylabs.restaurent.adapters.KdHomeViewPagerAdapter;
 import com.bitplaylabs.restaurent.extra.TableDetails;
 import com.bitplaylabs.restaurent.extra.UserGetInformation;
+import com.bitplaylabs.restaurent.services.ReadyOrder;
 import com.bitplaylabs.restaurent.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -28,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +66,7 @@ public class KDMainActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         user = mAuth.getCurrentUser();
         userId = user.getUid();
+        ReadyOrder.currentToken = FirebaseInstanceId.getInstance().getToken();
         mKdTablayout = (TabLayout) findViewById(R.id.act_kd_main_table_layout);
         mKdViewPager = (ViewPager) findViewById(R.id.act_kd_main_viewpager);
         mKdMainRv = (RecyclerView) findViewById(R.id.act_kd_main_rv);
@@ -73,7 +77,7 @@ public class KDMainActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-
+         Toast.makeText(this, ""+ReadyOrder.currentToken, Toast.LENGTH_SHORT).show();
         pushNotifications();
         mFragmentManager = getSupportFragmentManager();
 

@@ -172,7 +172,7 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
             case R.id.fragment_caption_confirm:
 
                 mRef = firebaseDatabase.getReference("");
-                mRef.child("booked")/*.child(mPrefs.getTableKey())*/.setValue(searchDataList);
+                mRef.child("booked").child(mPrefs.getTableKey()).push().setValue(searchDataList);
 
                 break;
         }

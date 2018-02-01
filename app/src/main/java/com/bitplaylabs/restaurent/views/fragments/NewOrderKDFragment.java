@@ -40,13 +40,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -76,6 +80,8 @@ public class NewOrderKDFragment extends Fragment {
     FirebaseUser user;
     private FirebaseAuth mAuth;
     static String LoggedIN_User_Email;
+    private FirebaseStorage mFireStorage;
+    String mCurrentId;
 
     public NewOrderKDFragment() {
         // Required empty public constructor
@@ -87,7 +93,10 @@ public class NewOrderKDFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_new_order_kd, container, false);
         firebaseDatabase = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
+        mFireStorage = FirebaseStorage.getInstance();
         user = mAuth.getCurrentUser();
+
+
         mRecyclerView = (RecyclerView) view.findViewById(R.id.frag_kd_new_order_rv);
         // kd = (TextView) view.findViewById(R.id.kd);
         initializeView();
@@ -105,8 +114,6 @@ public class NewOrderKDFragment extends Fragment {
     }
 
     private void initializeView() {
-
-
 
 
         LoggedIN_User_Email = user.getEmail();
@@ -136,15 +143,15 @@ public class NewOrderKDFragment extends Fragment {
                         mRef.addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                String tablebookedKey= dataSnapshot.getKey();
+                                String tablebookedKey = dataSnapshot.getKey();
 
-                                mRef = firebaseDatabase.getReference("booked").child("" + key).child(""+tablebookedKey);
+                                mRef = firebaseDatabase.getReference("booked").child("" + key).child("" + tablebookedKey);
                                 mRef.addChildEventListener(new ChildEventListener() {
                                     @Override
                                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
 
-                                       // Toast.makeText(mContext, ""+dataSnapshot.getValue()+"s"+s, Toast.LENGTH_SHORT).show();
+                                        // Toast.makeText(mContext, ""+dataSnapshot.getValue()+"s"+s, Toast.LENGTH_SHORT).show();
                                         // Toast.makeText(mContext, ""+dataSnapshot.getKey(), Toast.LENGTH_SHORT).show();
                                         SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
                                         SearchItemModel list = new SearchItemModel();
@@ -180,7 +187,7 @@ public class NewOrderKDFragment extends Fragment {
                                                         Intent service = new Intent(mContext, ReadyOrder.class);
                                                         mContext.startService(service);
 
-                                                        // itemReadyPushNotification();
+                                                        itemReadyPushNotification();
                                                         kdDialougeBox.dismiss();
                                                     }
                                                 });
@@ -223,9 +230,6 @@ public class NewOrderKDFragment extends Fragment {
                                 });
 
 
-
-
-
                             }
 
                             @Override
@@ -248,7 +252,6 @@ public class NewOrderKDFragment extends Fragment {
 
                             }
                         });
-
 
 
                     }
@@ -280,76 +283,11 @@ public class NewOrderKDFragment extends Fragment {
 
     private void itemReadyPushNotification() {
 
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-
-                int SDK_INT = Build.VERSION.SDK_INT;
-                if (SDK_INT > 8) {
-                    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-                    StrictMode.setThreadPolicy(policy);
-                    String send_email;
-                    if (LoggedIN_User_Email.equalsIgnoreCase("" + LoggedIN_User_Email)) {
-                        send_email = "prince@gmail.com";
-                    } else {
-                        send_email = "prince@gmail.com";
-                    }
-
-                    try {
-                        String jsonResponse;
-                        URL url = new URL("https://onesignal.com/api/v1/notifications");
-                        HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
-                        con.setUseCaches(false);
-                        con.setDoOutput(false);
-                        con.setDoInput(false);
-
-                        con.setRequestProperty("Content-Type", "application/json: charset-UTF-8");
-                        con.setRequestProperty("Authorization", "Basic MjlmNjRkMWQtM2RmYS00N2IwLTgwODAtMjhlYWM5MjNiMDg5");
-                        con.setRequestMethod("POST");
-
-                        String strJsonBody = "{"
-                                + "\"app_id\":\"8298bc49-6338-4e36-986a-fcddd9cb141d\","
-                                + "\"filters\":[{\"field\": \"tag\", \"key\": \"User_ID\", \"relation\":\"=\",\"value\": \"" + send_email + "\"}],"
-                                + "\"data\": {\"foo\" : \"bar\"},"
-                                + "\"contents\": {\"en\": \"English Message\"}"
-                                + "}";
-
-                        System.out.println("strJsonBody\n" + strJsonBody);
-                        byte[] sendbytes = strJsonBody.getBytes("UTF-8");
-                        con.setFixedLengthStreamingMode(sendbytes.length);
-
-                        OutputStream outputStream = con.getOutputStream();
-                        outputStream.write(sendbytes);
-
-                        int httpresponse = con.getResponseCode();
-                        System.out.println("httpresponse\n" + httpresponse);
-
-                        if (httpresponse >= HttpsURLConnection.HTTP_OK && httpresponse < HttpsURLConnection.HTTP_BAD_REQUEST) {
-
-                            Scanner scanner = new Scanner(con.getInputStream(), "UTF-8");
-                            jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
-                            scanner.close();
-                        } else {
-                            Scanner scanner = new Scanner(con.getInputStream(), "UTF-8");
-                            jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
-                            scanner.close();
-                        }
-                        System.out.println("jsonResponse\n" + jsonResponse);
-
-
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-
-            }
-        });
-
-
+      /*  String message = "Hello";
+        Map<String, Object> notficationmessage = new HashMap<>();
+        notficationmessage.put("message", message);
+        notficationmessage.put("from", mCurrentId);
+        mFireStorage= Fi.getReference("users/").child(mCurrentId).child("Notifications");*/
     }
 
 
