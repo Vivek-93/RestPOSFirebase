@@ -19,6 +19,7 @@ import com.bitplaylabs.restaurent.adapters.CaptionRecyclerViewAdaptor;
 import com.bitplaylabs.restaurent.extra.GuestDetails;
 import com.bitplaylabs.restaurent.extra.TableDetails;
 import com.bitplaylabs.restaurent.extra.UserGetInformation;
+import com.bitplaylabs.restaurent.services.MyFirebaseMessaging1;
 import com.bitplaylabs.restaurent.utils.Sharedpreferences;
 import com.bitplaylabs.restaurent.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
@@ -107,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
+
+        MyFirebaseMessaging1.openActivityNotification(getApplicationContext());
 
     }
 

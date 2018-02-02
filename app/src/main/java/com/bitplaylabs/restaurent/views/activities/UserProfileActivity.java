@@ -10,16 +10,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.extra.UserGetInformation;
 import com.bitplaylabs.restaurent.utils.Sharedpreferences;
 import com.bitplaylabs.restaurent.utils.Utils;
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class UserProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -29,6 +32,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private Sharedpreferences mPrefs;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
+    String url="http://www.enjoysharepoint.com/wiki/provider-hosted-add-in-package-sharepoint-online.png";
 
 
     @Override
@@ -62,6 +66,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         mBackIv.setOnClickListener(this);
         mEditImage.setOnClickListener(this);
 
+
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -83,19 +88,24 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
         Utils.stopProgress(this);
 
-        Log.d("UserProfileActivity",""+dataSnapshot.child(mPrefs.getUserId()).getValue().toString());
-        String userName = dataSnapshot.child(mPrefs.getUserId()).getValue(UserGetInformation.class).getName().toString();
-        String userRole = dataSnapshot.child(mPrefs.getUserId()).getValue(UserGetInformation.class).getSelectrole().toString();
-        String userEmail= dataSnapshot.child(mPrefs.getUserId()).getValue(UserGetInformation.class).getEmail().toString();
-        String userPhone= dataSnapshot.child(mPrefs.getUserId()).getValue(UserGetInformation.class).getNumber().toString();
-       // String userImage= dataSnapshot.child(mPrefs.getUserId()).getValue(UserGetInformation.class).getProfilepic().toString();
+        try {
+            Log.d("UserProfileActivity",""+dataSnapshot.child(mPrefs.getUserId()).getValue().toString());
+            String userName = dataSnapshot.child(mPrefs.getUserId()).getValue(UserGetInformation.class).getName().toString();
+            String userRole = dataSnapshot.child(mPrefs.getUserId()).getValue(UserGetInformation.class).getSelectrole().toString();
+            String userEmail= dataSnapshot.child(mPrefs.getUserId()).getValue(UserGetInformation.class).getEmail().toString();
+            String userPhone= dataSnapshot.child(mPrefs.getUserId()).getValue(UserGetInformation.class).getNumber().toString();
+          //  String userImage= dataSnapshot.child(mPrefs.getUserId()).getValue(UserGetInformation.class).getProfilepic().toString();
+         //   Toast.makeText(this, ""+userImage, Toast.LENGTH_SHORT).show();
+            // Log.d("image","url"+userImage);
+            profileUserName.setText(userName);
+            profileRole.setText(userRole);
+            profileEmail.setText(userEmail);
+            profileMobileNumber.setText(userPhone);
+            Picasso.with(this).load(url).into(mUserProfile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-       // Log.d("image","url"+userImage);
-        profileUserName.setText(userName);
-        profileRole.setText(userRole);
-        profileEmail.setText(userEmail);
-        profileMobileNumber.setText(userPhone);
-        //  Glide.with(this).load(userImage).into(mUserProfile);
 
     }
 

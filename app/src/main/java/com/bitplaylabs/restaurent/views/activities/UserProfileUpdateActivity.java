@@ -244,8 +244,8 @@ public class UserProfileUpdateActivity extends AppCompatActivity implements View
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Utils.stopProgress(UserProfileUpdateActivity.this);
                     final Uri imageurl=taskSnapshot.getDownloadUrl();
-                    mRef.child(mPrefs.getUserId()).child("profile_pic").setValue(imageurl.toString());
-
+                    mRef = firebaseDatabase.getReference();
+                    mRef.child("user").child(mPrefs.getUserId()).child("profile_pic").setValue(imageurl.toString());
                 }
             });
 

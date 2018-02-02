@@ -150,9 +150,6 @@ public class NewOrderKDFragment extends Fragment {
                                     @Override
                                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-
-                                        // Toast.makeText(mContext, ""+dataSnapshot.getValue()+"s"+s, Toast.LENGTH_SHORT).show();
-                                        // Toast.makeText(mContext, ""+dataSnapshot.getKey(), Toast.LENGTH_SHORT).show();
                                         SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
                                         SearchItemModel list = new SearchItemModel();
                                         String itemName = searchItemModel.getSearchItem();
@@ -168,7 +165,7 @@ public class NewOrderKDFragment extends Fragment {
                                         mRecyclerView.setHasFixedSize(true);
                                         mNewOrderKDAdapter = new NewOrderKDAdapter(getContext(), newOrderList, new NewOrderKDAdapter.ReadyClick() {
                                             @Override
-                                            public void onClicked(int position) {
+                                            public void onClicked(final int position) {
 
                                                 kdDialougeBox = new Dialog(mContext);
                                                 kdDialougeBox.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -187,7 +184,24 @@ public class NewOrderKDFragment extends Fragment {
                                                         Intent service = new Intent(mContext, ReadyOrder.class);
                                                         mContext.startService(service);
 
-                                                        itemReadyPushNotification();
+                                                        List<SearchItemModel> readyList = new ArrayList<>();
+                                                        SearchItemModel list = new SearchItemModel();
+                                                        String itemName = newOrderList.get(position).getSearchItem();
+                                                        int itemQuantity = newOrderList.get(position).getItemQuantity();
+                                                        String tableNo = newOrderList.get(position).getTableNo();
+                                                        String captainName = newOrderList.get(position).getCaptainName();
+                                                        list.setSearchItem(itemName);
+                                                        list.setItemQuantity(itemQuantity);
+                                                        list.setTableNo(tableNo);
+                                                        list.setCaptainName(captainName);
+                                                        readyList.add(list);
+                                                        mRef = firebaseDatabase.getReference("");
+                                                        mRef = firebaseDatabase.getReference("notifications").child(newOrderList.get(position).getTableNo().toString());
+                                                        mRef.setValue(readyList);
+
+
+                                                        //  mRef.setValue(newOrderList.get(position).getSearchItem().toString());
+                                                        //  itemReadyPushNotification();
                                                         kdDialougeBox.dismiss();
                                                     }
                                                 });
@@ -283,11 +297,7 @@ public class NewOrderKDFragment extends Fragment {
 
     private void itemReadyPushNotification() {
 
-      /*  String message = "Hello";
-        Map<String, Object> notficationmessage = new HashMap<>();
-        notficationmessage.put("message", message);
-        notficationmessage.put("from", mCurrentId);
-        mFireStorage= Fi.getReference("users/").child(mCurrentId).child("Notifications");*/
+
     }
 
 
