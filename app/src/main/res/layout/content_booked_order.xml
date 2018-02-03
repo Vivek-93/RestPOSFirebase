@@ -115,10 +115,18 @@
                 android:layout_toEndOf="@id/price_tv"
                 android:text=""
                 android:textColor="@color/colorPrimary"
-                android:textSize="18sp"
+                android:textSize="18sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_toEndOf="@id/act_booked_items_totalprice_tv"
+                android:text="Rs."
+                android:textColor="@color/colorBlack"
+                android:textSize="15sp"
                 android:textStyle="italic" />
-
-
 
         </RelativeLayout>
 

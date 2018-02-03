@@ -208,11 +208,6 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                     @Override
                     public void onClick(View view) {
 
-                        if (data.get(position).getStatus().equalsIgnoreCase("1")) {
-                            Toast.makeText(mContext, "Hello" + data.get(position).getTablekey(), Toast.LENGTH_SHORT).show();
-                            mRef = firebaseDatabase.getReference("tables");
-                            mRef.child(data.get(position).getTablekey()).child("status").setValue("0");
-                        }
                         Intent intent=new Intent(mContext, BillPrintActivity.class);
                         intent.putExtra("billingTableKey", data.get(position).getTablekey());
                         intent.putExtra("captainID", mPrefs.getUserId() );

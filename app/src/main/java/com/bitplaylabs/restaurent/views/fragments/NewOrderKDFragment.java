@@ -143,7 +143,7 @@ public class NewOrderKDFragment extends Fragment {
                         mRef.addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                String tablebookedKey = dataSnapshot.getKey();
+                                final String tablebookedKey = dataSnapshot.getKey();
 
                                 mRef = firebaseDatabase.getReference("booked").child("" + key).child("" + tablebookedKey);
                                 mRef.addChildEventListener(new ChildEventListener() {
@@ -156,10 +156,12 @@ public class NewOrderKDFragment extends Fragment {
                                         int itemQuantity = searchItemModel.getItemQuantity();
                                         String tableNo = searchItemModel.getTableNo();
                                         String captainName = searchItemModel.getCaptainName();
+                                        String time = searchItemModel.getTime();
                                         list.setSearchItem(itemName);
                                         list.setItemQuantity(itemQuantity);
                                         list.setTableNo(tableNo);
                                         list.setCaptainName(captainName);
+                                        list.setTime(time);
                                         newOrderList.add(list);
 
                                         mRecyclerView.setHasFixedSize(true);
@@ -190,15 +192,18 @@ public class NewOrderKDFragment extends Fragment {
                                                         int itemQuantity = newOrderList.get(position).getItemQuantity();
                                                         String tableNo = newOrderList.get(position).getTableNo();
                                                         String captainName = newOrderList.get(position).getCaptainName();
+                                                        String time = newOrderList.get(position).getTime();
                                                         list.setSearchItem(itemName);
                                                         list.setItemQuantity(itemQuantity);
                                                         list.setTableNo(tableNo);
                                                         list.setCaptainName(captainName);
+                                                        list.setTime(time);
                                                         readyList.add(list);
                                                         mRef = firebaseDatabase.getReference("");
-                                                        mRef = firebaseDatabase.getReference("notifications").child(newOrderList.get(position).getTableNo().toString());
-                                                        mRef.setValue(readyList);
-
+                                                        //  mRef = firebaseDatabase.getReference("notifications").child(newOrderList.get(position).getTableNo().toString());
+                                                        mRef = firebaseDatabase.getReference("readylist");
+                                                        mRef.push().setValue(readyList);
+                                                        firebaseDatabase.getReference("booked").child("" + key).child("" + tablebookedKey).removeValue();
 
                                                         //  mRef.setValue(newOrderList.get(position).getSearchItem().toString());
                                                         //  itemReadyPushNotification();

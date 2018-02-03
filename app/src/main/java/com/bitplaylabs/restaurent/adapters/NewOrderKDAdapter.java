@@ -69,8 +69,8 @@ public class NewOrderKDAdapter extends RecyclerView.Adapter<NewOrderKDAdapter.Vi
         holder.item_name.setText(mOrderList.get(position).getSearchItem().toString());
         holder.item_quantity.setText(""+mOrderList.get(position).getItemQuantity());
         holder.item_table.setText(mOrderList.get(position).getTableNo().toString());
-       /* holder.item_order_time.setText(mOrderList.get(position).getOrder_time().toString());
-        holder.item_time_elapsed.setText(mOrderList.get(position).getTime_elapsed().toString());*/
+        holder.item_order_time.setText(mOrderList.get(position).getTime().toString());
+     /*   holder.item_time_elapsed.setText(mOrderList.get(position).getTime_elapsed().toString());*/
         holder.item_order_taken_by.setText(mOrderList.get(position).getCaptainName().toString());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

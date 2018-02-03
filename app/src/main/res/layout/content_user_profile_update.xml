@@ -26,7 +26,9 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_centerInParent="true"
-                android:src="@drawable/ic_edit" />
+                android:scaleType="fitXY"
+                android:background="@drawable/edittext_background"
+                android:src="@mipmap/ic_launcher_round" />
 
             <Button
                 android:id="@+id/act_user_profile_edit_done_btn"

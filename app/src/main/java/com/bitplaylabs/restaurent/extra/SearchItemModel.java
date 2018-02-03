@@ -14,6 +14,7 @@ public class SearchItemModel implements Serializable {
     public String tableNo;
     public String captainName;
     public Long itemPrice;
+    public String time;
 
     public SearchItemModel() {
 
@@ -25,6 +26,14 @@ public class SearchItemModel implements Serializable {
         this.tableNo = tableNo;
         this.captainName = captainName;
         this.itemPrice=itemPrice;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public Long getItemPrice() {

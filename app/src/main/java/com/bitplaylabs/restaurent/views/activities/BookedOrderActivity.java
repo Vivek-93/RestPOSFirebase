@@ -79,7 +79,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                 Utils.stopProgress(BookedOrderActivity.this);
                 String key = dataSnapshot.getKey();
 
-                Toast.makeText(BookedOrderActivity.this, ""+key, Toast.LENGTH_SHORT).show();
+            //    Toast.makeText(BookedOrderActivity.this, ""+key, Toast.LENGTH_SHORT).show();
                 mRef = firebaseDatabase.getReference("booked").child(mPrefs.getTableKey()).child("" + key);
                 mRef.addChildEventListener(new ChildEventListener() {
                     @Override
@@ -109,6 +109,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                                 searchItemModel.setCaptainName(data.get(postion).getCaptainName());
                                 searchItemModel.setTableNo(data.get(postion).getTableNo());
                                 searchItemModel.setItemPrice(data.get(postion).getItemPrice());
+                                searchItemModel.setTime(data.get(postion).getTime());
                                 mUpdateList.add(searchItemModel);
 
                             }
@@ -186,7 +187,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
         mRef = firebaseDatabase.getReference("");
         mRef.child("tables").child(mPrefs.getTableKey()).child("status").setValue("1");
         mRef.child("tables").child(mPrefs.getTableKey()).child("totalprice").setValue("" + sum);
-        mBookedRv.setHasFixedSize(true);
+     /*   mBookedRv.setHasFixedSize(true);
         mBookedItemList.clear();
         mBookedItemsAdapter = new BookedOrderAdapter(getApplication(), mUpdateList, new BookedOrderAdapter.BookedActivityonClick() {
             @Override
@@ -199,7 +200,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
         });
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplication());
         mBookedRv.setLayoutManager(mLayoutManager);
-        mBookedRv.setAdapter(mBookedItemsAdapter);
+        mBookedRv.setAdapter(mBookedItemsAdapter);*/
 
         Toast.makeText(this, "Order placed", Toast.LENGTH_SHORT).show();
 

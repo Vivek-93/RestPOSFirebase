@@ -227,7 +227,7 @@ public class CaptainCategoryFragment extends Fragment {
                                         mSubItemArrayAdapter = new SubItemArrayAdapter(getContext(), subSubCogetaryList, new SubItemArrayAdapter.AddCartButtonClick() {
 
                                             @Override
-                                            public void onClicked(String itemname, int quantity, float price) {
+                                            public void onClicked(String itemname, int quantity, float price ,String time) {
 
                                                 searchDataList.clear();
                                                 SearchItemModel searchItemm = new SearchItemModel();
@@ -236,6 +236,7 @@ public class CaptainCategoryFragment extends Fragment {
                                                 searchItemm.setCaptainName(mPref.getLoggedInUsername());
                                                 searchItemm.setTableNo(mPref.getTableKey());
                                                 searchItemm.setItemPrice((long) price);
+                                                searchItemm.setTime(time);
                                                 searchDataList.add(searchItemm);
                                                 mRef = firebaseDatabase.getReference("");
                                                 mRef.child("booked").child(mPref.getTableKey()).push().setValue(searchDataList);

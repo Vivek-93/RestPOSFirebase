@@ -21,6 +21,7 @@ import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.extra.MenuList;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -40,7 +41,7 @@ public class SubItemArrayAdapter extends RecyclerView.Adapter<SubItemArrayAdapte
 
     public interface AddCartButtonClick {
 
-        void onClicked(String itemname, int quantity, float price);
+        void onClicked(String itemname, int quantity, float price ,String time);
     }
 
 
@@ -104,10 +105,15 @@ public class SubItemArrayAdapter extends RecyclerView.Adapter<SubItemArrayAdapte
                         @Override
                         public void onClick(View view) {
 
+                            Calendar cal = Calendar.getInstance();
+                            //  cal.setTime(date);
+                            int hours = cal.get(Calendar.HOUR_OF_DAY);
+                            int minuts = cal.get(Calendar.MINUTE);
+                            String time = hours + ":" + minuts ;
                             int quantity = Integer.parseInt(itemQuantitySpinner.getSelectedItem().toString());
                             String itemName = data.get(position).getItemname().toString();
                             String price = data.get(position).getPrice().toString();
-                            mClick.onClicked(itemName,quantity, Float.parseFloat(price));
+                            mClick.onClicked(itemName,quantity, Float.parseFloat(price),time);
                             additemsDialogBox.dismiss();
                         }
                     });

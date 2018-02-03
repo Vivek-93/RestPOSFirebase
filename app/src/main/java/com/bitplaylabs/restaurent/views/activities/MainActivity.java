@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.onesignal.OneSignal;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +79,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        showUserProfile();
 
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        showUserProfile();
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
         captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(MainActivity.this, data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
@@ -102,13 +112,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         mRecyclerView.setAdapter(captionRecyclerViewAdaptor);
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
         MyFirebaseMessaging1.openActivityNotification(getApplicationContext());
 
     }
@@ -198,7 +201,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+    showUserProfile();
 
+    }
+
+    private void showUserProfile() {
+
+        mRef = firebaseDatabase.getReference("user").child(mPrefs.getUserId());
+        mRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                Picasso.with(getApplicationContext()).load(""+dataSnapshot.getValue()).placeholder(R.drawable.userprofile).into(mProfile);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void showData(DataSnapshot dataSnapshot) {
