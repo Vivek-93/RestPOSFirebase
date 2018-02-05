@@ -2,6 +2,7 @@ package com.bitplaylabs.restaurent.views.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,16 +11,20 @@ import android.widget.Toast;
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.extra.GuestDetails;
 import com.bitplaylabs.restaurent.extra.SearchItemModel;
-import com.bitplaylabs.restaurent.extra.TableDetails;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.hendrix.pdfmyxml.PdfDocument;
+import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.bitplaylabs.restaurent.utils.Utils.context;
 
 public class BillPrintActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -31,6 +36,9 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
     String tableKey, captainId;
 
     private List<SearchItemModel> billingList;
+
+
+
 
 
     @Override
@@ -50,9 +58,15 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
 
         initializeViews();
 
+
+
     }
 
     private void initializeViews() {
+
+
+
+
 
         billingList = new ArrayList<>();
         mBackIv.setOnClickListener(this);
@@ -90,11 +104,11 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
 
-                        if(dataSnapshot.getValue()==null){
+                        if (dataSnapshot.getValue() == null) {
 
                             Toast.makeText(BillPrintActivity.this, "No Order is placed", Toast.LENGTH_SHORT).show();
 
-                        }else {
+                        } else {
                             SearchItemModel getItemsDetails = dataSnapshot.getValue(SearchItemModel.class);
                             SearchItemModel searchItemModel = new SearchItemModel();
                             String itemName = getItemsDetails.getSearchItem().toString();
@@ -171,34 +185,41 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
         });
 
 
-       /* mRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        AbstractViewRenderer page = new AbstractViewRenderer(this, R.layout.content_bill_print) {
+            private String _text;
 
-                final ArrayList<SearchItemModel> labels = new ArrayList<SearchItemModel>();
-                for (DataSnapshot data : dataSnapshot.getChildren()){
-
-                    SearchItemModel dailyItem = data.getValue(SearchItemModel.class);
-
-                    labels.add(dailyItem);
-
-
-
-                }
-
-              //  mPrintBillTv.setText(labels.size());
-              *//*  title.setText(labels.get(position));
-
-                // Do blabla with the title
-                String title = title.getText().toString();*//*
+            public void setText(String text) {
+                _text = text;
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            protected void initView(View view) {
+                TextView tv_hello = (TextView) view.findViewById(R.id.act_billprint_tv);
+                tv_hello.setText(_text);
             }
-        });*/
+        };
 
+// you can reuse the bitmap if you want
+        page.setReuseBitmap(true);
+
+
+
+        new PdfDocument.Builder(this).addPage(page).orientation(PdfDocument.A4_MODE.LANDSCAPE)
+                .progressMessage(R.string.gen_pdf_file).progressTitle(R.string.gen_please_wait)
+                .renderWidth(2115).renderHeight(1500)
+                .saveDirectory(this.getExternalFilesDir(null))
+                .filename("test")
+                .listener(new PdfDocument.Callback() {
+                    @Override
+                    public void onComplete(File file) {
+                        Toast.makeText(BillPrintActivity.this, ""+file.getName(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Log.i(PdfDocument.TAG_PDF_MY_XML, "Error");
+                    }
+                }).create().createPdf(this);
 
     }
 

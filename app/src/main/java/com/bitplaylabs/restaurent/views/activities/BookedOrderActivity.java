@@ -112,6 +112,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                                 searchItemModel.setTime(data.get(postion).getTime());
                                 mUpdateList.add(searchItemModel);
 
+
                             }
                         });
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplication());
@@ -187,20 +188,9 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
         mRef = firebaseDatabase.getReference("");
         mRef.child("tables").child(mPrefs.getTableKey()).child("status").setValue("1");
         mRef.child("tables").child(mPrefs.getTableKey()).child("totalprice").setValue("" + sum);
-     /*   mBookedRv.setHasFixedSize(true);
-        mBookedItemList.clear();
-        mBookedItemsAdapter = new BookedOrderAdapter(getApplication(), mUpdateList, new BookedOrderAdapter.BookedActivityonClick() {
-            @Override
-            public void onClicked(List<SearchItemModel> data, int postion) {
 
-                Toast.makeText(BookedOrderActivity.this, "" + data.get(postion).getItemQuantity(), Toast.LENGTH_SHORT).show();
-                //   Toast.makeText(BookedOrderActivity.this, ""+postion, Toast.LENGTH_SHORT).show();
-                mRef.child("booked").child(mPrefs.getTableKey()).setValue(data);
-            }
-        });
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplication());
-        mBookedRv.setLayoutManager(mLayoutManager);
-        mBookedRv.setAdapter(mBookedItemsAdapter);*/
+        mRef.child("booked").child(mPrefs.getTableKey()).push().setValue(mUpdateList);
+
 
         Toast.makeText(this, "Order placed", Toast.LENGTH_SHORT).show();
 

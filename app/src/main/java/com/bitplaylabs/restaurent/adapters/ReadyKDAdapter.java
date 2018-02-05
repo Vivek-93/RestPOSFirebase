@@ -57,7 +57,7 @@ public class ReadyKDAdapter extends RecyclerView.Adapter<ReadyKDAdapter.ViewHold
     @Override
     public int getItemCount() {
 
-        Toast.makeText(mContext, ""+mReadyList.size(), Toast.LENGTH_SHORT).show();
+
         return mReadyList.size();
 
     }

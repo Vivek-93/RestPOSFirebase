@@ -20,5 +20,7 @@
     <string name="title_activity_booked_order">BookedOrderActivity</string>
     <string name="title_activity_kdmain">KDMainActivity</string>
     <string name="title_activity_bill_print">BillPrintActivity</string>
+    <string name="gen_pdf_file">message</string>
+    <string name="gen_please_wait">messageeeeee</string>
 
 </resources>

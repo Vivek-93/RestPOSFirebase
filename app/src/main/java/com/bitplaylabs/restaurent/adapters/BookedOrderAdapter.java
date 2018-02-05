@@ -44,7 +44,7 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
         this.mContext = context;
         this.itemslist = itemslist;
         this.mClick = mClick;
-        upDatelist=new ArrayList<>();
+        upDatelist = new ArrayList<>();
 
     }
 
@@ -59,52 +59,27 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
     @Override
     public void onBindViewHolder(final BookedOrderAdapter.ViewHolder holder, final int position) {
 
-        holder.item_Name.setText(""+itemslist.get(position).getSearchItem());
-        holder.quality.setText(""+itemslist.get(position).getItemQuantity());
+        holder.item_Name.setText("" + itemslist.get(position).getSearchItem());
+        holder.quality.setText("" + itemslist.get(position).getItemQuantity());
         holder.count.setText(String.valueOf(position + 1) + ".");
 
 
 
-        holder.quality.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        upDatelist = itemslist;
 
-            }
+        upDatelist = updateOrderList(position,Integer.parseInt(holder.quality.getText().toString()), upDatelist);
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                String updateName = holder.item_Name.getText().toString();
-                String updateQuantity = charSequence.toString();
-                SearchItemModel bookedDetailModel = new SearchItemModel();
-                bookedDetailModel.setSearchItem(updateName);
-                bookedDetailModel.setItemQuantity(Integer.parseInt(updateQuantity));
-                bookedDetailModel.setItemPrice(itemslist.get(position).getItemPrice());
-                bookedDetailModel.setCaptainName(itemslist.get(position).getCaptainName());
-                bookedDetailModel.setTableNo(itemslist.get(position).getTableNo());
-                upDatelist.add(bookedDetailModel);
-
-                //  upDatelist.set(position, bookedDetailModel);
-    /*    notifyItemInserted(position);*/
-                //   notifyDataSetChanged();
-                mClick.onClicked(upDatelist,position);
-
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-
-
-            }
-        });
-
+        mClick.onClicked(upDatelist, position);
 
 
     }
 
-
+    private List<SearchItemModel> updateOrderList(int position, int newValue, List<SearchItemModel> mList) {
+        SearchItemModel searchItemModel = mList.get(position);
+        searchItemModel.setItemQuantity(newValue);
+        mList.set(position, searchItemModel);
+        return mList;
+    }
 
 
     @Override
