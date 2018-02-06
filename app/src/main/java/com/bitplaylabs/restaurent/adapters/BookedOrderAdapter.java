@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.extra.BookedDetailModel;
+import com.bitplaylabs.restaurent.extra.BookedModel;
 import com.bitplaylabs.restaurent.extra.SearchItemModel;
 
 import java.util.ArrayList;
@@ -30,21 +31,21 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
 
     private Context mContext;
 
-    public List<SearchItemModel> itemslist;
-    public List<SearchItemModel> upDatelist;
+    public List<BookedModel> itemslist;
+    //  public List<SearchItemModel> upDatelist;
     private int pos;
     private final BookedActivityonClick mClick;
 
     public interface BookedActivityonClick {
-        void onClicked(List<SearchItemModel> data, int position);
+        void onClicked(String captain_name, String tableNo, String itemName, long itemPrice, String order_time, String key, String quantity, int position);
 
     }
 
-    public BookedOrderAdapter(Context context, List<SearchItemModel> itemslist, BookedActivityonClick mClick) {
+    public BookedOrderAdapter(Context context, List<BookedModel> itemslist, BookedActivityonClick mClick) {
         this.mContext = context;
         this.itemslist = itemslist;
         this.mClick = mClick;
-        upDatelist = new ArrayList<>();
+
 
     }
 
@@ -64,12 +65,27 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
         holder.count.setText(String.valueOf(position + 1) + ".");
 
 
+        holder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-        upDatelist = itemslist;
+                String key = itemslist.get(position).getKey();
+                String quantity = holder.quality.getText().toString();
+                String captain_name = itemslist.get(position).captainName.toString();
+                String tableNo = itemslist.get(position).getTableNo().toString();
+                String itemName = itemslist.get(position).getSearchItem().toString();
+                String order_time = itemslist.get(position).getTime().toString();
+                long itemPrice = itemslist.get(position).getItemPrice();
 
-        upDatelist = updateOrderList(position,Integer.parseInt(holder.quality.getText().toString()), upDatelist);
+                mClick.onClicked(captain_name,tableNo, itemName, itemPrice, order_time, key, quantity, position);
 
-        mClick.onClicked(upDatelist, position);
+            }
+        });
+
+
+      /*  upDatelist = itemslist;
+
+        upDatelist = updateOrderList(position,Integer.parseInt(holder.quality.getText().toString()), upDatelist);*/
 
 
     }
@@ -92,6 +108,7 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
 
         public TextView item_Name, count;
         public EditText quality;
+        public ImageView edit;
 
         public ViewHolder(final View itemView) {
             super(itemView);
@@ -99,6 +116,7 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
             item_Name = (TextView) itemView.findViewById(R.id.namee);
             quality = (EditText) itemView.findViewById(R.id.quality);
             count = (TextView) itemView.findViewById(R.id.item_count_tv);
+            edit = (ImageView) itemView.findViewById(R.id.edit_quantity);
 
 
             itemView.setOnLongClickListener(new View.OnLongClickListener() {

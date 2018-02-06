@@ -46,6 +46,9 @@ public class Sharedpreferences {
     public static final String TAG_TABLE_ID= "tableid";
     public static final String TAG_TABLE_NUMBER= "tablenumber";
     public static final String TAG_LAST_DATE= "lastdate";
+    public static final String TAG_GuestBillPrintDetails= "guestbillprintdetails";
+    public static final String TAG_CaptainBillPrintDetails= "captainbillprintdetails";
+    public static final String TAG_BillPrintDetails= "billprintdetails";
 
     public static final String TAG_USER_COMING_FROM = "comingfrom";
 
@@ -150,6 +153,41 @@ public class Sharedpreferences {
     public void setTableNumber(String tablenumber) {
         try {
             editor.putString(TAG_TABLE_NUMBER, tablenumber);
+            editor.commit();
+        } catch (Exception e) {
+        }
+    }
+
+    public String getGuestBillPrintDetails() {
+        return pref.getString(TAG_GuestBillPrintDetails, "");
+    }
+
+    public void setGuestBillPrintDetails(String guestDetails) {
+        try {
+            editor.putString(TAG_GuestBillPrintDetails, guestDetails);
+            editor.commit();
+        } catch (Exception e) {
+        }
+    }
+    public String getCaptainBillPrintDetails() {
+        return pref.getString(TAG_CaptainBillPrintDetails, "");
+    }
+
+    public void setCaptainBillPrintDetails(String captainDetails) {
+        try {
+            editor.putString(TAG_CaptainBillPrintDetails, captainDetails);
+            editor.commit();
+        } catch (Exception e) {
+        }
+    }
+
+    public String getBillPrintDetails() {
+        return pref.getString(TAG_BillPrintDetails, "");
+    }
+
+    public void setBillPrintDetails(String billDetails) {
+        try {
+            editor.putString(TAG_BillPrintDetails, billDetails);
             editor.commit();
         } catch (Exception e) {
         }

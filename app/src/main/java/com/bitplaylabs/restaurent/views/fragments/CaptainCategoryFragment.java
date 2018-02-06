@@ -239,6 +239,7 @@ public class CaptainCategoryFragment extends Fragment {
                                                 searchItemm.setTime(time);
                                                 searchDataList.add(searchItemm);
                                                 mRef = firebaseDatabase.getReference("");
+                                                mRef.child("bookedmain").child(mPref.getTableKey()).push().setValue(searchDataList);
                                                 mRef.child("booked").child(mPref.getTableKey()).push().setValue(searchDataList);
                                                 mRef.child("bookingdetails").child(mPref.getTableKey()).child(mPref.getKot()).setValue(searchDataList);
                                             }

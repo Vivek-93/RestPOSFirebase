@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.adapters.BookedOrderAdapter;
 import com.bitplaylabs.restaurent.extra.BookedDetailModel;
+import com.bitplaylabs.restaurent.extra.BookedModel;
 import com.bitplaylabs.restaurent.extra.SearchBookedList;
 import com.bitplaylabs.restaurent.extra.SearchItemModel;
 import com.bitplaylabs.restaurent.extra.TableDetails;
@@ -41,8 +42,8 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
     private BookedOrderAdapter mBookedItemsAdapter;
     public TextView mTotalBillPrice, mDoneTv;
     public ImageView mBack;
-    private List<SearchItemModel> mBookedItemList;
-    private List<SearchItemModel> mUpdateList;
+    private List<BookedModel> mBookedItemList;
+   // private List<SearchItemModel> mUpdateList;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
@@ -68,27 +69,29 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
 
     private void initilizeView() {
         mBookedItemList = new ArrayList<>();
-        mUpdateList = new ArrayList<>();
+   //     mUpdateList = new ArrayList<>();
         mBack.setOnClickListener(this);
         mDoneTv.setOnClickListener(this);
 
-        mRef = firebaseDatabase.getReference("booked").child(mPrefs.getTableKey());
+        mRef = firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableKey());
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Utils.stopProgress(BookedOrderActivity.this);
-                String key = dataSnapshot.getKey();
+                 final String key = dataSnapshot.getKey();
 
-            //    Toast.makeText(BookedOrderActivity.this, ""+key, Toast.LENGTH_SHORT).show();
-                mRef = firebaseDatabase.getReference("booked").child(mPrefs.getTableKey()).child("" + key);
+                mRef = firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableKey()).child("" +key);
                 mRef.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
-                        SearchItemModel searchBookedList = new SearchItemModel();
+
+                        BookedModel searchItemModel = dataSnapshot.getValue(BookedModel.class);
+                        BookedModel searchBookedList = new BookedModel();
 
                         String tableNo = searchItemModel.getTableNo().toString();
                         String itemName = searchItemModel.getSearchItem().toString();
+                        String order_time = searchItemModel.getTime().toString();
+                        String key1=key;
                         int itemQuantity = searchItemModel.getItemQuantity();
                         long itemPrice = searchItemModel.getItemPrice();
                         searchBookedList.setSearchItem(itemName);
@@ -96,24 +99,34 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                         searchBookedList.setItemPrice(itemPrice);
                         searchBookedList.setCaptainName(searchItemModel.getCaptainName().toString());
                         searchBookedList.setTableNo(searchItemModel.getTableNo().toString());
-                          mBookedItemList.add(searchBookedList);
+                        searchBookedList.setKey(key1);
+                        searchBookedList.setTime(order_time);
+                        mBookedItemList.add(searchBookedList);
                         sum = sum + (itemPrice * itemQuantity);
                         mTotalBillPrice.setText("" + sum);
                         mBookedRv.setHasFixedSize(true);
                         mBookedItemsAdapter = new BookedOrderAdapter(getApplication(), mBookedItemList, new BookedOrderAdapter.BookedActivityonClick() {
                             @Override
-                            public void onClicked(List<SearchItemModel> data, int postion) {
-                                SearchItemModel searchItemModel = new SearchItemModel();
-                                searchItemModel.setSearchItem(data.get(postion).getSearchItem());
-                                searchItemModel.setItemQuantity(data.get(postion).getItemQuantity());
-                                searchItemModel.setCaptainName(data.get(postion).getCaptainName());
-                                searchItemModel.setTableNo(data.get(postion).getTableNo());
-                                searchItemModel.setItemPrice(data.get(postion).getItemPrice());
-                                searchItemModel.setTime(data.get(postion).getTime());
-                                mUpdateList.add(searchItemModel);
+                            public void onClicked(String captain_name, String tableNo, String itemName, long itemPrice, String order_time, String key, String quantity, int position) {
+
+                              List<BookedModel> list=new ArrayList<>();
+                                BookedModel searchItemm = new BookedModel();
+                                searchItemm.setSearchItem(itemName);
+                                searchItemm.setItemQuantity(Integer.parseInt(quantity));
+                                searchItemm.setCaptainName(captain_name);
+                                searchItemm.setTableNo(tableNo);
+                                searchItemm.setItemPrice((long) itemPrice);
+                                searchItemm.setTime(order_time);
+                                list.add(searchItemm);
+
+
+                                Toast.makeText(BookedOrderActivity.this, ""+quantity+key, Toast.LENGTH_SHORT).show();
+                               firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableKey()).child("" +key).setValue(list);
+                               firebaseDatabase.getReference("booked").child(mPrefs.getTableKey()).child("" +key);
 
 
                             }
+
                         });
                         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplication());
                         mBookedRv.setLayoutManager(mLayoutManager);
@@ -189,7 +202,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
         mRef.child("tables").child(mPrefs.getTableKey()).child("status").setValue("1");
         mRef.child("tables").child(mPrefs.getTableKey()).child("totalprice").setValue("" + sum);
 
-        mRef.child("booked").child(mPrefs.getTableKey()).push().setValue(mUpdateList);
+     //   mRef.child("booked").child(mPrefs.getTableKey()).push().setValue(mUpdateList);
 
 
         Toast.makeText(this, "Order placed", Toast.LENGTH_SHORT).show();
