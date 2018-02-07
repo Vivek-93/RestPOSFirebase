@@ -19,6 +19,8 @@ import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.extra.BookedDetailModel;
 import com.bitplaylabs.restaurent.extra.BookedModel;
 import com.bitplaylabs.restaurent.extra.SearchItemModel;
+import com.bitplaylabs.restaurent.utils.Sharedpreferences;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,8 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
     //  public List<SearchItemModel> upDatelist;
     private int pos;
     private final BookedActivityonClick mClick;
-
+    private FirebaseDatabase firebaseDatabase;
+    private Sharedpreferences mPrefs;
     public interface BookedActivityonClick {
         void onClicked(String captain_name, String tableNo, String itemName, long itemPrice, String order_time, String key, String quantity, int position);
 
@@ -45,6 +48,8 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
         this.mContext = context;
         this.itemslist = itemslist;
         this.mClick = mClick;
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        mPrefs = Sharedpreferences.getUserDataObj(mContext);
 
 
     }
@@ -79,6 +84,28 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
 
                 mClick.onClicked(captain_name,tableNo, itemName, itemPrice, order_time, key, quantity, position);
 
+            }
+        });
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                String key = itemslist.get(position).getKey();
+                delete(position);
+                firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableKey()).child(key).removeValue();
+                firebaseDatabase.getReference("booked").child(mPrefs.getTableKey()).child(key).removeValue();
+
+                Toast.makeText(mContext, "" + holder.item_Name.getText().toString() + " Delected", Toast.LENGTH_SHORT).show();
+
+                notifyDataSetChanged();
+                return true;
+            }
+
+            private void delete(int position) {
+
+                itemslist.remove(position);
+                notifyItemRemoved(position);
             }
         });
 
@@ -118,23 +145,6 @@ public class BookedOrderAdapter extends RecyclerView.Adapter<BookedOrderAdapter.
             count = (TextView) itemView.findViewById(R.id.item_count_tv);
             edit = (ImageView) itemView.findViewById(R.id.edit_quantity);
 
-
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-
-                    int position = getLayoutPosition();
-                    delete(getAdapterPosition());
-                    Toast.makeText(mContext, "" + item_Name.getText().toString() + " Delected", Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-
-                private void delete(int position) {
-
-                    itemslist.remove(position);
-                    notifyItemRemoved(position);
-                }
-            });
 
         }
     }

@@ -66,6 +66,7 @@ public class CaptainCategoryFragment extends Fragment {
     String selected = null;
 
     List<String> myList = new ArrayList<>();
+
     {
         myList.add("Morning");
         myList.add("Afternoon");
@@ -184,9 +185,10 @@ public class CaptainCategoryFragment extends Fragment {
                             menuList.setSubcategory(itemSubCategory);
                             subCogetaryList.add(menuList);
                             Iterator<MenuList> ite = subCogetaryList.iterator();
-                            while(ite.hasNext()) {
+                            while (ite.hasNext()) {
                                 MenuList iteValue = ite.next();
-                                if(iteValue.getSubcategory().equals(menuListFirebase.getSubcategory())) ite.remove();
+                                if (iteValue.getSubcategory().equals(menuListFirebase.getSubcategory()))
+                                    ite.remove();
                             }
                             subCogetaryList.add(menuListFirebase);
 
@@ -227,7 +229,7 @@ public class CaptainCategoryFragment extends Fragment {
                                         mSubItemArrayAdapter = new SubItemArrayAdapter(getContext(), subSubCogetaryList, new SubItemArrayAdapter.AddCartButtonClick() {
 
                                             @Override
-                                            public void onClicked(String itemname, int quantity, float price ,String time) {
+                                            public void onClicked(String itemname, int quantity, float price, String time) {
 
                                                 searchDataList.clear();
                                                 SearchItemModel searchItemm = new SearchItemModel();
@@ -240,12 +242,45 @@ public class CaptainCategoryFragment extends Fragment {
                                                 searchDataList.add(searchItemm);
                                                 mRef = firebaseDatabase.getReference("");
                                                 mRef.child("bookedmain").child(mPref.getTableKey()).push().setValue(searchDataList);
-                                                mRef.child("booked").child(mPref.getTableKey()).push().setValue(searchDataList);
                                                 mRef.child("bookingdetails").child(mPref.getTableKey()).child(mPref.getKot()).setValue(searchDataList);
+
+                                                mRef = firebaseDatabase.getReference("bookedmain").child(mPref.getTableKey());
+                                                mRef.addChildEventListener(new ChildEventListener() {
+                                                    @Override
+                                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                                                        String key = dataSnapshot.getKey();
+                                                        firebaseDatabase.getReference("booked").child(mPref.getTableKey()).child(key).setValue(searchDataList);
+
+                                                    }
+
+                                                    @Override
+                                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+
                                             }
                                         });
                                         mSubSubCatogeryRv.setLayoutManager(new GridLayoutManager(getContext(), 3));
                                         mSubSubCatogeryRv.setAdapter(mSubItemArrayAdapter);
+
 
                                     }
 

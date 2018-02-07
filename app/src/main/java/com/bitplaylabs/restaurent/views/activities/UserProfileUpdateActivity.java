@@ -41,9 +41,9 @@ import java.io.IOException;
 
 public class UserProfileUpdateActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public EditText mUpdateName, mUpdateNumber, mUpdateEmail, mUpdateAdd, mUpdateFather, mUpdateAadhar, mUpdatePan;
+    public EditText mUpdateName, mUpdateNumber, mUpdateAdd, mUpdateFather, mUpdateAadhar, mUpdatePan;
     public Button mUpdateDone;
-    public TextView mUpdateRole;
+    public TextView mUpdateRole,mUpdateEmail;
     public ImageView mBack, mUpdatePhoto;
     private Sharedpreferences mPrefs;
     private String name, number, email, address, father, aadhar, pan, profileRole;
@@ -67,7 +67,7 @@ public class UserProfileUpdateActivity extends AppCompatActivity implements View
         mRef = firebaseDatabase.getReference("users");
         mUpdateName = (EditText) findViewById(R.id.act_user_profile_update_name_et);
         mUpdateNumber = (EditText) findViewById(R.id.act_user_profile_update_mobileno_et);
-        mUpdateEmail = (EditText) findViewById(R.id.act_user_profile_update_email_et);
+        mUpdateEmail = (TextView) findViewById(R.id.act_user_profile_update_email_et);
         mUpdateRole = (TextView) findViewById(R.id.act_user_profile_update_role_et);
         mUpdateAdd = (EditText) findViewById(R.id.act_user_profile_update_address_tv);
         mUpdateFather = (EditText) findViewById(R.id.act_user_profile_update_father_et);

@@ -73,16 +73,17 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
     private CaptainSearchAdapter mCaptainSearchAdapter;
 
     private List<SearchItemModel> searchDataList;
+    private Sharedpreferences mPref;
 
     public CaptainSearchFragment() {
-        // Required empty public constructor
+
     }
 
-   private SearchBookedAdapter mAdapter;
+    private SearchBookedAdapter mAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-       // ((InputMethodManager) (getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        // ((InputMethodManager) (getActivity()).getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         View view = inflater.inflate(R.layout.fragment_caption_search, container, false);
         mPrefs = Sharedpreferences.getUserDataObj(getContext());
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -90,6 +91,7 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
         mSearchIv = (ImageView) view.findViewById(R.id.fragment_caption_search_iv);
         mCaptionSearchRv = (RecyclerView) view.findViewById(R.id.fragment_caption_search_rv);
         mBookItems = (Button) view.findViewById(R.id.fragment_caption_confirm);
+        mPref = Sharedpreferences.getUserDataObj(getActivity());
 
         initilizeView();
 
@@ -151,7 +153,7 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
         MenuList menuListFirebase = dataSnapshot.getValue(MenuList.class);
         SearchBookedList menuList = new SearchBookedList();
         String itemName = menuListFirebase.getItemname();
-        Long itemPrice= menuListFirebase.getPrice();
+        Long itemPrice = menuListFirebase.getPrice();
         menuList.setItemName(itemName);
         menuList.setItemPrice(itemPrice);
         searchList.add(menuList);
@@ -213,9 +215,11 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
                 searchItemm.setItemQuantity(Integer.parseInt(itemSpinner.getSelectedItem().toString()));
                 searchItemm.setCaptainName(mPrefs.getLoggedInUsername());
                 searchItemm.setTableNo(mPrefs.getTableKey());
-              //  searchItemm.setItemPrice(search);
+                //  searchItemm.setItemPrice(search);
                 searchDataList.add(searchItemm);
 
+                mRef = firebaseDatabase.getReference("");
+                mRef.child("bookedmain").child(mPref.getTableKey()).push().setValue(searchDataList);
                 mCaptionSearchRv.setHasFixedSize(true);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
                 mCaptionSearchRv.setLayoutManager(layoutManager);

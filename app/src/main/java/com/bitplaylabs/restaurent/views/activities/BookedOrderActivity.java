@@ -43,7 +43,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
     public TextView mTotalBillPrice, mDoneTv;
     public ImageView mBack;
     private List<BookedModel> mBookedItemList;
-   // private List<SearchItemModel> mUpdateList;
+    // private List<SearchItemModel> mUpdateList;
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
@@ -69,7 +69,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
 
     private void initilizeView() {
         mBookedItemList = new ArrayList<>();
-   //     mUpdateList = new ArrayList<>();
+        //     mUpdateList = new ArrayList<>();
         mBack.setOnClickListener(this);
         mDoneTv.setOnClickListener(this);
 
@@ -78,9 +78,9 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Utils.stopProgress(BookedOrderActivity.this);
-                 final String key = dataSnapshot.getKey();
+                final String key = dataSnapshot.getKey();
 
-                mRef = firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableKey()).child("" +key);
+                mRef = firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableKey()).child("" + key);
                 mRef.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -91,7 +91,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                         String tableNo = searchItemModel.getTableNo().toString();
                         String itemName = searchItemModel.getSearchItem().toString();
                         String order_time = searchItemModel.getTime().toString();
-                        String key1=key;
+                        String key1 = key;
                         int itemQuantity = searchItemModel.getItemQuantity();
                         long itemPrice = searchItemModel.getItemPrice();
                         searchBookedList.setSearchItem(itemName);
@@ -109,7 +109,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                             @Override
                             public void onClicked(String captain_name, String tableNo, String itemName, long itemPrice, String order_time, String key, String quantity, int position) {
 
-                              List<BookedModel> list=new ArrayList<>();
+                                List<BookedModel> list = new ArrayList<>();
                                 BookedModel searchItemm = new BookedModel();
                                 searchItemm.setSearchItem(itemName);
                                 searchItemm.setItemQuantity(Integer.parseInt(quantity));
@@ -120,9 +120,9 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                                 list.add(searchItemm);
 
 
-                                Toast.makeText(BookedOrderActivity.this, ""+quantity+key, Toast.LENGTH_SHORT).show();
-                               firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableKey()).child("" +key).setValue(list);
-                               firebaseDatabase.getReference("booked").child(mPrefs.getTableKey()).child("" +key);
+                                Toast.makeText(BookedOrderActivity.this, "" + quantity + key, Toast.LENGTH_SHORT).show();
+                                firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableKey()).child("" + key).setValue(list);
+                                firebaseDatabase.getReference("booked").child(mPrefs.getTableKey()).child("" + key).setValue(list);
 
 
                             }
@@ -201,9 +201,6 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
         mRef = firebaseDatabase.getReference("");
         mRef.child("tables").child(mPrefs.getTableKey()).child("status").setValue("1");
         mRef.child("tables").child(mPrefs.getTableKey()).child("totalprice").setValue("" + sum);
-
-     //   mRef.child("booked").child(mPrefs.getTableKey()).push().setValue(mUpdateList);
-
 
         Toast.makeText(this, "Order placed", Toast.LENGTH_SHORT).show();
 

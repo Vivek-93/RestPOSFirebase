@@ -96,7 +96,7 @@
             android:text="Email"
             android:textColor="@color/colorBlack" />
 
-        <EditText
+        <TextView
             android:id="@+id/act_user_profile_update_email_et"
             android:layout_width="match_parent"
             android:layout_height="40dp"
