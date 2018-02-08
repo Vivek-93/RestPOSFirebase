@@ -14,16 +14,8 @@
             android:id="@+id/fragment_caption_search_rv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/fragment_caption_confirm"/>
-
-        <Button
-            android:id="@+id/fragment_caption_confirm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Confirm"
-            android:background="@color/colorPrimary"
-            android:textColor="@color/colorWhite"
             android:layout_above="@id/fragment_caption_search_ll"/>
+
         <LinearLayout
             android:id="@+id/fragment_caption_search_ll"
             android:layout_width="match_parent"

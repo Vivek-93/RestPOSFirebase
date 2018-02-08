@@ -44,6 +44,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,7 +58,6 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
     public AutoCompleteTextView mSearchEt;
     public ImageView mSearchIv;
     public RecyclerView mCaptionSearchRv;
-    public Button mBookItems;
 
     public String search;
     private Dialog additemsDialog;
@@ -90,7 +90,6 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
         mSearchEt = (AutoCompleteTextView) view.findViewById(R.id.fragment_caption_search_et);
         mSearchIv = (ImageView) view.findViewById(R.id.fragment_caption_search_iv);
         mCaptionSearchRv = (RecyclerView) view.findViewById(R.id.fragment_caption_search_rv);
-        mBookItems = (Button) view.findViewById(R.id.fragment_caption_confirm);
         mPref = Sharedpreferences.getUserDataObj(getActivity());
 
         initilizeView();
@@ -110,7 +109,7 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
 
     private void initilizeView() {
 
-        mBookItems.setOnClickListener(this);
+
         Log.d("CaptainSearchFragment", "item name");
         searchList = new ArrayList<>();
         searchDataList = new ArrayList<>();
@@ -171,18 +170,14 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
                 searchFunction();
                 break;
 
-            case R.id.fragment_caption_confirm:
-
-                mRef = firebaseDatabase.getReference("");
-                mRef.child("booked").child(mPrefs.getTableKey()).push().setValue(searchDataList);
-
-                break;
         }
     }
 
     private void searchFunction() {
 
         search = mSearchEt.getText().toString();
+        Scanner in = new Scanner(search).useDelimiter("[^0-9]+");
+        final int integer = in.nextInt();
         additemsDialog = new Dialog(getContext());
         additemsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         additemsDialog.setContentView(R.layout.item_table_detail_item_quantity_bill);
@@ -210,12 +205,14 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
             @Override
             public void onClick(View view) {
 
+
+
                 SearchItemModel searchItemm = new SearchItemModel();
                 searchItemm.setSearchItem(search);
                 searchItemm.setItemQuantity(Integer.parseInt(itemSpinner.getSelectedItem().toString()));
                 searchItemm.setCaptainName(mPrefs.getLoggedInUsername());
                 searchItemm.setTableNo(mPrefs.getTableKey());
-                //  searchItemm.setItemPrice(search);
+                  searchItemm.setItemPrice(Long.valueOf(integer));
                 searchDataList.add(searchItemm);
 
                 mRef = firebaseDatabase.getReference("");

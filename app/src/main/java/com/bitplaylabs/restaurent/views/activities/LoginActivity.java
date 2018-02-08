@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         OneSignal.startInit(this);
         setContentView(R.layout.activity_login);
-        mAuth = FirebaseAuth.getInstance();
+
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -79,6 +79,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         mRegisterTv.setOnClickListener(this);
         mLoginButton.setOnClickListener(this);
+        mForgotTv.setOnClickListener(this);
       /*  Loggedin_User_Email = user.getEmail();
         OneSignal.sendTag("User_ID", Loggedin_User_Email);*/
 
@@ -97,6 +98,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.login_act_sign_up_tv:
                 Intent intent = new Intent(this, RegisterActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.login_act_forgot_password_tv:
+                Intent intent1=new Intent(this,ResetPasswordActivity.class);
+                startActivity(intent1);
                 break;
         }
 

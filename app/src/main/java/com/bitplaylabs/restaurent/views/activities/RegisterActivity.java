@@ -30,7 +30,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public EditText regMobileNumber, regUserName, regEmail, regPass;
     public Spinner mSelectType;
     public ImageView regBackIv;
-    public Button registerBtn;
+    public Button registerBtn, regBack;
     private FirebaseAuth mAuth;
 
     String nameValue, passwordValue, phoneNumValue, emailValue, selectRole;
@@ -55,6 +55,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         regPass = (EditText) findViewById(R.id.reg_act_passwo_et);
         registerBtn = (Button) findViewById(R.id.register_act_sign_up_button);
         mSelectType = (Spinner) findViewById(R.id.reg_act_select_type);
+        regBack=(Button)findViewById(R.id.reg_btn_back);
 
         initializeViews();
 
@@ -73,6 +74,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }*/
 
         registerBtn.setOnClickListener(this);
+        regBack.setOnClickListener(this);
     }
 
     @Override
@@ -81,6 +83,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         switch (view.getId()) {
             case R.id.register_act_sign_up_button:
                 attemptregister();
+                break;
+
+            case R.id.reg_btn_back:
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
                 break;
 
         }
