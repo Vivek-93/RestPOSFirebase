@@ -1,5 +1,6 @@
 package com.bitplaylabs.restaurent.views.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -78,8 +79,10 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Utils.stopProgress(BookedOrderActivity.this);
-                final String key = dataSnapshot.getKey();
 
+
+
+                final String key = dataSnapshot.getKey();
                 mRef = firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableKey()).child("" + key);
                 mRef.addChildEventListener(new ChildEventListener() {
                     @Override
@@ -120,7 +123,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                                 list.add(searchItemm);
 
 
-                                Toast.makeText(BookedOrderActivity.this, "" + quantity + key, Toast.LENGTH_SHORT).show();
+                            //    Toast.makeText(BookedOrderActivity.this, "" + quantity + key, Toast.LENGTH_SHORT).show();
                                 firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableKey()).child("" + key).setValue(list);
                                 firebaseDatabase.getReference("booked").child(mPrefs.getTableKey()).child("" + key).setValue(list);
 
@@ -190,7 +193,9 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                 break;
 
             case R.id.act_booked_back_iv:
-                onBackPressed();
+                Intent intent=new Intent(this,TableDetailsActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
                 break;
 
         }
@@ -203,6 +208,16 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
         mRef.child("tables").child(mPrefs.getTableKey()).child("totalprice").setValue("" + sum);
 
         Toast.makeText(this, "Order placed", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        Intent intent=new Intent(this,TableDetailsActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
 
     }
 }

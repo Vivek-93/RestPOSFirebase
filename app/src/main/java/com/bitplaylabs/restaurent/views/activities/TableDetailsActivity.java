@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bitplaylabs.restaurent.R;
 import com.bitplaylabs.restaurent.extra.GuestDetails;
@@ -18,13 +19,14 @@ import com.bitplaylabs.restaurent.utils.Sharedpreferences;
 import com.bitplaylabs.restaurent.utils.Utils;
 import com.bitplaylabs.restaurent.views.fragments.CaptainCategoryFragment;
 import com.bitplaylabs.restaurent.views.fragments.CaptainSearchFragment;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class TableDetailsActivity extends AppCompatActivity implements View.OnClickListener{
+public class TableDetailsActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private FirebaseDatabase firebaseDatabase;
@@ -39,7 +41,7 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
 
     private Button mCetogery, mSearch;
     private Sharedpreferences mPrefs;
-    String keyId,tableNo;
+    String keyId, tableNo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +60,9 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
         mBookedItems = (ImageView) findViewById(R.id.act_table_details_toolbar_iv);
         context = TableDetailsActivity.this;
         mPrefs = Sharedpreferences.getUserDataObj(this);
-        keyId= mPrefs.getTableKey();
-       // keyId=getIntent().getExtras().getString("TableKey");
-      //  tableNo=getIntent().getExtras().getString("TableNumber");
+        keyId = mPrefs.getTableKey();
+        // keyId=getIntent().getExtras().getString("TableKey");
+        //  tableNo=getIntent().getExtras().getString("TableNumber");
 
         initializeViews();
     }
@@ -98,12 +100,12 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
         Utils.stopProgress(this);
 
 
-        Log.d("TableDetailsActivity",""+dataSnapshot.child(mPrefs.getUserId()).child(keyId).getValue());
+        Log.d("TableDetailsActivity", "" + dataSnapshot.child(mPrefs.getUserId()).child(keyId).getValue());
         String guestName = dataSnapshot.child(mPrefs.getUserId()).child(keyId).getValue(GuestDetails.class).getGuestname().toString();
-        String guestPhone= dataSnapshot.child(mPrefs.getUserId()).child(keyId).getValue(GuestDetails.class).getGuestnumber().toString();
+        String guestPhone = dataSnapshot.child(mPrefs.getUserId()).child(keyId).getValue(GuestDetails.class).getGuestnumber().toString();
         String headCount = dataSnapshot.child(mPrefs.getUserId()).child(keyId).getValue(GuestDetails.class).getHeadcount().toString();
         String kot = dataSnapshot.child(mPrefs.getUserId()).child(keyId).getValue(GuestDetails.class).getKot().toString();
-     //   Toast.makeText(context, ""+kot, Toast.LENGTH_SHORT).show();
+        //   Toast.makeText(context, ""+kot, Toast.LENGTH_SHORT).show();
         mGuestName.setText(guestName);
         mGuestPhone.setText(guestPhone);
         mGuestTable.setText(keyId);
@@ -117,8 +119,7 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
         switch (view.getId()) {
             case R.id.act_table_details_toolbar_iv:
 
-                Intent intent = new Intent(TableDetailsActivity.this, BookedOrderActivity.class);
-                startActivity(intent);
+                openBookedOrderActivityFun();
                 break;
 
             case R.id.act_table_details_catogery_btn:
@@ -130,40 +131,40 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
                 break;
 
             case R.id.act_table_details_back_iv:
-                Intent intent1=new Intent(this,MainActivity.class);
+                Intent intent1 = new Intent(this, MainActivity.class);
+                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent1);
                 break;
         }
 
     }
 
+    private void openBookedOrderActivityFun() {
+
+        Intent intent = new Intent(TableDetailsActivity.this, BookedOrderActivity.class);
+        startActivity(intent);
+    }
+
     private void openSearchFragment() {
 
-        //  Bundle bundle = new Bundle();
-        //  bundle.putSerializable("itemList", mealdetails);
         CaptainSearchFragment csf = new CaptainSearchFragment();
-        //   csf.setArguments(bundle);
         mFragmentManager.beginTransaction().replace(R.id.act_table_details_framelayout, csf).addToBackStack(null).commit();
     }
 
     private void openCatogeryFragment() {
 
-      /*  Bundle bundle = new Bundle();
-        bundle.putString("tableno", mGuestTable.getText().toString());*/
         CaptainCategoryFragment ccf = new CaptainCategoryFragment();
-        //   ccf.setArguments(bundle);
         mFragmentManager.beginTransaction().replace(R.id.act_table_details_framelayout, ccf).addToBackStack(null).commit();
     }
 
     @Override
     public void onBackPressed() {
 
-        Intent intent1=new Intent(this,MainActivity.class);
-        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent intent1 = new Intent(this, MainActivity.class);
+        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent1);
         super.onBackPressed();
     }
-
 
 
 }

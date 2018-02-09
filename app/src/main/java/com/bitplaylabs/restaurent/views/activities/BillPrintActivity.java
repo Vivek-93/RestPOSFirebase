@@ -99,7 +99,7 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
 
                 String key = dataSnapshot.getKey();
 
-                Toast.makeText(BillPrintActivity.this, ""+key, Toast.LENGTH_SHORT).show();
+            //    Toast.makeText(BillPrintActivity.this, ""+key, Toast.LENGTH_SHORT).show();
 
                 mRef = firebaseDatabase.getReference("bookedmain").child(tableKey).child("" + key);
                 mRef.addChildEventListener(new ChildEventListener() {
@@ -202,7 +202,9 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
                 break;
 
             case R.id.act_printbill_back_iv:
-                onBackPressed();
+               Intent intent=new Intent(this,MainActivity.class);
+               intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+               startActivity(intent);
                 finish();
                 break;
         }
@@ -261,5 +263,17 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
 
         firebaseDatabase.getReference("tables").child(tableKey).child("status").setValue("0");
         firebaseDatabase.getReference("booked").child(tableKey).removeValue();
+        firebaseDatabase.getReference("bookedmain").child(tableKey).removeValue();
+      //  firebaseDatabase.getReference("guestdetails").child(mPrefs.getUserId()).child(tableKey).removeValue();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent=new Intent(this,MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY|Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

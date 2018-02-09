@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public TextView mUserName, mUserRole;
     private FirebaseAuth mAuth;
     private FirebaseDatabase firebaseDatabase;
-    private FirebaseAuth.AuthStateListener mStateListener;
     private DatabaseReference mRef;
     String userId;
     FirebaseUser user;
@@ -112,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         mRecyclerView.setAdapter(captionRecyclerViewAdaptor);
-        MyFirebaseMessaging1.openActivityNotification(getApplicationContext());
+     //   MyFirebaseMessaging1.openActivityNotification(getApplicationContext());
 
     }
 
@@ -256,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mAuth.signOut();
                 finish();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY|Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;
 
@@ -269,5 +268,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
+
 
 }

@@ -64,13 +64,12 @@ public class NewOrderKDAdapter extends RecyclerView.Adapter<NewOrderKDAdapter.Vi
     @Override
     public void onBindViewHolder(final NewOrderKDAdapter.ViewHolder holder, final int position) {
 
-       /* Log.d("NewOrderAdapter","name"+mOrderList.get(position).getKot().toString());
-        holder.item_kot.setText(""+mOrderList.get(position).getKot().toString());*/
+        holder.serial_no.setText(""+(position + 1));
         holder.item_name.setText(mOrderList.get(position).getSearchItem().toString());
         holder.item_quantity.setText(""+mOrderList.get(position).getItemQuantity());
         holder.item_table.setText(mOrderList.get(position).getTableNo().toString());
         holder.item_order_time.setText(mOrderList.get(position).getTime().toString());
-     /*   holder.item_time_elapsed.setText(mOrderList.get(position).getTime_elapsed().toString());*/
+
         holder.item_order_taken_by.setText(mOrderList.get(position).getCaptainName().toString());
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +77,8 @@ public class NewOrderKDAdapter extends RecyclerView.Adapter<NewOrderKDAdapter.Vi
             public void onClick(View v) {
 
                 mClick.onClicked(position);
-               // Toast.makeText(mContext, "aa"+position, Toast.LENGTH_SHORT).show();
+               // notifyDataSetChanged();
+
             }
         });
 
@@ -89,12 +89,11 @@ public class NewOrderKDAdapter extends RecyclerView.Adapter<NewOrderKDAdapter.Vi
     public int getItemCount() {
 
         return mOrderList.size();
-
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView item_kot, item_name, item_quantity, item_table, item_order_time, item_time_elapsed, item_order_taken_by;
+        public TextView item_kot, item_name, item_quantity, item_table, item_order_time, item_time_elapsed, item_order_taken_by,serial_no;
 
 
         public ViewHolder(View itemView) {
@@ -108,6 +107,7 @@ public class NewOrderKDAdapter extends RecyclerView.Adapter<NewOrderKDAdapter.Vi
             item_order_time = (TextView) itemView.findViewById(R.id.fag_new_order_rv_order_time_tv);
             item_time_elapsed = (TextView) itemView.findViewById(R.id.fag_new_order_rv_time_elapsed_tv);
             item_order_taken_by = (TextView) itemView.findViewById(R.id.item_order_taken_by_tv);
+            serial_no=(TextView)itemView.findViewById(R.id.fag_new_order_tv);
 
         }
     }

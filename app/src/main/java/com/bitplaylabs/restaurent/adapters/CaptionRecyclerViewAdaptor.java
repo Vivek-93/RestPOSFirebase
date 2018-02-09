@@ -1,5 +1,6 @@
 package com.bitplaylabs.restaurent.adapters;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -83,6 +84,7 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
         return viewHolder;
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(final CaptionRecyclerViewAdaptor.ViewHolder holder, final int position) {
 
@@ -91,6 +93,7 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
 
         if (data.get(position).getStatus().equalsIgnoreCase("1")) {
             holder.itemView.setBackgroundColor(Color.GREEN);
+            holder.printBillBtn.setEnabled(true);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -104,6 +107,8 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
 
         } else if (data.get(position).getStatus().equalsIgnoreCase("0")) {
 
+            holder.printBillBtn.setEnabled(false);
+            holder.printBillBtn.setBackgroundColor(R.color.color_light_blue);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -164,10 +169,8 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                         @Override
                         public void onClick(View view) {
 
-                          //  mRef = firebaseDatabase.getReference("ordernumber");
-
                             Calendar cal = Calendar.getInstance();
-                            //  cal.setTime(date);
+
                             int hours = cal.get(Calendar.HOUR_OF_DAY);
                             int minuts = cal.get(Calendar.MINUTE);
 

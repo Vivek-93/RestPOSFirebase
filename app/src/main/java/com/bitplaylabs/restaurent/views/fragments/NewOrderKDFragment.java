@@ -124,179 +124,183 @@ public class NewOrderKDFragment extends Fragment {
                 data = new ArrayList<>();
                 newOrderList = new ArrayList<SearchItemModel>();
 
-                mRef = firebaseDatabase.getReference("tables");
-                mRef.addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                try {
+                    mRef = firebaseDatabase.getReference("tables");
+                    mRef.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                        TableDetails value = dataSnapshot.getValue(TableDetails.class);
-                        TableDetails fire = new TableDetails();
-                        String id = value.getTableid();
-                        String tablename = value.getTablename();
-                        final String key = dataSnapshot.getKey().toString();
-                        fire.setTableid(id);
-                        fire.setTablename(tablename);
-                        fire.setTablekey(key);
-                        data.add(fire);
+                            TableDetails value = dataSnapshot.getValue(TableDetails.class);
+                            TableDetails fire = new TableDetails();
+                            String id = value.getTableid();
+                            String tablename = value.getTablename();
+                            final String key = dataSnapshot.getKey().toString();
+                            fire.setTableid(id);
+                            fire.setTablename(tablename);
+                            fire.setTablekey(key);
+                            data.add(fire);
 
-                        mRef = firebaseDatabase.getReference("booked").child("" + key);
-                        mRef.addChildEventListener(new ChildEventListener() {
-                            @Override
-                            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                                final String tablebookedKey = dataSnapshot.getKey();
+                            mRef = firebaseDatabase.getReference("booked").child("" + key);
+                            mRef.addChildEventListener(new ChildEventListener() {
+                                @Override
+                                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                    final String tablebookedKey = dataSnapshot.getKey();
 
-                                mRef = firebaseDatabase.getReference("booked").child("" + key).child("" + tablebookedKey);
-                                mRef.addChildEventListener(new ChildEventListener() {
-                                    @Override
-                                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                                    mRef = firebaseDatabase.getReference("booked").child("" + key).child("" + tablebookedKey);
+                                    mRef.addChildEventListener(new ChildEventListener() {
+                                        @Override
+                                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                                        SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
-                                        SearchItemModel list = new SearchItemModel();
-                                        String itemName = searchItemModel.getSearchItem();
-                                        int itemQuantity = searchItemModel.getItemQuantity();
-                                        String tableNo = searchItemModel.getTableNo();
-                                        String captainName = searchItemModel.getCaptainName();
-                                        String time = searchItemModel.getTime();
-                                        list.setSearchItem(itemName);
-                                        list.setItemQuantity(itemQuantity);
-                                        list.setTableNo(tableNo);
-                                        list.setCaptainName(captainName);
-                                        list.setTime(time);
-                                        newOrderList.add(list);
+                                            SearchItemModel searchItemModel = dataSnapshot.getValue(SearchItemModel.class);
+                                            SearchItemModel list = new SearchItemModel();
+                                            String itemName = searchItemModel.getSearchItem();
+                                            int itemQuantity = searchItemModel.getItemQuantity();
+                                            String tableNo = searchItemModel.getTableNo();
+                                            String captainName = searchItemModel.getCaptainName();
+                                            String time = searchItemModel.getTime();
+                                            list.setSearchItem(itemName);
+                                            list.setItemQuantity(itemQuantity);
+                                            list.setTableNo(tableNo);
+                                            list.setCaptainName(captainName);
+                                            list.setTime(time);
+                                            newOrderList.add(list);
 
-                                        mRecyclerView.setHasFixedSize(true);
-                                        mNewOrderKDAdapter = new NewOrderKDAdapter(getContext(), newOrderList, new NewOrderKDAdapter.ReadyClick() {
-                                            @Override
-                                            public void onClicked(final int position) {
+                                            mRecyclerView.setHasFixedSize(true);
+                                            mNewOrderKDAdapter = new NewOrderKDAdapter(getContext(), newOrderList, new NewOrderKDAdapter.ReadyClick() {
+                                                @Override
+                                                public void onClicked(final int position) {
 
-                                                kdDialougeBox = new Dialog(mContext);
-                                                kdDialougeBox.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                                kdDialougeBox.setContentView(R.layout.item_meal_ready);
-                                                kdDialougeBox.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                                                kdDialougeBox.getWindow().setGravity(Gravity.CENTER);
-                                                kdDialougeBox.show();
+                                                    kdDialougeBox = new Dialog(mContext);
+                                                    kdDialougeBox.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                                    kdDialougeBox.setContentView(R.layout.item_meal_ready);
+                                                    kdDialougeBox.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                                                    kdDialougeBox.getWindow().setGravity(Gravity.CENTER);
+                                                    kdDialougeBox.show();
 
-                                                TextView mCancelTV = (TextView) kdDialougeBox.findViewById(R.id.meal_ready_cancel_tv);
-                                                TextView mReadyTV = (TextView) kdDialougeBox.findViewById(R.id.meal_ready_tv);
+                                                    TextView mCancelTV = (TextView) kdDialougeBox.findViewById(R.id.meal_ready_cancel_tv);
+                                                    TextView mReadyTV = (TextView) kdDialougeBox.findViewById(R.id.meal_ready_tv);
 
-                                                mReadyTV.setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View view) {
+                                                    mReadyTV.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View view) {
 
-                                                        Intent service = new Intent(mContext, ReadyOrder.class);
-                                                        mContext.startService(service);
+                                                            Intent service = new Intent(mContext, ReadyOrder.class);
+                                                            mContext.startService(service);
 
-                                                        List<SearchItemModel> readyList = new ArrayList<>();
-                                                        SearchItemModel list = new SearchItemModel();
-                                                        String itemName = newOrderList.get(position).getSearchItem();
-                                                        int itemQuantity = newOrderList.get(position).getItemQuantity();
-                                                        String tableNo = newOrderList.get(position).getTableNo();
-                                                        String captainName = newOrderList.get(position).getCaptainName();
-                                                        String time = newOrderList.get(position).getTime();
-                                                        list.setSearchItem(itemName);
-                                                        list.setItemQuantity(itemQuantity);
-                                                        list.setTableNo(tableNo);
-                                                        list.setCaptainName(captainName);
-                                                        list.setTime(time);
-                                                        readyList.add(list);
-                                                        mRef = firebaseDatabase.getReference("");
-                                                        //  mRef = firebaseDatabase.getReference("notifications").child(newOrderList.get(position).getTableNo().toString());
-                                                        mRef = firebaseDatabase.getReference("readylist");
-                                                        mRef.push().setValue(readyList);
-                                                        firebaseDatabase.getReference("booked").child("" + key).child("" + tablebookedKey).removeValue();
+                                                            List<SearchItemModel> readyList = new ArrayList<>();
+                                                            SearchItemModel list = new SearchItemModel();
+                                                            String itemName = newOrderList.get(position).getSearchItem();
+                                                            int itemQuantity = newOrderList.get(position).getItemQuantity();
+                                                            String tableNo = newOrderList.get(position).getTableNo();
+                                                            String captainName = newOrderList.get(position).getCaptainName();
+                                                            String time = newOrderList.get(position).getTime();
+                                                            list.setSearchItem(itemName);
+                                                            list.setItemQuantity(itemQuantity);
+                                                            list.setTableNo(tableNo);
+                                                            list.setCaptainName(captainName);
+                                                            list.setTime(time);
+                                                            readyList.add(list);
+                                                            mRef = firebaseDatabase.getReference("");
+                                                            //  mRef = firebaseDatabase.getReference("notifications").child(newOrderList.get(position).getTableNo().toString());
+                                                            mRef = firebaseDatabase.getReference("readylist");
+                                                            mRef.push().setValue(readyList);
+                                                            firebaseDatabase.getReference("booked").child("" + key).child("" + tablebookedKey).removeValue();
 
-                                                        //  mRef.setValue(newOrderList.get(position).getSearchItem().toString());
-                                                        //  itemReadyPushNotification();
-                                                        kdDialougeBox.dismiss();
-                                                    }
-                                                });
+                                                            //  mRef.setValue(newOrderList.get(position).getSearchItem().toString());
+                                                            //  itemReadyPushNotification();
+                                                            kdDialougeBox.dismiss();
+                                                        }
+                                                    });
 
-                                                mCancelTV.setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View v) {
-                                                        kdDialougeBox.dismiss();
-                                                    }
-                                                });
-                                            }
-                                        });
-                                        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-                                        mRecyclerView.setLayoutManager(mLayoutManager);
-                                        mRecyclerView.setAdapter(mNewOrderKDAdapter);
-                                        mNewOrderKDAdapter.notifyDataSetChanged();
+                                                    mCancelTV.setOnClickListener(new View.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(View v) {
+                                                            kdDialougeBox.dismiss();
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                            RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+                                            mRecyclerView.setLayoutManager(mLayoutManager);
+                                            mRecyclerView.setAdapter(mNewOrderKDAdapter);
+                                            mNewOrderKDAdapter.notifyDataSetChanged();
 
-                                    }
+                                        }
 
-                                    @Override
-                                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-
-                                    }
-
-                                    @Override
-                                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                                    }
-
-                                    @Override
-                                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-
-                                    }
-                                });
+                                        @Override
+                                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
 
-                            }
+                                        }
 
-                            @Override
-                            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                                        @Override
+                                        public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                            }
+                                        }
 
-                            @Override
-                            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                                        @Override
+                                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                            }
+                                        }
 
-                            @Override
-                            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
 
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
+                                        }
+                                    });
 
 
-                    }
+                                }
 
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                                @Override
+                                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                    }
+                                }
 
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                                @Override
+                                public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                    }
+                                }
 
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                                @Override
+                                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                    }
+                                }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
+                                }
+                            });
+
+
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-        }, 0, 10, TimeUnit.SECONDS);
+        }, 0, 5, TimeUnit.SECONDS);
 
     }
 

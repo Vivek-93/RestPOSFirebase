@@ -20,6 +20,18 @@
         android:weightSum="10">
 
         <TextView
+            android:id="@+id/fag_ready_order_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight=".25"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <TextView
             android:id="@+id/fag_ready_order_rv_kot_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

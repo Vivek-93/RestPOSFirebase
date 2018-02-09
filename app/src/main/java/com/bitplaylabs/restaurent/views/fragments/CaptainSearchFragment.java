@@ -43,6 +43,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 
@@ -87,9 +88,9 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
         View view = inflater.inflate(R.layout.fragment_caption_search, container, false);
         mPrefs = Sharedpreferences.getUserDataObj(getContext());
         firebaseDatabase = FirebaseDatabase.getInstance();
-        mSearchEt = (AutoCompleteTextView) view.findViewById(R.id.fragment_caption_search_et);
-        mSearchIv = (ImageView) view.findViewById(R.id.fragment_caption_search_iv);
-        mCaptionSearchRv = (RecyclerView) view.findViewById(R.id.fragment_caption_search_rv);
+        mSearchEt = view.findViewById(R.id.fragment_caption_search_et);
+        mSearchIv = view.findViewById(R.id.fragment_caption_search_iv);
+        mCaptionSearchRv = view.findViewById(R.id.fragment_caption_search_rv);
         mPref = Sharedpreferences.getUserDataObj(getActivity());
 
         initilizeView();
@@ -160,6 +161,21 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
         mAdapter = new SearchBookedAdapter(getActivity(), searchList);
         mSearchEt.setThreshold(0);
         mSearchEt.setAdapter(mAdapter);
+      /*  mSearchEt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                // When textview lost focus check the textview data valid or not
+                Toast.makeText(mContext, "Hvdwsi"+hasFocus, Toast.LENGTH_SHORT).show();
+                if (!hasFocus) {
+                    if (!searchList.contains(mSearchEt.getText().toString())) {
+                        mSearchEt.setText(""); // clear your TextView
+                        Toast.makeText(mContext, "Hi", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+*/
+
 
     }
 
@@ -175,57 +191,97 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
 
     private void searchFunction() {
 
-        search = mSearchEt.getText().toString();
-        Scanner in = new Scanner(search).useDelimiter("[^0-9]+");
-        final int integer = in.nextInt();
-        additemsDialog = new Dialog(getContext());
-        additemsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        additemsDialog.setContentView(R.layout.item_table_detail_item_quantity_bill);
-        additemsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        additemsDialog.getWindow().setGravity(Gravity.CENTER);
-        additemsDialog.show();
+        try {
+            search = mSearchEt.getText().toString();
+            Scanner in = new Scanner(search).useDelimiter("[^0-9]+");
+            final int integer = in.nextInt();
+            additemsDialog = new Dialog(getContext());
+            additemsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            additemsDialog.setContentView(R.layout.item_table_detail_item_quantity_bill);
+            additemsDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            additemsDialog.getWindow().setGravity(Gravity.CENTER);
+            additemsDialog.show();
 
-        TextView itemQuality = (TextView) additemsDialog.findViewById(R.id.item_table_details_quantity_tv);
-        Button addBucket = (Button) additemsDialog.findViewById(R.id.item_table_details_quantity_button);
-        itemSpinner = (Spinner) additemsDialog.findViewById(R.id.item_table_details_quantity_spinner);
+            TextView itemQuality = additemsDialog.findViewById(R.id.item_table_details_quantity_tv);
+            Button addBucket = additemsDialog.findViewById(R.id.item_table_details_quantity_button);
+            itemSpinner = additemsDialog.findViewById(R.id.item_table_details_quantity_spinner);
 
-        itemQuality.setText(search);
-        addQuantity = new ArrayList<String>();
-        addQuantity.add("" + 1);
-        addQuantity.add("" + 2);
-        addQuantity.add("" + 3);
-        addQuantity.add("" + 4);
-        addQuantity.add("" + 5);
-        addQuantity.add("" + 6);
-        addQuantity.add("" + 7);
-        addQuantity.add("" + 8);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, addQuantity);
-        itemSpinner.setAdapter(adapter);
-        addBucket.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            itemQuality.setText(search);
+            addQuantity = new ArrayList<String>();
+            addQuantity.add("" + 1);
+            addQuantity.add("" + 2);
+            addQuantity.add("" + 3);
+            addQuantity.add("" + 4);
+            addQuantity.add("" + 5);
+            addQuantity.add("" + 6);
+            addQuantity.add("" + 7);
+            addQuantity.add("" + 8);
+            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, addQuantity);
+            itemSpinner.setAdapter(adapter);
+            addBucket.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Calendar cal = Calendar.getInstance();
+                    //  cal.setTime(date);
+                    int hours = cal.get(Calendar.HOUR_OF_DAY);
+                    int minuts = cal.get(Calendar.MINUTE);
+                    String time = hours + ":" + minuts;
+                    SearchItemModel searchItemm = new SearchItemModel();
+                    searchItemm.setSearchItem(search);
+                    searchItemm.setItemQuantity(Integer.parseInt(itemSpinner.getSelectedItem().toString()));
+                    searchItemm.setCaptainName(mPrefs.getLoggedInUsername());
+                    searchItemm.setTableNo(mPrefs.getTableKey());
+                    searchItemm.setItemPrice(Long.valueOf(integer));
+                    searchItemm.setTime(time);
+                    searchDataList.add(searchItemm);
+
+                    mRef = firebaseDatabase.getReference("");
+                    mRef.child("bookedmain").child(mPref.getTableKey()).push().setValue(searchDataList);
+                    mRef = firebaseDatabase.getReference("bookedmain").child(mPref.getTableKey());
+                    mRef.addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                            String key = dataSnapshot.getKey();
+                            firebaseDatabase.getReference("booked").child(mPref.getTableKey()).child(key).setValue(searchDataList);
+
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
 
-
-                SearchItemModel searchItemm = new SearchItemModel();
-                searchItemm.setSearchItem(search);
-                searchItemm.setItemQuantity(Integer.parseInt(itemSpinner.getSelectedItem().toString()));
-                searchItemm.setCaptainName(mPrefs.getLoggedInUsername());
-                searchItemm.setTableNo(mPrefs.getTableKey());
-                  searchItemm.setItemPrice(Long.valueOf(integer));
-                searchDataList.add(searchItemm);
-
-                mRef = firebaseDatabase.getReference("");
-                mRef.child("bookedmain").child(mPref.getTableKey()).push().setValue(searchDataList);
-                mCaptionSearchRv.setHasFixedSize(true);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
-                mCaptionSearchRv.setLayoutManager(layoutManager);
-                mCaptainSearchAdapter = new CaptainSearchAdapter(getContext(), searchDataList);
-                mCaptionSearchRv.setAdapter(mCaptainSearchAdapter);
-                mSearchEt.setText("");
-                additemsDialog.dismiss();
-            }
-        });
+                    mCaptionSearchRv.setHasFixedSize(true);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+                    mCaptionSearchRv.setLayoutManager(layoutManager);
+                    mCaptainSearchAdapter = new CaptainSearchAdapter(getContext(), searchDataList);
+                    mCaptionSearchRv.setAdapter(mCaptainSearchAdapter);
+                    mSearchEt.setText("");
+                    additemsDialog.dismiss();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
     }

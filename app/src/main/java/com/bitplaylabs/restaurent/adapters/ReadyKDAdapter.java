@@ -39,17 +39,17 @@ public class ReadyKDAdapter extends RecyclerView.Adapter<ReadyKDAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder( ReadyKDAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ReadyKDAdapter.ViewHolder holder, int position) {
 
        /* Log.d("NewOrderAdapter","name"+mOrderList.get(position).getKot().toString());
         holder.item_kot.setText(""+mOrderList.get(position).getKot().toString());*/
+        holder.serial_no_tv.setText(""+(position + 1));
         holder.item_ready_name.setText(mReadyList.get(position).getSearchItem().toString());
-        holder.item_ready_quantity.setText(""+mReadyList.get(position).getItemQuantity());
+        holder.item_ready_quantity.setText("" + mReadyList.get(position).getItemQuantity());
         holder.item_ready_table.setText(mReadyList.get(position).getTableNo().toString());
         holder.item_ready_order_time.setText(mReadyList.get(position).getTime().toString());
-     //   holder.item_time_elapsed.setText(mOrderList.get(position).getTime_elapsed().toString());
+        //   holder.item_time_elapsed.setText(mOrderList.get(position).getTime_elapsed().toString());
         holder.item_ready_order_taken_by.setText(mReadyList.get(position).getCaptainName().toString());
-
 
 
     }
@@ -64,7 +64,7 @@ public class ReadyKDAdapter extends RecyclerView.Adapter<ReadyKDAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView item_ready_kot, item_ready_name, item_ready_quantity, item_ready_table, item_ready_order_time, item_ready_time_elapsed, item_ready_order_taken_by;
+        public TextView item_ready_kot, item_ready_name, item_ready_quantity, item_ready_table, item_ready_order_time, item_ready_time_elapsed, item_ready_order_taken_by, serial_no_tv;
 
 
         public ViewHolder(View itemView) {
@@ -77,6 +77,8 @@ public class ReadyKDAdapter extends RecyclerView.Adapter<ReadyKDAdapter.ViewHold
             item_ready_order_time = (TextView) itemView.findViewById(R.id.fag_ready_order_rv_order_time_tv);
             item_ready_time_elapsed = (TextView) itemView.findViewById(R.id.fag_ready_order_rv_time_elapsed_tv);
             item_ready_order_taken_by = (TextView) itemView.findViewById(R.id.item_ready_order_taken_by_tv);
+            serial_no_tv = (TextView) itemView.findViewById(R.id.fag_ready_order_tv);
+
 
         }
     }
