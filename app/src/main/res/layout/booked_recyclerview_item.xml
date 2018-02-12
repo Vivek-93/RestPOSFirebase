@@ -4,7 +4,7 @@
     xmlns:card_view="http://schemas.android.com/tools"
     android:id="@+id/caption_card_view_item"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
 
@@ -55,6 +55,8 @@
         <ImageView
             android:id="@+id/edit_quantity"
             android:layout_width="0dp"
+            android:padding="5dp"
+            android:scaleType="fitCenter"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:src="@drawable/ic_edit"

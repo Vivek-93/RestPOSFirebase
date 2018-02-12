@@ -76,8 +76,9 @@
                             android:imeOptions="actionNext"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
+                            android:inputType="textEmailAddress"
                             android:singleLine="true"
-                            android:text="prince@gmail.com"
+                            android:text=""
                             android:textSize="16sp" />
 
 
@@ -94,7 +95,7 @@
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
                             android:singleLine="true"
-                            android:text="qwerty"
+                            android:text=""
                             android:textSize="16sp" />
 
 

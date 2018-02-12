@@ -67,22 +67,22 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
 
     private void reSetPasswordFun() {
 
-        Utils.showProgress(this);
+      //  Utils.showProgress(this);
         String email = edtEmail.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(getApplicationContext(), "Enter your email!", Toast.LENGTH_SHORT).show();
             return;
-        } else {
+        } else if(!TextUtils.isEmpty(email)) {
 
             mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        Utils.stopProgress(ResetPasswordActivity.this);
+                      //  Utils.stopProgress(ResetPasswordActivity.this);
                         Toast.makeText(ResetPasswordActivity.this, "Check email to reset your password!", Toast.LENGTH_SHORT).show();
                     } else {
-                        Utils.stopProgress(ResetPasswordActivity.this);
+                     //   Utils.stopProgress(ResetPasswordActivity.this);
                         Toast.makeText(ResetPasswordActivity.this, "Fail to send reset password email!", Toast.LENGTH_SHORT).show();
                     }
                 }

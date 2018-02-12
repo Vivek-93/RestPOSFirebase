@@ -126,6 +126,7 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                             //    Toast.makeText(BookedOrderActivity.this, "" + quantity + key, Toast.LENGTH_SHORT).show();
                                 firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableKey()).child("" + key).setValue(list);
                                 firebaseDatabase.getReference("booked").child(mPrefs.getTableKey()).child("" + key).setValue(list);
+                                Toast.makeText(BookedOrderActivity.this, "Order updated", Toast.LENGTH_SHORT).show();
 
 
                             }

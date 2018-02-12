@@ -59,10 +59,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         user = mAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         mPrefs = Sharedpreferences.getUserDataObj(this);
-     /*   if (mAuth.getCurrentUser() != null) {
+        if (mAuth.getCurrentUser() != null) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
-        }*/
+        }
         mEmailET = (EditText) findViewById(R.id.login_act_email_et);
         mPasswordET = (EditText) findViewById(R.id.login_act_password_et);
         mLoginButton = (Button) findViewById(R.id.login_act_login_button);

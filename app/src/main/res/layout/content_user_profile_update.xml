@@ -27,8 +27,20 @@
                 android:layout_height="100dp"
                 android:layout_centerInParent="true"
                 android:scaleType="fitXY"
+                android:padding="5dp"
                 android:background="@drawable/edittext_background"
-                android:src="@mipmap/ic_launcher_round" />
+                android:src="@drawable/userprofile" />
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="20dp"
+                android:layout_alignEnd="@id/act_update_profile_iv"
+                android:layout_alignParentBottom="true"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:background="@drawable/edittext_background"
+                android:src="@drawable/ic_edit"
+                android:tint="@color/colorPrimary" />
 
             <Button
                 android:id="@+id/act_user_profile_edit_done_btn"

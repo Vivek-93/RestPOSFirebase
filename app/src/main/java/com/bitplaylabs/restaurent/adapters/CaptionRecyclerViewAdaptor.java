@@ -108,7 +108,7 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
         } else if (data.get(position).getStatus().equalsIgnoreCase("0")) {
 
             holder.printBillBtn.setEnabled(false);
-            holder.printBillBtn.setBackgroundColor(R.color.color_light_blue);
+          //  holder.printBillBtn.setBackgroundColor(R.color.color_light_blue);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

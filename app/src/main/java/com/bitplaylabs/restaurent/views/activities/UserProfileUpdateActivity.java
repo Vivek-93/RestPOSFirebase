@@ -186,11 +186,11 @@ public class UserProfileUpdateActivity extends AppCompatActivity implements View
     //capture and select image from gallery
     private void selectAndCaptureImage() {
 
-        final CharSequence[] items = {"Take Photo", "Choose from Gallery",
+        final CharSequence[] items = {/*"Take Photo",*/ "Choose from Gallery",
                 "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add Photo!");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
+        builder.setItems(items,   new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (items[item].equals("Take Photo")) {
