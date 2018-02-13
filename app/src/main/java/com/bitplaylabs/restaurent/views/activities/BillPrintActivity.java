@@ -38,7 +38,7 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
     private ImageView mBackIv;
-    String tableKey, captainId;
+    String tableKey, captainId,tablename;
     //  public PDFView mPdf;
 
     private List<SearchItemModel> billingList;
@@ -53,6 +53,7 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
         mPrefs = Sharedpreferences.getUserDataObj(this);
         tableKey = getIntent().getExtras().getString("billingTableKey");
         captainId = getIntent().getExtras().getString("captainID");
+        tablename = getIntent().getExtras().getString("tablename");
         mPrintBillTv = (TextView) findViewById(R.id.act_billprint_tv);
         mCaptainDetail = (TextView) findViewById(R.id.act_billprint_captain_tv);
         mGuestDetailsTv = (TextView) findViewById(R.id.act_billprint_guest_tv);
@@ -71,7 +72,7 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
         billingList = new ArrayList<>();
         mBackIv.setOnClickListener(this);
         mBillPrintDoneTv.setOnClickListener(this);
-        mRef = firebaseDatabase.getReference("guestdetails").child(captainId).child(tableKey);
+        mRef = firebaseDatabase.getReference("guestdetails").child(captainId).child(tablename);
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -92,7 +93,7 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
-        mRef = firebaseDatabase.getReference("bookedmain").child(tableKey);
+        mRef = firebaseDatabase.getReference("bookedmain").child(tablename);
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -101,7 +102,7 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
 
             //    Toast.makeText(BillPrintActivity.this, ""+key, Toast.LENGTH_SHORT).show();
 
-                mRef = firebaseDatabase.getReference("bookedmain").child(tableKey).child("" + key);
+                mRef = firebaseDatabase.getReference("bookedmain").child(tablename).child("" + key);
                 mRef.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -262,8 +263,8 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
 
 
         firebaseDatabase.getReference("tables").child(tableKey).child("status").setValue("0");
-        firebaseDatabase.getReference("booked").child(tableKey).removeValue();
-        firebaseDatabase.getReference("bookedmain").child(tableKey).removeValue();
+        firebaseDatabase.getReference("booked").child(tablename).removeValue();
+        firebaseDatabase.getReference("bookedmain").child(tablename).removeValue();
       //  firebaseDatabase.getReference("guestdetails").child(mPrefs.getUserId()).child(tableKey).removeValue();
     }
 

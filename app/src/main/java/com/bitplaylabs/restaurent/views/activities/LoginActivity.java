@@ -52,17 +52,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        OneSignal.startInit(this);
+      //  OneSignal.startInit(this);
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         mPrefs = Sharedpreferences.getUserDataObj(this);
-        if (mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();
-        }
         mEmailET = (EditText) findViewById(R.id.login_act_email_et);
         mPasswordET = (EditText) findViewById(R.id.login_act_password_et);
         mLoginButton = (Button) findViewById(R.id.login_act_login_button);
@@ -75,6 +71,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initilizeView() {
+        final FirebaseUser user1 = mAuth.getCurrentUser();
+        mRef = firebaseDatabase.getReference("users");
+        mRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Utils.stopProgress(LoginActivity.this);
+                userRole = dataSnapshot.child(user1.getUid()).getValue(UserGetInformation.class).getSelectrole().toString();
+
+                if (mAuth.getCurrentUser() != null && userRole.equalsIgnoreCase("Captain") ) {
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
+                } else if(mAuth.getCurrentUser() != null && userRole.equalsIgnoreCase("Cashier")){
+                    startActivity(new Intent(LoginActivity.this, CashierMainActivity.class));
+                    finish();
+                } else if(mAuth.getCurrentUser() != null && userRole.equalsIgnoreCase("Kitchen Display")){
+                    startActivity(new Intent(LoginActivity.this, KDMainActivity.class));
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         mRegisterTv.setOnClickListener(this);
@@ -82,6 +103,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mForgotTv.setOnClickListener(this);
       /*  Loggedin_User_Email = user.getEmail();
         OneSignal.sendTag("User_ID", Loggedin_User_Email);*/
+
 
     }
 
@@ -109,11 +131,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void login_func() {
-        Utils.showProgress(this);
+
         String name = mEmailET.getText().toString();
         String password = mPasswordET.getText().toString();
 
         if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(password)) {
+             Utils.showProgress(this);
 
             mAuth.signInWithEmailAndPassword(name, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                 @Override
@@ -134,13 +157,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 if (userRole.equalsIgnoreCase("Captain")) {
 
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_NO_HISTORY);
                                     startActivity(intent);
 
                                 } else if (userRole.equalsIgnoreCase("Kitchen Display")) {
 
                                     Intent intent = new Intent(LoginActivity.this, KDMainActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                    startActivity(intent);
+                                }  else if (userRole.equalsIgnoreCase("Cashier")) {
+
+                                    Intent intent = new Intent(LoginActivity.this, CashierMainActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_NO_HISTORY);
                                     startActivity(intent);
                                 }
 
@@ -162,6 +190,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             });
 
+        } else {
+            Toast.makeText(this, "Enter Email and password", Toast.LENGTH_SHORT).show();
         }
 
 

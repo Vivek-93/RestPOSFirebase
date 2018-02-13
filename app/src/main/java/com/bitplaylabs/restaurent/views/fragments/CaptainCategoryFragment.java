@@ -114,6 +114,8 @@ public class CaptainCategoryFragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
+             //   Toast.makeText(mContext, ""+dataSnapshot.getValue(), Toast.LENGTH_SHORT).show();
+
                 showData(dataSnapshot);
             }
 
@@ -241,16 +243,17 @@ public class CaptainCategoryFragment extends Fragment {
                                                 searchItemm.setTime(time);
                                                 searchDataList.add(searchItemm);
                                                 mRef = firebaseDatabase.getReference("");
-                                                mRef.child("bookedmain").child(mPref.getTableKey()).push().setValue(searchDataList);
-                                                mRef.child("bookingdetails").child(mPref.getTableKey()).child(mPref.getKot()).setValue(searchDataList);
-
-                                                mRef = firebaseDatabase.getReference("bookedmain").child(mPref.getTableKey());
+                                                mRef.child("bookedmain").child(mPref.getTableName()).push().setValue(searchDataList);
+                                                mRef.child("bookingdetails").child(mPref.getTableName()).child(mPref.getKot()).setValue(searchDataList);
+                                                mRef = firebaseDatabase.getReference("");
+                                                mRef.child("tables").child(mPref.getTableKey()).child("status").setValue("1");
+                                                mRef = firebaseDatabase.getReference("bookedmain").child(mPref.getTableName());
                                                 mRef.addChildEventListener(new ChildEventListener() {
                                                     @Override
                                                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                                                         String key = dataSnapshot.getKey();
-                                                        firebaseDatabase.getReference("booked").child(mPref.getTableKey()).child(key).setValue(searchDataList);
+                                                        firebaseDatabase.getReference("booked").child(mPref.getTableName()).child(key).setValue(searchDataList);
 
                                                     }
 

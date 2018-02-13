@@ -97,7 +97,8 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mPrefs.setTableKey(data.get(position).getTableid());
+                    mPrefs.setTableKey(data.get(position).getTablekey());
+                    mPrefs.setTableName(data.get(position).getTablename());
                     Intent intent = new Intent(mContext, TableDetailsActivity.class);
                     intent.putExtra("TableKey", data.get(position).getTablekey());
                     //intent.putExtra("TableNumber", data.get(position).get);
@@ -113,7 +114,8 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                 @Override
                 public void onClick(View v) {
 
-                    mPrefs.setTableKey(data.get(position).getTableid());
+                    mPrefs.setTableKey(data.get(position).getTablekey());
+                    mPrefs.setTableName(data.get(position).getTablename());
                     tableInfoDialogBox = new Dialog(mContext);
                     //  tableInfoDialogBox.requestWindowFeature(Window.FEATURE_NO_TITLE);
                     tableInfoDialogBox.setContentView(R.layout.item_caption_table_info);
@@ -180,7 +182,7 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                             int year = cal.get(Calendar.YEAR);
 
                             String kot = hours + "" + minuts + "" + day + "" + month + "" + year ;
-                            mClick.onClicked(data.get(position).getTablekey(), data.get(position).getTableid().toString(),counts.getText().toString() ,
+                            mClick.onClicked(data.get(position).getTablekey(), data.get(position).getTablename().toString(),counts.getText().toString() ,
                                     guestName.getText().toString(), guestPhone.getText().toString(), kot.toString());
 
                             notifyDataSetChanged();
@@ -214,6 +216,7 @@ public class CaptionRecyclerViewAdaptor extends RecyclerView.Adapter<CaptionRecy
                         Intent intent=new Intent(mContext, BillPrintActivity.class);
                         intent.putExtra("billingTableKey", data.get(position).getTablekey());
                         intent.putExtra("captainID", mPrefs.getUserId() );
+                        intent.putExtra("tablename", mPrefs.getTableName() );
                         mContext.startActivity(intent);
 
                         printDialogBox.dismiss();

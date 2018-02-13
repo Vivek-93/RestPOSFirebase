@@ -24,5 +24,6 @@
     <string name="gen_please_wait">Bill</string>
     <string name="title_activity_pdf_print">PdfPrintActivity</string>
     <string name="title_activity_reset_password">ResetPasswordActivity</string>
+    <string name="title_activity_caisher_main">CaisherMainActivity</string>
 
 </resources>

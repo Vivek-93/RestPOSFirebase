@@ -74,16 +74,14 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
         mBack.setOnClickListener(this);
         mDoneTv.setOnClickListener(this);
 
-        mRef = firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableKey());
+        mRef = firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableName());
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Utils.stopProgress(BookedOrderActivity.this);
 
-
-
                 final String key = dataSnapshot.getKey();
-                mRef = firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableKey()).child("" + key);
+                mRef = firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableName()).child("" + key);
                 mRef.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -122,10 +120,12 @@ public class BookedOrderActivity extends AppCompatActivity implements View.OnCli
                                 searchItemm.setTime(order_time);
                                 list.add(searchItemm);
 
+                                sum = sum + (itemPrice * Integer.parseInt(quantity));
+                                mTotalBillPrice.setText("" + sum);
 
                             //    Toast.makeText(BookedOrderActivity.this, "" + quantity + key, Toast.LENGTH_SHORT).show();
-                                firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableKey()).child("" + key).setValue(list);
-                                firebaseDatabase.getReference("booked").child(mPrefs.getTableKey()).child("" + key).setValue(list);
+                                firebaseDatabase.getReference("bookedmain").child(mPrefs.getTableName()).child("" + key).setValue(list);
+                                firebaseDatabase.getReference("booked").child(mPrefs.getTableName()).child("" + key).setValue(list);
                                 Toast.makeText(BookedOrderActivity.this, "Order updated", Toast.LENGTH_SHORT).show();
 
 

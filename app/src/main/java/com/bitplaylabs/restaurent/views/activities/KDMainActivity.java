@@ -1,5 +1,6 @@
 package com.bitplaylabs.restaurent.views.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +39,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KDMainActivity extends AppCompatActivity {
+public class KDMainActivity extends AppCompatActivity implements View.OnClickListener {
 
     // FragmentManager Instance
     private FragmentManager mFragmentManager;
@@ -48,6 +50,7 @@ public class KDMainActivity extends AppCompatActivity {
     public TabLayout mKdTablayout;
     public ViewPager mKdViewPager;
     public RecyclerView mKdMainRv;
+    public ImageView mLogout;
 
     private KDMainAdapter mKDMainAdapter;
     private TextView mName;
@@ -73,6 +76,7 @@ public class KDMainActivity extends AppCompatActivity {
         mKdViewPager = (ViewPager) findViewById(R.id.act_kd_main_viewpager);
         mKdMainRv = (RecyclerView) findViewById(R.id.act_kd_main_rv);
         mName = (TextView) findViewById(R.id.act_kd_main_user_name_tv);
+        mLogout=(ImageView)findViewById(R.id.act_kd_main_logout_iv);
 
         initializeViews();
 
@@ -80,9 +84,10 @@ public class KDMainActivity extends AppCompatActivity {
 
     private void initializeViews() {
 
+        mLogout.setOnClickListener(this);
         FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications");
       //   Toast.makeText(this, ""+ReadyOrder.currentToken, Toast.LENGTH_SHORT).show();
-        pushNotifications();
+
         mFragmentManager = getSupportFragmentManager();
 
         settingUpTabLayout();
@@ -151,8 +156,6 @@ public class KDMainActivity extends AppCompatActivity {
 
     }
 
-    private void pushNotifications() {
-    }
 
     private void showData(DataSnapshot dataSnapshot) {
 
@@ -198,4 +201,19 @@ public class KDMainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.act_kd_main_logout_iv:
+
+                mAuth.signOut();
+                finish();
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK );
+                startActivity(intent);
+
+                return;
+        }
+
+    }
 }

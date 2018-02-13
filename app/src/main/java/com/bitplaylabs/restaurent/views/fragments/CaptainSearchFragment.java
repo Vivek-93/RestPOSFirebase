@@ -237,14 +237,16 @@ public class CaptainSearchFragment extends Fragment implements View.OnClickListe
                     searchDataList.add(searchItemm);
 
                     mRef = firebaseDatabase.getReference("");
-                    mRef.child("bookedmain").child(mPref.getTableKey()).push().setValue(searchDataList);
-                    mRef = firebaseDatabase.getReference("bookedmain").child(mPref.getTableKey());
+                    mRef.child("bookedmain").child(mPref.getTableName()).push().setValue(searchDataList);
+                    mRef = firebaseDatabase.getReference("bookedmain").child(mPref.getTableName());
                     mRef.addChildEventListener(new ChildEventListener() {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
                             String key = dataSnapshot.getKey();
-                            firebaseDatabase.getReference("booked").child(mPref.getTableKey()).child(key).setValue(searchDataList);
+                            firebaseDatabase.getReference("booked").child(mPref.getTableName()).child(key).setValue(searchDataList);
+                            mRef = firebaseDatabase.getReference("");
+                            mRef.child("tables").child(mPref.getTableKey()).child("status").setValue("1");
 
                         }
 

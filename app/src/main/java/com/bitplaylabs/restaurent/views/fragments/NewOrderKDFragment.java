@@ -133,20 +133,20 @@ public class NewOrderKDFragment extends Fragment {
                             TableDetails value = dataSnapshot.getValue(TableDetails.class);
                             TableDetails fire = new TableDetails();
                             String id = value.getTableid();
-                            String tablename = value.getTablename();
+                            final String tablename = value.getTablename();
                             final String key = dataSnapshot.getKey().toString();
                             fire.setTableid(id);
                             fire.setTablename(tablename);
                             fire.setTablekey(key);
                             data.add(fire);
 
-                            mRef = firebaseDatabase.getReference("booked").child("" + key);
+                            mRef = firebaseDatabase.getReference("booked").child("" + tablename);
                             mRef.addChildEventListener(new ChildEventListener() {
                                 @Override
                                 public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                                     final String tablebookedKey = dataSnapshot.getKey();
 
-                                    mRef = firebaseDatabase.getReference("booked").child("" + key).child("" + tablebookedKey);
+                                    mRef = firebaseDatabase.getReference("booked").child("" + tablename).child("" + tablebookedKey);
                                     mRef.addChildEventListener(new ChildEventListener() {
                                         @Override
                                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -204,7 +204,7 @@ public class NewOrderKDFragment extends Fragment {
                                                             //  mRef = firebaseDatabase.getReference("notifications").child(newOrderList.get(position).getTableNo().toString());
                                                             mRef = firebaseDatabase.getReference("readylist");
                                                             mRef.push().setValue(readyList);
-                                                            firebaseDatabase.getReference("booked").child("" + key).child("" + tablebookedKey).removeValue();
+                                                            firebaseDatabase.getReference("booked").child("" + tablename).child("" + tablebookedKey).removeValue();
 
                                                             //  mRef.setValue(newOrderList.get(position).getSearchItem().toString());
                                                             //  itemReadyPushNotification();

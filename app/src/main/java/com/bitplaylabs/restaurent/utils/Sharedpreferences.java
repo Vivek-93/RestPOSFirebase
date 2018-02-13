@@ -44,6 +44,7 @@ public class Sharedpreferences {
     public static final String TAG_GET_TABLE_FEY= "tablekey";
     public static final String TAG_USER_ROLE= "userrole";
     public static final String TAG_TABLE_ID= "tableid";
+    public static final String TAG_GET_TABLE_NAME= "tablename";
     public static final String TAG_TABLE_NUMBER= "tablenumber";
     public static final String TAG_LAST_DATE= "lastdate";
     public static final String TAG_GuestBillPrintDetails= "guestbillprintdetails";
@@ -145,6 +146,21 @@ public class Sharedpreferences {
         } catch (Exception e) {
         }
     }
+
+    public String getTableName() {
+        return pref.getString(TAG_GET_TABLE_NAME, "");
+    }
+
+    public void setTableName(String tablename) {
+        try {
+            editor.putString(TAG_GET_TABLE_NAME, tablename);
+            editor.commit();
+        } catch (Exception e) {
+        }
+    }
+
+
+
 
     public String getTableNumber() {
         return pref.getString(TAG_TABLE_NUMBER, "");

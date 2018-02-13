@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 TableDetails value = dataSnapshot.getValue(TableDetails.class);
                 TableDetails fire = new TableDetails();
                 String id = value.getTableid();
-                String tablename = value.getTablename();
+                final String tablename = value.getTablename();
                 String tablestatus = value.getStatus();
                 String totalprice = value.getTotalprice();
                 String key = dataSnapshot.getKey().toString();
@@ -157,12 +157,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
                 captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(MainActivity.this, data,  new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
                     @Override
-                    public void onClicked(String tablekey, String tableid, String headcount, String guestname, String phoneno,String kot) {
+                    public void onClicked(String tablekey, String tablename, String headcount, String guestname, String phoneno,String kot) {
                       //  mPrefs.setTableKey(tablekey);
                         try {
 
                             GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount ,kot);
-                            firebaseDatabase.getReference().child("guestdetails").child(userId).child(tablekey).setValue(guestDetails);
+                            firebaseDatabase.getReference().child("guestdetails").child(userId).child(tablename).setValue(guestDetails);
                             Intent intent = new Intent(MainActivity.this, TableDetailsActivity.class);
                             intent.putExtra("TableKey", tablekey);
                             // intent.putExtra("TableNumber", tableno);
@@ -255,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mAuth.signOut();
                 finish();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK  );
                 startActivity(intent);
                 break;
 

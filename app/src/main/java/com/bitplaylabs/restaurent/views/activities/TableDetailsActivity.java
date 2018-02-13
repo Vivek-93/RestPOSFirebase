@@ -60,7 +60,7 @@ public class TableDetailsActivity extends AppCompatActivity implements View.OnCl
         mBookedItems = (ImageView) findViewById(R.id.act_table_details_toolbar_iv);
         context = TableDetailsActivity.this;
         mPrefs = Sharedpreferences.getUserDataObj(this);
-        keyId = mPrefs.getTableKey();
+        keyId = mPrefs.getTableName();
         // keyId=getIntent().getExtras().getString("TableKey");
         //  tableNo=getIntent().getExtras().getString("TableNumber");
 
