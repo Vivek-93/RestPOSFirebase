@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         showUserProfile();
 
 
-
     }
 
     @Override
@@ -92,11 +91,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
         captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(MainActivity.this, data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
             @Override
-            public void onClicked(String tablekey, String tableid, String headcount, String guestname, String phoneno,String kot) {
+            public void onClicked(String tablekey, String tableid, String headcount, String guestname, String phoneno, String kot) {
 
                 try {
 
-                    GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount,kot);
+                    GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount, kot);
                     firebaseDatabase.getReference().child("guestdetails").child(userId).child(tablekey).setValue(guestDetails);
                     Intent intent = new Intent(MainActivity.this, TableDetailsActivity.class);
                     intent.putExtra("TableKey", tablekey);
@@ -111,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         mRecyclerView.setAdapter(captionRecyclerViewAdaptor);
-     //   MyFirebaseMessaging1.openActivityNotification(getApplicationContext());
+        //   MyFirebaseMessaging1.openActivityNotification(getApplicationContext());
 
     }
 
@@ -155,13 +154,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 mRecyclerView.setHasFixedSize(true);
                 mRecyclerView.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
-                captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(MainActivity.this, data,  new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
+                captionRecyclerViewAdaptor = new CaptionRecyclerViewAdaptor(MainActivity.this, data, new CaptionRecyclerViewAdaptor.ProceedButtonClick() {
                     @Override
-                    public void onClicked(String tablekey, String tablename, String headcount, String guestname, String phoneno,String kot) {
-                      //  mPrefs.setTableKey(tablekey);
+                    public void onClicked(String tablekey, String tablename, String headcount, String guestname, String phoneno, String kot) {
+                        //  mPrefs.setTableKey(tablekey);
                         try {
 
-                            GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount ,kot);
+                            GuestDetails guestDetails = new GuestDetails(guestname, phoneno, headcount, kot);
                             firebaseDatabase.getReference().child("guestdetails").child(userId).child(tablename).setValue(guestDetails);
                             Intent intent = new Intent(MainActivity.this, TableDetailsActivity.class);
                             intent.putExtra("TableKey", tablekey);
@@ -200,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-    showUserProfile();
+        showUserProfile();
 
     }
 
@@ -211,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                Picasso.with(getApplicationContext()).load(""+dataSnapshot.getValue()).placeholder(R.drawable.userprofile).into(mProfile);
+                Picasso.with(getApplicationContext()).load("" + dataSnapshot.getValue()).placeholder(R.drawable.userprofile).into(mProfile);
             }
 
             @Override
@@ -253,22 +252,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
             case R.id.act_main_logout_iv:
                 mAuth.signOut();
-                finish();
+              //  finish();
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK  );
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
                 break;
 
             case R.id.act_main_profile_iv:
 
                 Intent intent1 = new Intent(MainActivity.this, UserProfileActivity.class);
+                intent1.putExtra("fommingfrom","Captain");
                 startActivity(intent1);
                 break;
         }
 
 
     }
-
 
 
 }

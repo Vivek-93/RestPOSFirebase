@@ -33,7 +33,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     private Sharedpreferences mPrefs;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference mRef;
-    String url = "http://www.enjoysharepoint.com/wiki/provider-hosted-add-in-package-sharepoint-online.png";
+    String commingData;
 
 
     @Override
@@ -44,6 +44,7 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
         firebaseDatabase = FirebaseDatabase.getInstance();
         mRef = firebaseDatabase.getReference("users");
         mPrefs = Sharedpreferences.getUserDataObj(this);
+        commingData= getIntent().getStringExtra("fommingfrom");
         profileUserName = (TextView) findViewById(R.id.act_user_profile_name_tv);
         profileMobileNumber = (TextView) findViewById(R.id.act_user_profile_mobileno_tv);
         profileEmail = (TextView) findViewById(R.id.act_user_profile_email_tv);
@@ -180,10 +181,24 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
 
         switch (view.getId()) {
             case R.id.act_user_profile_back_iv:
-                Intent intent = new Intent(UserProfileActivity.this, MainActivity.class);
+
+                if(commingData.equalsIgnoreCase("Cashier")) {
+
+                Intent intent = new Intent(UserProfileActivity.this, CashierMainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(intent);
+                finish();
                 break;
+               } else if(commingData.equalsIgnoreCase("Captain")){
+
+                    Intent intent = new Intent(UserProfileActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    startActivity(intent);
+                    finish();
+                    break;
+
+                }
+
 
             case R.id.act_user_profile_edit_iv:
                 userProfileEditFun();
@@ -197,9 +212,21 @@ public class UserProfileActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(UserProfileActivity.this, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
+        if(commingData.equalsIgnoreCase("Cashier")) {
+
+            Intent intent = new Intent(UserProfileActivity.this, CashierMainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
+            finish();
+
+        } else if(commingData.equalsIgnoreCase("Captain")){
+
+            Intent intent = new Intent(UserProfileActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
+            finish();
+
+        }
     }
 
     private void userProfileEditFun() {

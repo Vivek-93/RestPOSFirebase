@@ -52,7 +52,7 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
         firebaseDatabase = FirebaseDatabase.getInstance();
         mPrefs = Sharedpreferences.getUserDataObj(this);
         tableKey = getIntent().getExtras().getString("billingTableKey");
-        captainId = getIntent().getExtras().getString("captainID");
+      //  captainId = getIntent().getExtras().getString("captainID");
         tablename = getIntent().getExtras().getString("tablename");
         mPrintBillTv = (TextView) findViewById(R.id.act_billprint_tv);
         mCaptainDetail = (TextView) findViewById(R.id.act_billprint_captain_tv);
@@ -72,7 +72,7 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
         billingList = new ArrayList<>();
         mBackIv.setOnClickListener(this);
         mBillPrintDoneTv.setOnClickListener(this);
-        mRef = firebaseDatabase.getReference("guestdetails").child(captainId).child(tablename);
+     /*   mRef = firebaseDatabase.getReference("guestdetails").child(captainId).child(tablename);
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -92,7 +92,7 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
 
             }
         });
-
+*/
         mRef = firebaseDatabase.getReference("bookedmain").child(tablename);
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -199,7 +199,7 @@ public class BillPrintActivity extends AppCompatActivity implements View.OnClick
         switch (view.getId()) {
 
             case R.id.act_printbill_done_tv:
-                billPrintFunction();
+             //   billPrintFunction();
                 break;
 
             case R.id.act_printbill_back_iv:

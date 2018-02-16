@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.onesignal.OneSignal;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -52,7 +53,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-      //  OneSignal.startInit(this);
+        //  OneSignal.startInit(this);
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
@@ -79,13 +80,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Utils.stopProgress(LoginActivity.this);
                 userRole = dataSnapshot.child(user1.getUid()).getValue(UserGetInformation.class).getSelectrole().toString();
 
-                if (mAuth.getCurrentUser() != null && userRole.equalsIgnoreCase("Captain") ) {
+                if (mAuth.getCurrentUser() != null && userRole.equalsIgnoreCase("Captain")) {
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
-                } else if(mAuth.getCurrentUser() != null && userRole.equalsIgnoreCase("Cashier")){
+                } else if (mAuth.getCurrentUser() != null && userRole.equalsIgnoreCase("Cashier")) {
                     startActivity(new Intent(LoginActivity.this, CashierMainActivity.class));
                     finish();
-                } else if(mAuth.getCurrentUser() != null && userRole.equalsIgnoreCase("Kitchen Display")){
+                } else if (mAuth.getCurrentUser() != null && userRole.equalsIgnoreCase("Kitchen Display")) {
                     startActivity(new Intent(LoginActivity.this, KDMainActivity.class));
                     finish();
                 }
@@ -123,7 +124,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.login_act_forgot_password_tv:
-                Intent intent1=new Intent(this,ResetPasswordActivity.class);
+                Intent intent1 = new Intent(this, ResetPasswordActivity.class);
                 startActivity(intent1);
                 break;
         }
@@ -136,7 +137,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String password = mPasswordET.getText().toString();
 
         if (!TextUtils.isEmpty(name) && !TextUtils.isEmpty(password)) {
-             Utils.showProgress(this);
+            Utils.showProgress(this);
 
             mAuth.signInWithEmailAndPassword(name, password).addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                 @Override
@@ -152,23 +153,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 Utils.stopProgress(LoginActivity.this);
 
+                                mRef = firebaseDatabase.getReference("Notifications");
+                                mRef.child(user1.getUid()).child("Token").setValue(FirebaseInstanceId.getInstance().getToken());
                                 userRole = dataSnapshot.child(user1.getUid()).getValue(UserGetInformation.class).getSelectrole().toString();
 
                                 if (userRole.equalsIgnoreCase("Captain")) {
 
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
                                     startActivity(intent);
 
                                 } else if (userRole.equalsIgnoreCase("Kitchen Display")) {
 
                                     Intent intent = new Intent(LoginActivity.this, KDMainActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP| Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
                                     startActivity(intent);
-                                }  else if (userRole.equalsIgnoreCase("Cashier")) {
+                                } else if (userRole.equalsIgnoreCase("Cashier")) {
 
                                     Intent intent = new Intent(LoginActivity.this, CashierMainActivity.class);
-                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
                                     startActivity(intent);
                                 }
 
@@ -179,7 +182,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                             }
                         });
-
 
 
                     } else if (!task.isSuccessful()) {

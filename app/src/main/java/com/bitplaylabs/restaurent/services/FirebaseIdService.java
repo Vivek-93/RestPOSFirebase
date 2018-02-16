@@ -1,6 +1,8 @@
 package com.bitplaylabs.restaurent.services;
 
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -16,6 +18,10 @@ public class FirebaseIdService extends FirebaseInstanceIdService {
         super.onTokenRefresh();
 
         String referesedToken = FirebaseInstanceId.getInstance().getToken();
-        ReadyOrder.currentToken=referesedToken;
+       // ReadyOrder.currentToken=referesedToken;
+
+        DatabaseReference reference= FirebaseDatabase.getInstance().getReference("Notifications");
+
+        reference.child("token").setValue(referesedToken);
     }
 }
